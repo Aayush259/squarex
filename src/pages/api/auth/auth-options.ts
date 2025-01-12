@@ -1,9 +1,9 @@
-import NextAuth from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
+import NextAuth, { NextAuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
 import connectMongoDb from '@/lib/db';
 import User from '@/models/User';
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
     providers: [
         CredentialsProvider({
             name: "Credentials",
@@ -39,5 +39,19 @@ export default NextAuth({
             return session;
         },
     },
+    pages: {
+        signIn: "/signin",
+    },
     secret: process.env.NEXTAUTH_SECRET,
-});
+    cookies: {
+        sessionToken: {
+            name: `next-auth.session-token`,
+            options: {
+                httpOnly: true,
+                sameSite: 'lax',
+                path: '/',
+                secure: process.env.NODE_ENV === 'production',
+            },
+        },
+    },
+};
