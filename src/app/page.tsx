@@ -1,3 +1,4 @@
+import Basic1 from "@/components/templates/basic/Basic1";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,6 +8,6 @@ export const metadata: Metadata = {
 
 export default function Home() {
     return (
-        <div></div>
+        <Basic1 />
     );
 };
