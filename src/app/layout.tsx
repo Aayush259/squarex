@@ -1,5 +1,6 @@
-import { Geist, Geist_Mono, Heebo } from "next/font/google";
+import { Geist, Geist_Mono, Heebo, Playfair_Display, Poppins } from "next/font/google";
 import "./globals.css";
+import StoreProvider from "@/store/StoreProvider";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -16,6 +17,17 @@ const heebo = Heebo({
     subsets: ["latin"],
 });
 
+const playfairDisplay = Playfair_Display({
+    variable: "--font-playfair-display",
+    subsets: ["latin"],
+});
+
+const poppins = Poppins({
+    weight: "400",
+    variable: "--font-poppins",
+    subsets: ["latin"],
+});
+
 export default function RootLayout({
     children,
 }: Readonly<{
@@ -24,9 +36,11 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body
-                className={`${geistSans.variable} ${geistMono.variable} ${heebo.variable} antialiased`}
+                className={`${geistSans.variable} ${geistMono.variable} ${heebo.variable} ${playfairDisplay.variable} ${poppins.variable} antialiased`}
             >
-                {children}
+                <StoreProvider>
+                    {children}
+                </StoreProvider>
             </body>
         </html>
     );
