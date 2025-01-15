@@ -10,11 +10,12 @@ export default async function middleware(req: NextRequest) {
     // Check if the user is authenticated
     const isAuthenticated = !!session;
 
-    // Allow access to the sign-in and sign-up pages
+    // Allow access to the sign-in, sign-up pages and portfolio routes
     const isSignInOrSignUp = pathname.startsWith('/signin') || pathname.startsWith('/signup');
+    const isPortfolioRoute = pathname.startsWith('/portfolio');
 
-    // If the user is not authenticated and trying to access a protected route, redirect to sign-in
-    if (!isAuthenticated && !isSignInOrSignUp) {
+    // If the user is not authenticated and trying to access a protected route (excluding portfolio routes), redirect to sign-in
+    if (!isAuthenticated && !isSignInOrSignUp && !isPortfolioRoute) {
         return NextResponse.redirect(new URL('/signin', req.url));
     }
 
