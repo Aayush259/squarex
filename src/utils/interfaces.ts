@@ -23,9 +23,38 @@ export interface UserState {
 };
 
 export type TemplateType = 'basic1template' | null;
+export type TemplateMode = 'checking' | 'editing' | 'reviewing' | 'done' | null;
+
+// Interface for basic1template data structure
+export interface Basic1TemplateData {
+    home: {
+        title: string;
+        name: string;
+        role: string;
+        bio: string;
+        image: string;
+    },
+    work: {
+        title: string;
+        projects: {
+            title: string;
+            url: string;
+            description: string;
+            image: string;
+        }[];
+    },
+    skills: string[];
+}
+
+// Template data type that maps template types to their corresponding data structures
+export type TemplateDataMap = {
+    basic1template: Basic1TemplateData;
+}
 
 export interface TemplateState {
-    mode: 'checking' | 'editing' | 'reviewing' | 'done' | null;
+    mode: TemplateMode;
     selectedTemplate: TemplateType;
-    templateData: Record<string, any>;
-};
+    templateData: {
+        [K in Exclude<TemplateType, null>]: K extends keyof TemplateDataMap ? TemplateDataMap[K] : never;
+    } | null;
+}
