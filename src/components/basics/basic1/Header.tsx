@@ -27,6 +27,7 @@ export default function Basic1Header() {
 
             dispatch(setTemplateData({
                 basic1template: {
+                ...templateData.basic1template,
                     home: {
                         ...templateData?.basic1template.home,
                         title: homeLinkRef.current?.textContent || "",
