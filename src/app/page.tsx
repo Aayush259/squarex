@@ -1,3 +1,4 @@
+import Home from "@/components/home/Home";
 import Basic1 from "@/components/templates/basic/Basic1";
 import { Metadata } from "next";
 
@@ -6,8 +7,9 @@ export const metadata: Metadata = {
     description: "",
 };
 
-export default function Home() {
+export default function Page() {
     return (
-        <Basic1 />
+        <Home />
+        // <Basic1 />
     );
 };
