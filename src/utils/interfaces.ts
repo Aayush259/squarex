@@ -22,6 +22,7 @@ export interface UserState {
     email: string;
 };
 
+export type SocialLinks = 'Instagram' | 'Twitter' | 'LinkedIn' | 'GitHub' | 'Facebook' | null;
 export type TemplateType = 'basic1template' | null;
 export type TemplateMode = 'checking' | 'editing' | 'reviewing' | 'done' | null;
 
@@ -44,6 +45,10 @@ export interface Basic1TemplateData {
         }[];
     },
     skills: string[];
+    social: {
+        platform: SocialLinks;
+        url: string | null;
+    }[]
 }
 
 // Template data type that maps template types to their corresponding data structures
