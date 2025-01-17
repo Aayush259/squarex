@@ -1,5 +1,6 @@
 "use client";
 import Basic1Contact from "@/components/basics/basic1/Contact";
+import Basic1Footer from "@/components/basics/basic1/Footer";
 import Basic1Header from "@/components/basics/basic1/Header";
 import Basic1Hero from "@/components/basics/basic1/Hero";
 import Basic1Projects from "@/components/basics/basic1/Projects";
@@ -74,7 +75,29 @@ const Basic1 = () => {
                             },
                         ]
                     },
-                    skills: ["JavaScript", "TypeScript", "Next JS", "React JS", "Tailwind CSS", "MERN Stack"]
+                    skills: ["JavaScript", "TypeScript", "Next JS", "React JS", "Tailwind CSS", "MERN Stack"],
+                    social: [
+                        {
+                            platform: "LinkedIn",
+                            url: "/",
+                        },
+                        {
+                            platform: "GitHub",
+                            url: "/",
+                        },
+                        {
+                            platform: "Instagram",
+                            url: "/",
+                        },
+                        {
+                            platform: "Twitter",
+                            url: "/",
+                        },
+                        {
+                            platform: "Facebook",
+                            url: "/",
+                        },
+                    ],
                 }
             }));
         } else {
@@ -83,12 +106,13 @@ const Basic1 = () => {
     }, []);
 
     return (
-        <div className="bg-[#EDF7FA] text-[#21243D] h-screen w-screen fixed top-0 left-0 heebo overflow-y-auto">
+        <div className="bg-[#EDF7FA] text-[#21243D] h-screen w-screen fixed top-0 left-0 heebo overflow-y-auto overflow-x-hidden">
             <Basic1Header />
             <Basic1Hero />
             <Basic1Projects />
             <Basic1Skills />
             <Basic1Contact />
+            <Basic1Footer />
 
             {
                 slug?.toString() !== user?.id.toString() && (
