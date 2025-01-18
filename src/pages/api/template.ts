@@ -3,14 +3,67 @@ import { authOptions } from "./auth/auth-options";
 import connectMongoDb from "@/lib/db";
 import { NextApiRequest, NextApiResponse } from "next";
 import mongoose from "mongoose";
+import { Readable } from 'stream';
+import cloudinary from 'cloudinary';
+
+const cloudName = process.env.CLOUD_NAME;
+const apiKey = process.env.API_KEY;
+const apiSecret = process.env.API_SECRET;
+
+cloudinary.v2.config({
+    cloud_name: cloudName,
+    api_key: apiKey,
+    api_secret: apiSecret,
+    secure: true
+});
+
+export const config = {
+    api: {
+        bodyParser: {
+            sizeLimit: '50mb',
+        },
+    },
+};
 
 type TTemplateData = {
     [key: string]: string | number | Buffer | TTemplateData | TTemplateData[];
 }
 
-const uploadImage = async (imageBuffer: Buffer): Promise<string> => {
+interface UploadImageResponse {
+    success: boolean;
+    url?: string;
+}
 
-    return "<image url>";
+const uploadImage = async (imageBuffer: Buffer): Promise<UploadImageResponse> => {
+    try {
+        if (!imageBuffer) {
+            throw new Error("Image buffer is undefined");
+        }
+
+        connectMongoDb();
+
+        const stream = Readable.from(imageBuffer);
+
+        const uploadPromise = new Promise<string>((resolve, reject) => {
+            const uploadStream = cloudinary.v2.uploader.upload_stream(
+                { folder: "SquareX" },
+                (error, result) => {
+                    if (error) {
+                        reject(new Error("Cloudinary Image Upload error: " + error.message));
+                    } else {
+                        resolve(result?.secure_url || "dummy image url");
+                    }
+                }
+            )
+
+            stream.pipe(uploadStream);
+        });
+
+        const imageUrl = await uploadPromise;
+        return { success: true, url: imageUrl };
+    } catch (error) {
+        return { success: false };
+    }
 }
 
 const processImages = async (templateData: TTemplateData): Promise<void> => {
@@ -22,8 +75,13 @@ const processImages = async (templateData: TTemplateData): Promise<void> => {
             }
         } else if (templateData !== null && typeof templateData === "object") {
             for (const key in templateData) {
-                if (key === "image" && typeof templateData[key] === "string") {
-                    templateData[key] = await uploadImage(Buffer.from(templateData[key], "base64"));
+                if (key === "image" && typeof templateData[key] === "string" && templateData[key].startsWith("data:image")) {
+                    const imageUploadResponse = await uploadImage(Buffer.from(templateData[key], "base64"));
+                    if (imageUploadResponse.success && imageUploadResponse?.url) {
+                        templateData[key] = imageUploadResponse.url;
+                    } else {
+                        templateData[key] = "<dummy image url>";
+                    }
                 } else {
                     await traverseAndProcess(templateData[key] as TTemplateData | TTemplateData[]);
                 }
@@ -59,6 +117,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const existingTemplate = await mongoose.connection.collection(templateName).findOne({ user_id: userId });
 
         let updatedTemplateData = JSON.parse(JSON.stringify(templateData));
+
+        updatedTemplateData = await processImages(updatedTemplateData);
 
         if (existingTemplate) {
             // Update the existing template
