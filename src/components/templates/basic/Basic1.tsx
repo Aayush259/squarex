@@ -8,7 +8,8 @@ import Basic1Hero from "@/components/basics/basic1/Hero";
 import Basic1Projects from "@/components/basics/basic1/Projects";
 import Basic1Skills from "@/components/basics/basic1/Skills";
 import Button from "@/components/Button";
-import { CreatingPortfolioSpinner } from "@/components/Loader";
+import { NotFound, SomethingWentWrong } from "@/components/Error";
+import { CreatingPortfolioSpinner, FullPageLoader } from "@/components/Loader";
 import { selectTemplateData, selectTemplateMode, setMode, setTemplateData } from "@/store/templateSlice";
 import { selectUser } from "@/store/userSlice";
 import { TemplateMode } from "@/utils/interfaces";
@@ -30,19 +31,20 @@ const Basic1 = () => {
 
     const [settingUpPortfolio, setSettingUpPortfolio] = useState<boolean>(false);
     const [gettingPortfolio, setGettingPortfolio] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
 
     const setupPortfolio = async () => {
         if (!templateData?.basic1template || settingUpPortfolio) return;
         setSettingUpPortfolio(true);
         const { data, error } = await createPortfolioWithBasic1Template(templateData.basic1template);
         if (error) {
-            // Handle error
+            setError("Something went wrong");
         } else if (data) {
             console.log(data);
             if (pathname?.includes("portfolio")) {
                 window.location.reload();
             } else {
-                router.push(`/portfolio/${data.user_id}/basic1template`);
+                router.push(`/portfolio/${data.user_id}/b1`);
             }
         }
     };
@@ -52,7 +54,12 @@ const Basic1 = () => {
         setGettingPortfolio(true);
         const { data, error } = await getPortfolioWithBasic1Template(slug as string);
         if (error) {
-            // Handle error
+            if (error === "NOT_FOUND") {
+                setError("NOT_FOUND");
+            } else {
+                setError("Something went wrong");
+            }
+            console.log(error);
         } else if (data) {
             console.log(data);
             dispatch(setTemplateData({
@@ -144,9 +151,11 @@ const Basic1 = () => {
         }
     }, []);
 
-    if (gettingPortfolio) {
-        return <p>Loading..</p>
-    }
+    if (gettingPortfolio) return <FullPageLoader />
+
+    if (error === "NOT_FOUND") return <NotFound />;
+
+    if (error) return <SomethingWentWrong />;
 
     if (!templateData) return null;
 
