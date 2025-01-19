@@ -19,11 +19,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const template = await mongoose.connection.collection(templateName).findOne({ user_id: slug });
 
         if (template) {
-            // Update the existing template
             res.status(200).json({ success: true, message: "Portfolio", data: template });
         } else {
             
-            res.status(404).json({ success: false, message: "Portfolio not found" });
+            res.status(404).json({ success: false, message: "NOT_FOUND" });
         }
     } catch (error) {
         console.error("Error:", error);
