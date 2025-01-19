@@ -76,7 +76,9 @@ const processImages = async (templateData: TTemplateData): Promise<void> => {
         } else if (templateData !== null && typeof templateData === "object") {
             for (const key in templateData) {
                 if (key === "image" && typeof templateData[key] === "string" && templateData[key].startsWith("data:image")) {
-                    const imageUploadResponse = await uploadImage(Buffer.from(templateData[key], "base64"));
+                    const base64string = templateData[key].split(",")[1];  // Remove metadata
+                    const imageBuffer = Buffer.from(base64string, "base64");
+                    const imageUploadResponse = await uploadImage(imageBuffer);
                     if (imageUploadResponse.success && imageUploadResponse?.url) {
                         templateData[key] = imageUploadResponse.url;
                     } else {
@@ -118,21 +120,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         let updatedTemplateData = JSON.parse(JSON.stringify(templateData));
 
-        updatedTemplateData = await processImages(updatedTemplateData);
+        await processImages(updatedTemplateData);
 
         if (existingTemplate) {
             // Update the existing template
-            existingTemplate.data = templateData;
+            existingTemplate.data = updatedTemplateData;
             await mongoose.connection.collection(templateName).updateOne({ user_id: userId }, { $set: existingTemplate });
             res.status(201).json({ success: true, message: "Updated portfolio" });
         } else {
             // Create a new template
             const newTemplate = {
                 user_id: userId,
-                data: templateData
+                data: updatedTemplateData
             };
             await mongoose.connection.collection(templateName).insertOne(newTemplate);
-            res.status(201).json({ success: true, message: "Created portfolio" });
+            res.status(201).json({ success: true, message: "Created portfolio", data: newTemplate });
         }
     } catch (error) {
         console.error("Error during signup:", error);
