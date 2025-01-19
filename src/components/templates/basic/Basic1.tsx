@@ -1,4 +1,6 @@
 "use client";
+import { createPortfolioWithBasic1Template } from "@/apis/createPortfolio";
+import { getPortfolioWithBasic1Template } from "@/apis/getPortfolio";
 import Basic1Contact from "@/components/basics/basic1/Contact";
 import Basic1Footer from "@/components/basics/basic1/Footer";
 import Basic1Header from "@/components/basics/basic1/Header";
@@ -6,9 +8,11 @@ import Basic1Hero from "@/components/basics/basic1/Hero";
 import Basic1Projects from "@/components/basics/basic1/Projects";
 import Basic1Skills from "@/components/basics/basic1/Skills";
 import Button from "@/components/Button";
-import { selectTemplateMode, setMode, setTemplateData } from "@/store/templateSlice";
+import { CreatingPortfolioSpinner } from "@/components/Loader";
+import { selectTemplateData, selectTemplateMode, setMode, setTemplateData } from "@/store/templateSlice";
 import { selectUser } from "@/store/userSlice";
 import { TemplateMode } from "@/utils/interfaces";
+import { usePathname } from "next/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,20 +20,55 @@ import { useDispatch, useSelector } from "react-redux";
 const Basic1 = () => {
 
     const templateMode = useSelector(selectTemplateMode);
+    const templateData = useSelector(selectTemplateData);
     const user = useSelector(selectUser);
     const dispatch = useDispatch();
     const router = useRouter();
+    const pathname = usePathname();
     const params = useParams();
     const slug = params?.slug;
 
-    const setupPortfolio = async () => { };
+    const [settingUpPortfolio, setSettingUpPortfolio] = useState<boolean>(false);
+    const [gettingPortfolio, setGettingPortfolio] = useState<boolean>(false);
+
+    const setupPortfolio = async () => {
+        if (!templateData?.basic1template || settingUpPortfolio) return;
+        setSettingUpPortfolio(true);
+        const { data, error } = await createPortfolioWithBasic1Template(templateData.basic1template);
+        if (error) {
+            // Handle error
+        } else if (data) {
+            console.log(data);
+            if (pathname?.includes("portfolio")) {
+                window.location.reload();
+            } else {
+                router.push(`/portfolio/${data.user_id}/basic1template`);
+            }
+        }
+    };
+
+    const getPortfolio = async () => {
+        if (!slug || gettingPortfolio) return;
+        setGettingPortfolio(true);
+        const { data, error } = await getPortfolioWithBasic1Template(slug as string);
+        if (error) {
+            // Handle error
+        } else if (data) {
+            console.log(data);
+            dispatch(setTemplateData({
+                basic1template: data.data
+            }));
+            dispatch(setMode("done"));
+        }
+        setTimeout(() => {
+            setGettingPortfolio(false);
+        }, 0);
+    }
 
     const handleFixedBtnClick = () => {
+        if (settingUpPortfolio) return;
         if (user?.id.toString() === slug?.toString() && templateMode === "done") {
-            router.push("/template/basic1template");
-            setTimeout(() => {
-                dispatch(setMode("editing"));
-            }, 0);
+            dispatch(setMode("editing"));
         } else if (templateMode === "checking") {
             dispatch(setMode("editing"))
         } else if (templateMode === "editing") {
@@ -42,7 +81,9 @@ const Basic1 = () => {
 
     // Initialize template data
     useEffect(() => {
-        if (!slug) {
+        if (slug) {
+            getPortfolio();
+        } else {
             dispatch(setTemplateData({
                 basic1template: {
                     home: {
@@ -100,13 +141,21 @@ const Basic1 = () => {
                     ],
                 }
             }));
-        } else {
-
         }
     }, []);
 
+    if (gettingPortfolio) {
+        return <p>Loading..</p>
+    }
+
+    if (!templateData) return null;
+
     return (
         <div className="bg-[#EDF7FA] text-[#21243D] h-screen w-screen fixed top-0 left-0 heebo overflow-y-auto overflow-x-hidden">
+            {
+                settingUpPortfolio && <CreatingPortfolioSpinner />
+            }
+
             <Basic1Header />
             <Basic1Hero />
             <Basic1Projects />
@@ -115,7 +164,7 @@ const Basic1 = () => {
             <Basic1Footer />
 
             {
-                slug?.toString() !== user?.id.toString() && (
+                (slug?.toString() === user?.id.toString() && !settingUpPortfolio) && (
                     <Button className="z-50 border border-white hover:border-[var(--primary)] !fixed bottom-10 right-10 shadow !py-1" onClick={handleFixedBtnClick}>
                         {
                             templateMode === "editing" ? "Preview" : templateMode === "reviewing" ? "Publish" : templateMode === "done" ? "Edit" : null
