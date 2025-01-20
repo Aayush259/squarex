@@ -36,3 +36,20 @@ export const getImageFileBase64 = async (imageObjectUrl: string): Promise<string
         reader.readAsDataURL(file);
     });
 };
+
+export const scrollToElement = ( parentId?: string, elementId?: string) => {
+
+    let parent = document.getElementById(parentId || "");
+
+    if (!parent) parent = document.body;
+
+    if (!elementId) {
+        parent.scrollTo({ top: 0, behavior: "smooth" });
+        return;
+    };
+
+    const element = document.getElementById(elementId);
+    if (!element) return;
+
+    parent.scrollTo({ top: element.offsetTop, behavior: "smooth" });
+};
