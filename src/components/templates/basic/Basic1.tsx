@@ -89,6 +89,8 @@ const Basic1 = () => {
 
     // Initialize template data
     useEffect(() => {
+        if (templateData?.basic1template) return;
+
         if (slug) {
             getPortfolio();
         } else {

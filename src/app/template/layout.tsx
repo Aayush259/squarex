@@ -1,41 +1,41 @@
 "use client";
-import { useEffect } from "react";
-import { setMode } from "@/store/templateSlice";
-// import { useSession } from "next-auth/react";
-// import { useParams, useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-// import { setUser } from "@/store/userSlice";
+import { useEffect, useState } from "react";
+import { selectTemplateMode, setMode, setTemplateData } from "@/store/templateSlice";
+import { useSession } from "next-auth/react";
+import { useDispatch, useSelector } from "react-redux";
+import { usePathname } from "next/navigation";
+import { FullPageLoader } from "@/components/Loader";
+import { getPortfolioWithBasic1Template } from "@/apis/getPortfolio";
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+
     const dispatch = useDispatch();
+    const pathname = usePathname();
+    const { data: session } = useSession();
+
+    const templateMode = useSelector(selectTemplateMode);
+
+    const initializeTemplate = async () => {
+        if (!pathname || !session?.user?.id) return;
+
+        if (pathname.includes("basic1template")) {
+            const { data, error } = await getPortfolioWithBasic1Template(session.user.id);
+
+            if (data) {
+                dispatch(setTemplateData({
+                    basic1template: data.data
+                }));
+            }
+        }
+
+        dispatch(setMode("editing"));
+    };
 
     useEffect(() => {
-        dispatch(setMode("editing"));
-    }, []);
+        initializeTemplate();
+    }, [pathname, session]);
 
-    // const { data: session } = useSession();
-    // const params = useParams();
-    // const router = useRouter();
-    // const slug = params?.slug as string;
-
-    // useEffect(() => {
-    //     if (session?.user) {
-    //         if (slug === session.user.id) {
-    //             dispatch(setUser({
-    //                 id: session.user.id,
-    //                 name: session.user.name || '',
-    //                 email: session.user.email || '',
-    //             }));
-    //         } else {
-    //             router.push('/');
-    //         }
-    //     }
-    // }, [session, slug, dispatch, router]);
-
-    // Only render children if slug matches user id
-    // if (session?.user?.id !== slug) {
-    //     return null;
-    // }
+    if (!session?.user?.id || !templateMode) return <FullPageLoader />;
 
     return children;
 };
