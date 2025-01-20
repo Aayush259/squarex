@@ -12,6 +12,7 @@ import { NotFound, SomethingWentWrong } from "@/components/Error";
 import { CreatingPortfolioSpinner, FullPageLoader } from "@/components/Loader";
 import { selectTemplateData, selectTemplateMode, setMode, setTemplateData } from "@/store/templateSlice";
 import { selectUser } from "@/store/userSlice";
+import { IDs } from "@/utils/helper";
 import { TemplateMode } from "@/utils/interfaces";
 import { usePathname } from "next/navigation";
 import { useParams, useRouter } from "next/navigation";
@@ -160,7 +161,7 @@ const Basic1 = () => {
     if (!templateData) return null;
 
     return (
-        <div className="bg-[#EDF7FA] text-[#21243D] h-screen w-screen fixed top-0 left-0 heebo overflow-y-auto overflow-x-hidden">
+        <div id={IDs.B1} className="bg-[#EDF7FA] text-[#21243D] h-screen w-screen fixed top-0 left-0 heebo overflow-y-auto overflow-x-hidden">
             {
                 settingUpPortfolio && <CreatingPortfolioSpinner />
             }
@@ -171,6 +172,16 @@ const Basic1 = () => {
             <Basic1Skills />
             <Basic1Contact />
             <Basic1Footer />
+
+            {
+                (!settingUpPortfolio && !slug) && (
+                    <Button className="z-50 border border-white hover:border-[var(--primary)] !fixed bottom-10 right-10 shadow !py-1" onClick={handleFixedBtnClick}>
+                        {
+                            templateMode === "editing" ? "Preview" : templateMode === "reviewing" ? "Publish" : null
+                        }
+                    </Button>
+                )
+            }
 
             {
                 (slug?.toString() === user?.id.toString() && !settingUpPortfolio) && (
