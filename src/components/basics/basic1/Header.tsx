@@ -4,7 +4,8 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { IoCloseOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
-import { restoreCursorPosition } from "@/utils/funcs";
+import { restoreCursorPosition, scrollToElement } from "@/utils/funcs";
+import { IDs } from "@/utils/helper";
 
 export default function Basic1Header() {
 
@@ -27,7 +28,7 @@ export default function Basic1Header() {
 
             dispatch(setTemplateData({
                 basic1template: {
-                ...templateData.basic1template,
+                    ...templateData.basic1template,
                     home: {
                         ...templateData?.basic1template.home,
                         title: homeLinkRef.current?.textContent || "",
@@ -59,7 +60,8 @@ export default function Basic1Header() {
                     contentEditable={templateMode === 'editing'}
                     suppressContentEditableWarning
                     onInput={() => handleNameChange(homeLinkRef)}
-                    className="outline-none hidden md:block font-semibold hover:text-red-500 duration-300"
+                    className={`outline-none hidden md:block font-semibold hover:text-red-500 duration-300 ${templateMode !== "editing" && "cursor-pointer"}`}
+                    onClick={templateMode !== 'editing' ? () => scrollToElement(IDs.B1) : undefined}
                 >
                     {templateData.basic1template.home.title}
                 </span>
@@ -70,13 +72,17 @@ export default function Basic1Header() {
                     contentEditable={templateMode === 'editing'}
                     suppressContentEditableWarning
                     onInput={() => handleNameChange(workLinkRef)}
-                    className="outline-none hidden md:block font-semibold hover:text-red-500 duration-300"
+                    className={`outline-none hidden md:block font-semibold hover:text-red-500 duration-300 ${templateMode !== "editing" && "cursor-pointer"}`}
+                    onClick={templateMode !== 'editing' ? () => scrollToElement(IDs.B1, IDs.PROJECTS) : undefined}
                 >
                     {templateData.basic1template.work.title}
                 </span>
 
                 {/* Contact Link */}
-                <span className="hidden md:block font-semibold hover:text-red-500 duration-300">
+                <span
+                    className={`outline-none hidden md:block font-semibold hover:text-red-500 duration-300 ${templateMode !== "editing" && "cursor-pointer"}`}
+                    onClick={templateMode !== 'editing' ? () => scrollToElement(IDs.B1, IDs.CONTACT) : undefined}
+                >
                     {"Contact"}
                 </span>
             </header>
@@ -93,6 +99,7 @@ export default function Basic1Header() {
                     suppressContentEditableWarning
                     onInput={() => handleNameChange(homeLinkRef)}
                     className="outline-none block w-full my-6 text-lg text-center font-semibold duration-300"
+                    onClick={templateMode !== 'editing' ? () => { scrollToElement(IDs.B1); setIsSidebarOpen(false) } : undefined}
                 >
                     {templateData.basic1template.home.title}
                 </span>
@@ -104,12 +111,16 @@ export default function Basic1Header() {
                     suppressContentEditableWarning
                     onInput={() => handleNameChange(workLinkRef)}
                     className="outline-none block w-full my-6 text-lg text-center font-semibold duration-300"
+                    onClick={templateMode !== 'editing' ? () => { scrollToElement(IDs.B1, IDs.PROJECTS); setIsSidebarOpen(false) } : undefined}
                 >
                     {templateData.basic1template.work.title}
                 </span>
 
                 {/* Contact Link for mobile */}
-                <span className="block w-full my-6 text-lg text-center font-semibold duration-300">
+                <span 
+                className="block w-full my-6 text-lg text-center font-semibold duration-300"
+                    onClick={templateMode !== 'editing' ? () => { scrollToElement(IDs.B1, IDs.CONTACT); setIsSidebarOpen(false) } : undefined}
+                >
                     {"Contact"}
                 </span>
             </div>

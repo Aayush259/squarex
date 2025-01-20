@@ -8,6 +8,7 @@ import Link from "next/link";
 import { ChangeEvent, RefObject, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { IoIosClose } from "react-icons/io";
+import { IDs } from "@/utils/helper";
 
 const Basic1Projects = () => {
 
@@ -137,7 +138,7 @@ const Basic1Projects = () => {
     if (!templateData?.basic1template) return null;
 
     return (
-        <section className="w-full px-5 py-5 md:px-36">
+        <section id={IDs.PROJECTS} className="w-full px-5 py-5 md:px-36">
             <h2 className="text-xl md:text-2xl font-semibold">
                 <span
                     className="outline-none"

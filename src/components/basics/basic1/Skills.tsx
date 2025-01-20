@@ -6,6 +6,7 @@ import { useRef, useState } from "react";
 import Button from "@/components/Button";
 import { IoIosClose } from "react-icons/io";
 import { restoreCursorPosition } from "@/utils/funcs";
+import { IDs } from "@/utils/helper";
 
 const Basic1Skills = () => {
 
@@ -79,7 +80,7 @@ const Basic1Skills = () => {
                 )
             }
 
-            <section className="flex items-center overflow-hidden relative z-20 my-10 w-screen text-3xl whitespace-nowrap text-white bg-[var(--primary)] font-semibold">
+            <section id={IDs.SKILLS} className="flex items-center overflow-hidden relative z-20 my-10 w-screen text-3xl whitespace-nowrap text-white bg-[var(--primary)] font-semibold">
                 <div className="animate-scroll1 flex shrink-0 gap-4 min-w-[100vw] w-fit flex-nowrap xs:space-x-32 space-x-16 my-8 py-6 xs:py-8 xs:px-20 px-8">
                     {
                         templateData.basic1template.skills.map((skill, index) => (
