@@ -1,12 +1,18 @@
-// "use client";
+"use client";
+import { useEffect } from "react";
+import { setMode } from "@/store/templateSlice";
 // import { useSession } from "next-auth/react";
 // import { useParams, useRouter } from "next/navigation";
-// import { useEffect } from "react";
-// import { useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 // import { setUser } from "@/store/userSlice";
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-    // const dispatch = useDispatch();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(setMode("editing"));
+    }, []);
+
     // const { data: session } = useSession();
     // const params = useParams();
     // const router = useRouter();
