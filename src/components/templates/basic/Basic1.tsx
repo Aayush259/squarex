@@ -173,7 +173,7 @@ const Basic1 = () => {
             <Basic1Contact />
             <Basic1Footer />
 
-            <div className="z-50 !fixed bottom-10 right-10 flex items-center gap-2">
+            <div className="z-50 !fixed bottom-20 right-5 md:bottom-10 md:right-10 flex items-center gap-2">
                 {
                     !settingUpPortfolio && templateMode === "reviewing" && (
                         <Button className="border border-white hover:border-[var(--primary)] shadow !py-1 !px-2" onClick={() => dispatch(setMode("editing"))}>

@@ -50,15 +50,15 @@ const Basic1Skills = () => {
         <>
             {
                 (editEnabled && templateMode === "editing") && (
-                    <div className="flex items-center gap-2 my-10 px-4 relative">
-                        <button className="text-[var(--primary)] absolute right-0 top-0 -translate-y-1/2 duration-300 hover:opacity-50" onClick={() => setEditEnabled(false)}>
+                    <div className="flex items-center flex-wrap gap-2 my-10 px-4 relative">
+                        <button className="text-[var(--primary)] absolute right-0 top-0 -translate-y-full md:-translate-y-1/2 duration-300 hover:opacity-50" onClick={() => setEditEnabled(false)}>
                             <IoIosClose size={44} />
                         </button>
                         {
                             templateData.basic1template.skills.map((skill, index) => (
                                 <span
                                     key={index}
-                                    className="outline-none border border-[var(--primary)] rounded-full max-w-[70vw] overflow-hidden whitespace-nowrap text-sm py-1 px-3 w-[200px]"
+                                    className="outline-none border border-[var(--primary)] rounded-full max-w-[70vw] overflow-hidden whitespace-nowrap text-sm py-1 px-3 w-[150px] md:w-[200px]"
                                     ref={(el: HTMLSpanElement | null) => {
                                         skillRefs.current[index] = el
                                     }}

@@ -160,7 +160,7 @@ const Basic1Projects = () => {
 
                             {
                                 (templateMode === "editing" && templateData.basic1template.work.projects.length > 1) && (
-                                    <button className="text-[var(--primary)] absolute right-0 top-0 -translate-y-1/2 duration-300 hover:opacity-50" onClick={() => removeProject(index)}>
+                                    <button className="text-[var(--primary)] absolute right-0 top-0 -translate-y-full md:-translate-y-1/2 duration-300 hover:opacity-50" onClick={() => removeProject(index)}>
                                         <IoIosClose size={44} />
                                     </button>
                                 )
