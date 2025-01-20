@@ -13,11 +13,11 @@ import { CreatingPortfolioSpinner, FullPageLoader } from "@/components/Loader";
 import { selectTemplateData, selectTemplateMode, setMode, setTemplateData } from "@/store/templateSlice";
 import { selectUser } from "@/store/userSlice";
 import { IDs } from "@/utils/helper";
-import { TemplateMode } from "@/utils/interfaces";
 import { usePathname } from "next/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { GoPencil } from "react-icons/go";
 
 const Basic1 = () => {
 
@@ -173,25 +173,35 @@ const Basic1 = () => {
             <Basic1Contact />
             <Basic1Footer />
 
-            {
-                (!settingUpPortfolio && !slug) && (
-                    <Button className="z-50 border border-white hover:border-[var(--primary)] !fixed bottom-10 right-10 shadow !py-1" onClick={handleFixedBtnClick}>
-                        {
-                            templateMode === "editing" ? "Preview" : templateMode === "reviewing" ? "Publish" : null
-                        }
-                    </Button>
-                )
-            }
+            <div className="z-50 !fixed bottom-10 right-10 flex items-center gap-2">
+                {
+                    !settingUpPortfolio && templateMode === "reviewing" && (
+                        <Button className="border border-white hover:border-[var(--primary)] shadow !py-1 !px-2" onClick={() => dispatch(setMode("editing"))}>
+                            <GoPencil size={24} />
+                        </Button>
+                    )
+                }
 
-            {
-                (slug?.toString() === user?.id.toString() && !settingUpPortfolio) && (
-                    <Button className="z-50 border border-white hover:border-[var(--primary)] !fixed bottom-10 right-10 shadow !py-1" onClick={handleFixedBtnClick}>
-                        {
-                            templateMode === "editing" ? "Preview" : templateMode === "reviewing" ? "Publish" : templateMode === "done" ? "Edit" : null
-                        }
-                    </Button>
-                )
-            }
+                {
+                    (!settingUpPortfolio && !slug) && (
+                        <Button className="border border-white hover:border-[var(--primary)] shadow !py-1" onClick={handleFixedBtnClick}>
+                            {
+                                templateMode === "editing" ? "Preview" : templateMode === "reviewing" ? "Publish" : null
+                            }
+                        </Button>
+                    )
+                }
+
+                {
+                    (slug?.toString() === user?.id.toString() && !settingUpPortfolio) && (
+                        <Button className="border border-white hover:border-[var(--primary)] shadow !py-1 !px-2" onClick={handleFixedBtnClick}>
+                            {
+                                templateMode === "editing" ? "Preview" : templateMode === "reviewing" ? "Publish" : templateMode === "done" ? <GoPencil size={24} /> : null
+                            }
+                        </Button>
+                    )
+                }
+            </div>
         </div>
     );
 };
