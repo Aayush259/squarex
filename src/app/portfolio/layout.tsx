@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/store/userSlice";
+import { setMode } from "@/store/templateSlice";
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     const dispatch = useDispatch();
@@ -18,6 +19,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 }));
             }
         }
+        dispatch(setMode("done"));
     }, [session, dispatch]);
 
     return children;
