@@ -126,7 +126,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // Update the existing template
             existingTemplate.data = updatedTemplateData;
             await mongoose.connection.collection(templateName).updateOne({ user_id: userId }, { $set: existingTemplate });
-            res.status(201).json({ success: true, message: "Updated portfolio" });
+            res.status(201).json({ success: true, message: "Updated portfolio", data: existingTemplate });
         } else {
             // Create a new template
             const newTemplate = {
