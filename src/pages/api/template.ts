@@ -5,6 +5,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import mongoose from "mongoose";
 import { Readable } from 'stream';
 import cloudinary from 'cloudinary';
+import UserTemplates from "@/models/UserTemplates";
 
 const cloudName = process.env.CLOUD_NAME;
 const apiKey = process.env.API_KEY;
@@ -134,6 +135,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 data: updatedTemplateData
             };
             await mongoose.connection.collection(templateName).insertOne(newTemplate);
+            const existingTemplateNames = await UserTemplates.findOne({ user_id: userId });
+            if (existingTemplateNames) {
+                existingTemplateNames.templateNames.push(templateName);
+                await existingTemplateNames.save();
+            } else {
+                const newTemplateNames = new UserTemplates({
+                    user_id: userId,
+                    templateNames: [templateName]
+                });
+                await newTemplateNames.save();
+            }
             res.status(201).json({ success: true, message: "Created portfolio", data: newTemplate });
         }
     } catch (error) {
