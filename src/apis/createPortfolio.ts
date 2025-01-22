@@ -1,9 +1,25 @@
 import useFetchApi from "@/hooks/useFetchApi";
 import { getImageFileBase64 } from "@/utils/funcs";
+import { templateNames } from "@/utils/helper";
 import { Basic1TemplateData } from "@/utils/interfaces";
 
-const templateNames = {
-    Basic1Template: "Basic1Template",
+export const updateMetadata = async (templateName: string, page_title?: string, page_description?: string) => {
+
+    const payload = {
+        templateName,
+        ...(page_title ? { page_title } : {}),
+        ...(page_description ? { page_description } : {}),
+    };
+
+    const { data, error } = await useFetchApi("/api/editMetadata", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+    });
+
+    return { data, error };
 }
 
 export const createPortfolioWithBasic1Template = async (templateData: Basic1TemplateData) => {
