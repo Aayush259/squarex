@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "./auth/auth-options";
 import connectMongoDb from "@/lib/db";
 import { NextApiRequest, NextApiResponse } from "next";
-import mongoose from "mongoose";
+import Contact from "@/models/Contact";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "GET") {
@@ -20,7 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
         await connectMongoDb();
 
-        const messages = await mongoose.connection.collection("Contact").find({ user_id: userId }).toArray();
+        const messages = await Contact.find({ user_id: userId });
 
         res.status(200).json({ success: true, message: "Messages", data: messages });
     } catch (error) {
