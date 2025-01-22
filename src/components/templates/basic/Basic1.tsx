@@ -66,6 +66,8 @@ const Basic1 = () => {
             dispatch(setTemplateData({
                 basic1template: data.data
             }));
+            if (data.page_title) document.title = data.page_title;
+            if (data.page_description) document.querySelector("meta[name='description']")?.setAttribute("content", data.page_description);
             dispatch(setMode("done"));
         }
         setTimeout(() => {
