@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono, Heebo, Playfair_Display, Poppins } from "next/font/google";
 import "./globals.css";
 import StoreProvider from "@/store/StoreProvider";
+import Session from "@/components/Session";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -39,7 +40,9 @@ export default function RootLayout({
                 className={`${geistSans.variable} ${geistMono.variable} ${heebo.variable} ${playfairDisplay.variable} ${poppins.variable} antialiased`}
             >
                 <StoreProvider>
-                    {children}
+                    <Session>
+                        {children}
+                    </Session>
                 </StoreProvider>
             </body>
         </html>
