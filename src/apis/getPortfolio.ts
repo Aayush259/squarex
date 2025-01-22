@@ -1,8 +1,15 @@
 import useFetchApi from "@/hooks/useFetchApi";
-import { Basic1TemplateData } from "@/utils/interfaces";
+import { templateNames } from "@/utils/helper";
 
-const templateNames = {
-    Basic1Template: "Basic1Template",
+export const getCreatedTemplateNames = async () => {
+    const { data, error } = await useFetchApi("/api/getCreatedTemplateNames", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        }
+    });
+
+    return { data, error };
 }
 
 export const getPortfolioWithBasic1Template = async (slug: string) => {
