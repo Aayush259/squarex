@@ -26,7 +26,7 @@ export default function Home() {
     }
 
     return (
-        <div className="w-full py-10 md:px-28 md:py-28 flex flex-col md:flex-row gap-8">
+        <div className="w-full py-10 md:px-28 flex flex-col md:flex-row gap-8">
             {
                 templates.map(template => (
                     <div key={template.name} className="overflow-hidden w-[450px] max-w-[95vw] mx-auto md:mx-0 p-0.5 rounded-lg bg-gradient-to-b from-transparent to-[var(--primary)]">
