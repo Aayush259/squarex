@@ -53,3 +53,13 @@ export const scrollToElement = ( parentId?: string, elementId?: string) => {
 
     parent.scrollTo({ top: element.offsetTop, behavior: "smooth" });
 };
+
+export const getRandomEmoji = () => {
+    const emojis = [
+        "😃", "😄", "😘", "🤓", "😉", "🤗", "🥳", "🙃", "😊", "😎", "🤠", "😁"
+    ];
+
+    const randomIndex = Math.floor(Math.random() * emojis.length);
+
+    return emojis[randomIndex];
+};
