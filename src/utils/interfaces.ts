@@ -15,6 +15,16 @@ export interface ITemplates {
     image: string;
 }
 
+export interface IContact {
+    user_id: string;
+    templateName: TemplateType;
+    data: {
+        name: string;
+        email: string;
+        message: string;
+    }
+}
+
 // Store Interfaces
 export interface UserState {
     id: string;
