@@ -1,7 +1,7 @@
 "use client";
 import Button from "@/components/Button";
 import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
-import { SocialLinks } from "@/utils/interfaces";
+import { Basic1TemplateData, SocialLinks } from "@/utils/interfaces";
 import Link from "next/link";
 import { useState } from "react";
 import { FaLinkedinIn, FaGithub, FaFacebook } from "react-icons/fa";
@@ -31,9 +31,9 @@ const Basic1Footer = () => {
 
     const handleLinkAdd = () => {
         setInputEnabled(false);
-        if (templateMode !== "editing" || !inputPlatform || !templateData?.basic1template) return;
+        if (templateMode !== "editing" || !inputPlatform || !templateData?.data) return;
 
-        const updatedSocialLinks = [...templateData.basic1template.social];
+        const updatedSocialLinks = [...(templateData.data as Basic1TemplateData).social];
         const index = updatedSocialLinks.findIndex(social => social.platform === inputPlatform);
 
         if (index === -1) {
@@ -49,8 +49,9 @@ const Basic1Footer = () => {
         };
 
         dispatch(setTemplateData({
-            basic1template: {
-                ...templateData.basic1template,
+            ...templateData,
+            data: {
+                ...(templateData.data as Basic1TemplateData),
                 social: updatedSocialLinks
             }
         }));
@@ -61,13 +62,13 @@ const Basic1Footer = () => {
         }, 0);
     }
 
-    if (!templateData?.basic1template) return null;
+    if (!templateData?.data) return null;
 
     return (
         <footer className="w-full mt-12 bg-white py-6 px-4 md:py-20 md:px-20">
             <div className="flex w-fit max-w-full mx-auto items-center gap-4">
                 {
-                    templateData.basic1template.social.map((link, index) => {
+                    (templateData.data as Basic1TemplateData).social.map((link, index) => {
 
                         if (!link.url) return;
 
@@ -92,7 +93,7 @@ const Basic1Footer = () => {
                 }
 
                 {
-                    (templateMode === "editing" && templateData.basic1template.social.length < 5) && (
+                    (templateMode === "editing" && (templateData.data as Basic1TemplateData).social.length < 5) && (
                         <div className="relative">
                             <Button className="flex items-center justify-center !p-0 w-9 h-9" onClick={() => setAddMoreDropDownEnabled(!addMoreDropDownEnabled)}>
                                 <IoAdd size={24} />
@@ -100,7 +101,7 @@ const Basic1Footer = () => {
 
                             <div className={`absolute bottom-0 right-0 translate-x-full translate-y-full border-[var(--primary)] rounded-lg w-[200px] overflow-hidden max-h-fit duration-300 ${addMoreDropDownEnabled ? "h-[200px] border" : "h-[0px] border-0"}`}>
                                 {
-                                    (['Instagram', 'Twitter', 'LinkedIn', 'GitHub', 'Facebook'] as SocialLinks[]).filter(platform => !templateData.basic1template.social.some(link => link.platform === platform))
+                                    (['Instagram', 'Twitter', 'LinkedIn', 'GitHub', 'Facebook'] as SocialLinks[]).filter(platform => !(templateData.data as Basic1TemplateData).social.some(link => link.platform === platform))
                                         .map((platform, index) => (
                                             <button
                                                 key={index}

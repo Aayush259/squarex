@@ -18,6 +18,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GoPencil } from "react-icons/go";
+import { Basic1TemplateData } from "@/utils/interfaces";
 
 const Basic1 = () => {
 
@@ -35,9 +36,9 @@ const Basic1 = () => {
     const [error, setError] = useState<string | null>(null);
 
     const setupPortfolio = async () => {
-        if (!templateData?.basic1template || settingUpPortfolio) return;
+        if (!templateData?.data || settingUpPortfolio) return;
         setSettingUpPortfolio(true);
-        const { data, error } = await createPortfolioWithBasic1Template(templateData.basic1template);
+        const { data, error } = await createPortfolioWithBasic1Template(templateData.data as Basic1TemplateData);
         if (error) {
             setError("Something went wrong");
         } else if (data) {
@@ -64,7 +65,8 @@ const Basic1 = () => {
         } else if (data) {
             console.log(data);
             dispatch(setTemplateData({
-                basic1template: data.data
+                type: 'basic1template',
+                data: data.data,
             }));
             if (data.page_title) document.title = data.page_title;
             if (data.page_description) document.querySelector("meta[name='description']")?.setAttribute("content", data.page_description);
@@ -91,13 +93,14 @@ const Basic1 = () => {
 
     // Initialize template data
     useEffect(() => {
-        if (templateData?.basic1template) return;
+        if (templateData?.data) return;
 
         if (slug) {
             getPortfolio();
         } else {
             dispatch(setTemplateData({
-                basic1template: {
+                type: 'basic1template',
+                data: {
                     home: {
                         title: "Home",
                         name: "Aayush",

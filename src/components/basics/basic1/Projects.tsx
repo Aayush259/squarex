@@ -20,7 +20,7 @@ const Basic1Projects = () => {
     const projectRefs = useRef<{ title: HTMLSpanElement | null; url: HTMLSpanElement | null; description: HTMLSpanElement | null; image: HTMLInputElement | null; }[]>([]);
 
     const handleSectionChange = (ref: RefObject<HTMLSpanElement | null>) => {
-        if (!ref.current || !templateData?.basic1template) return;
+        if (!ref.current || !templateData?.data) return;
 
         const selection = window.getSelection();
 
@@ -30,10 +30,11 @@ const Basic1Projects = () => {
             const cursorPosition = range.startOffset;
 
             dispatch(setTemplateData({
-                basic1template: {
-                    ...templateData?.basic1template,
+                ...templateData,
+                data: {
+                    ...(templateData.data as Basic1TemplateData),
                     work: {
-                        ...templateData?.basic1template.work,
+                        ...(templateData.data as Basic1TemplateData).work,
                         title: myWorkRef.current?.textContent || "",
                     }
                 }
@@ -46,7 +47,7 @@ const Basic1Projects = () => {
 
     const handleProjectsChange = (index: number, field: keyof Basic1TemplateData['work']['projects'][number]) => {
         const ref = projectRefs.current[index]?.[field as keyof typeof projectRefs.current[number]];
-        if (!ref || !templateData?.basic1template) return;
+        if (!ref || !templateData?.data) return;
 
         const selection = window.getSelection();
 
@@ -55,50 +56,52 @@ const Basic1Projects = () => {
         const range = selection.getRangeAt(0);
         const cursorPosition = range.startOffset;
 
-        const updatedProjects = [...templateData.basic1template.work.projects];
+        const updatedProjects = [...(templateData.data as Basic1TemplateData).work.projects];
         updatedProjects[index] = {
             ...updatedProjects[index],
             [field]: ref.textContent || "",
         };
 
         dispatch(setTemplateData({
-            basic1template: {
-                ...templateData.basic1template,
+            ...templateData,
+            data: {
+                ...(templateData.data as Basic1TemplateData),
                 work: {
-                    ...templateData.basic1template.work,
+                    ...(templateData.data as Basic1TemplateData).work,
                     projects: updatedProjects,
                 },
-            },
+            }
         }));
 
         restoreCursorPosition(ref, cursorPosition, selection);
     };
 
     const handleProjectImageChange = (index: number, e: ChangeEvent<HTMLInputElement>) => {
-        if (!templateData?.basic1template) return;
+        if (!templateData?.data) return;
         const file = e.target.files?.[0];
 
         if (file && file.type.startsWith("image/")) {
-            const updatedProjects = [...templateData.basic1template.work.projects];
+            const updatedProjects = [...(templateData.data as Basic1TemplateData).work.projects];
             updatedProjects[index] = {
                 ...updatedProjects[index],
                 image: URL.createObjectURL(file),
             };
 
             dispatch(setTemplateData({
-                basic1template: {
-                    ...templateData.basic1template,
+                ...templateData,
+                data: {
+                    ...(templateData.data as Basic1TemplateData),
                     work: {
-                        ...templateData.basic1template.work,
+                        ...(templateData.data as Basic1TemplateData).work,
                         projects: updatedProjects,
                     },
-                },
+                }
             }));
         };
     };
 
     const addProject = () => {
-        if (!templateData?.basic1template) return;
+        if (!templateData?.data) return;
 
         const newProject: Basic1TemplateData['work']['projects'][number] = {
             title: "Project Name",
@@ -107,35 +110,37 @@ const Basic1Projects = () => {
             image: "/slider2.jpg",
         };
 
-        const updatedProjects = [...templateData.basic1template.work.projects, newProject];
+        const updatedProjects = [...(templateData.data as Basic1TemplateData).work.projects, newProject];
 
         dispatch(setTemplateData({
-            basic1template: {
-                ...templateData.basic1template,
+            ...templateData,
+            data: {
+                ...(templateData.data as Basic1TemplateData),
                 work: {
-                    ...templateData.basic1template.work,
+                    ...(templateData.data as Basic1TemplateData).work,
                     projects: updatedProjects,
                 },
-            },
+            }
         }));
     };
 
     const removeProject = (index: number) => {
-        if (!templateData?.basic1template) return;
-        const updatedProjects = [...templateData.basic1template.work.projects];
+        if (!templateData?.data) return;
+        const updatedProjects = [...(templateData.data as Basic1TemplateData).work.projects];
         updatedProjects.splice(index, 1);
         dispatch(setTemplateData({
-            basic1template: {
-                ...templateData.basic1template,
+            ...templateData,
+            data: {
+                ...(templateData.data as Basic1TemplateData),
                 work: {
-                    ...templateData.basic1template.work,
+                    ...(templateData.data as Basic1TemplateData).work,
                     projects: updatedProjects,
                 },
-            },
+            }
         }));
     }
 
-    if (!templateData?.basic1template) return null;
+    if (!templateData?.data) return null;
 
     return (
         <section id={IDs.PROJECTS} className="w-full px-5 py-5 md:px-36">
@@ -146,11 +151,11 @@ const Basic1Projects = () => {
                     contentEditable={templateMode === "editing"}
                     suppressContentEditableWarning
                     onInput={() => handleSectionChange(myWorkRef)}
-                >{templateData.basic1template.work.title}</span>
+                >{(templateData.data as Basic1TemplateData).work.title}</span>
             </h2>
 
             {
-                templateData.basic1template.work.projects.map((project, index) => {
+                (templateData.data as Basic1TemplateData).work.projects.map((project, index) => {
                     if (!projectRefs.current[index]) {
                         projectRefs.current[index] = { title: null, url: null, description: null, image: null };
                     }
@@ -159,7 +164,7 @@ const Basic1Projects = () => {
                         <div key={index} className="w-full flex flex-col md:flex-row md:gap-8 my-8 relative">
 
                             {
-                                (templateMode === "editing" && templateData.basic1template.work.projects.length > 1) && (
+                                (templateMode === "editing" && (templateData.data as Basic1TemplateData).work.projects.length > 1) && (
                                     <button className="text-[var(--primary)] absolute right-0 top-0 -translate-y-full md:-translate-y-1/2 duration-300 hover:opacity-50" onClick={() => removeProject(index)}>
                                         <IoIosClose size={44} />
                                     </button>

@@ -1,4 +1,4 @@
-import { TemplateDataMap, TemplateState, TemplateType } from '@/utils/interfaces';
+import { TemplateData, TemplateDataMap, TemplateState, TemplateType } from '@/utils/interfaces';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState: TemplateState = {
@@ -16,11 +16,18 @@ const templateSlice = createSlice({
         },
         setSelectedTemplate: (state, action: PayloadAction<TemplateType>) => {
             state.selectedTemplate = action.payload;
+            state.templateData = null;
         },
-        setTemplateData: (state, action: PayloadAction<{
-            [K in Exclude<TemplateType, null>]: K extends keyof TemplateDataMap ? TemplateDataMap[K] : never;
-        } | null>) => {
-            state.templateData = action.payload;
+        setTemplateData: (state, action: PayloadAction<{ type: Exclude<TemplateType, null>; data: TemplateDataMap[Exclude<TemplateType, null>] }>) => {
+            const { type, data } = action.payload;
+
+            if (state.selectedTemplate === type) {
+                state.templateData = { type, data } as TemplateData;
+            } else {
+                console.error(
+                    `Template mismatch: Expected ${state.selectedTemplate}, received ${type}`
+                );
+            }
         },
         resetTemplate: (state) => {
             return initialState;

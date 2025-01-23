@@ -7,6 +7,7 @@ import Button from "@/components/Button";
 import { IoIosClose } from "react-icons/io";
 import { restoreCursorPosition } from "@/utils/funcs";
 import { IDs } from "@/utils/helper";
+import { Basic1TemplateData } from "@/utils/interfaces";
 
 const Basic1Skills = () => {
 
@@ -20,7 +21,7 @@ const Basic1Skills = () => {
 
     const handleSkillChange = (index: number) => {
         const ref = skillRefs.current[index];
-        if (!ref || !templateData?.basic1template) return;
+        if (!ref || !templateData?.data) return;
 
         const selection = window.getSelection();
 
@@ -29,22 +30,23 @@ const Basic1Skills = () => {
         const range = selection.getRangeAt(0);
         const cursorPosition = range.startOffset;
 
-        const updatedSkills = [...templateData.basic1template.skills];
+        const updatedSkills = [...(templateData.data as Basic1TemplateData).skills];
         updatedSkills[index] = ref.textContent || "";
 
         dispatch(
             setTemplateData({
-                basic1template: {
-                    ...templateData.basic1template,
+                ...templateData,
+                data: {
+                    ...(templateData.data as Basic1TemplateData),
                     skills: updatedSkills,
-                },
+                }
             })
         );
 
         restoreCursorPosition(ref, cursorPosition, selection);
     };
 
-    if (!templateData?.basic1template) return;
+    if (!templateData?.data) return;
 
     return (
         <>
@@ -55,7 +57,7 @@ const Basic1Skills = () => {
                             <IoIosClose size={44} />
                         </button>
                         {
-                            templateData.basic1template.skills.map((skill, index) => (
+                            (templateData.data as Basic1TemplateData).skills.map((skill, index) => (
                                 <span
                                     key={index}
                                     className="outline-none border border-[var(--primary)] rounded-full max-w-[70vw] overflow-hidden whitespace-nowrap text-sm py-1 px-3 w-[150px] md:w-[200px]"
@@ -83,7 +85,7 @@ const Basic1Skills = () => {
             <section id={IDs.SKILLS} className="flex items-center overflow-hidden relative z-20 my-10 w-screen text-3xl whitespace-nowrap text-white bg-[var(--primary)] font-semibold">
                 <div className="animate-scroll1 flex shrink-0 gap-4 min-w-[100vw] w-fit flex-nowrap xs:space-x-32 space-x-16 my-8 py-6 xs:py-8 xs:px-20 px-8">
                     {
-                        templateData.basic1template.skills.map((skill, index) => (
+                        (templateData.data as Basic1TemplateData).skills.map((skill, index) => (
                             <div className="flex items-start justify-center space-y-4" key={index}>
                                 <CgAsterisk size={40} className="animate-spin2" />
                                 <p className="ml-5">
@@ -95,7 +97,7 @@ const Basic1Skills = () => {
                 </div>
                 <div className="animate-scroll2 flex shrink-0 gap-4 w-fit flex-nowrap xs:space-x-32 space-x-16 my-8 py-6 xs:py-8 xs:px-20 px-8">
                     {
-                        templateData.basic1template.skills.map((skill, index) => (
+                        (templateData.data as Basic1TemplateData).skills.map((skill, index) => (
                             <div className="flex items-start justify-center space-y-4" key={index}>
                                 <CgAsterisk size={50} className="animate-spin2" />
                                 <p className="ml-5">

@@ -1,6 +1,7 @@
 "use client";
 import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
 import { restoreCursorPosition } from "@/utils/funcs";
+import { Basic1TemplateData } from "@/utils/interfaces";
 import Image from "next/image";
 import { ChangeEvent, RefObject, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,7 +18,7 @@ const Basic1Hero = () => {
     const dispatch = useDispatch();
 
     const handleSectionChange = (ref: RefObject<HTMLSpanElement | null>) => {
-        if (!ref.current || !templateData?.basic1template) return;
+        if (!ref.current || !templateData?.data) return;
 
         const selection = window.getSelection();
 
@@ -27,16 +28,17 @@ const Basic1Hero = () => {
             const cursorPosition = range.startOffset;
 
             dispatch(setTemplateData({
-                basic1template: {
-                    ...templateData?.basic1template,
+                ...templateData,
+                data: {
+                    ...(templateData.data as Basic1TemplateData),
                     home: {
-                        ...templateData?.basic1template.home,
+                        ...(templateData?.data as Basic1TemplateData).home,
                         name: nameRef.current?.textContent || "",
                         role: roleRef.current?.textContent || "",
                         bio: bioRef.current?.textContent || "",
                     },
                     work: {
-                        ...templateData?.basic1template.work,
+                        ...(templateData?.data as Basic1TemplateData).work,
                         title: myWorkRef.current?.textContent || "",
                     }
                 }
@@ -53,14 +55,15 @@ const Basic1Hero = () => {
     };
 
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-        if (!templateData?.basic1template) return;
+        if (!templateData?.data) return;
         const file = e.target.files?.[0];
         if (file && file.type.startsWith("image/")) {
             dispatch(setTemplateData({
-                basic1template: {
-                    ...templateData?.basic1template,
+                ...templateData,
+                data: {
+                    ...(templateData.data as Basic1TemplateData),
                     home: {
-                        ...templateData?.basic1template.home,
+                        ...(templateData?.data as Basic1TemplateData).home,
                         image: URL.createObjectURL(file),
                     }
                 }
@@ -68,7 +71,7 @@ const Basic1Hero = () => {
         };
     };
 
-    if (!templateData?.basic1template) return null;
+    if (!templateData?.data) return null;
 
     return (
         <section className="w-full bg-[#FFFFFF] px-5 pt-12 pb-20 md:px-36 md:pt-28 md:pb-28">
@@ -83,7 +86,7 @@ const Basic1Hero = () => {
                                 contentEditable={templateMode === "editing"}
                                 suppressContentEditableWarning
                                 onInput={() => handleSectionChange(nameRef)}
-                            >{templateData.basic1template.home.name}</span>
+                            >{(templateData.data as Basic1TemplateData).home.name}</span>
                         </span>
                         <span
                             className="outline-none"
@@ -92,7 +95,7 @@ const Basic1Hero = () => {
                             suppressContentEditableWarning
                             onInput={() => handleSectionChange(roleRef)}
                         >
-                            {templateData.basic1template.home.role}
+                            {(templateData.data as Basic1TemplateData).home.role}
                         </span>
                     </h1>
 
@@ -103,7 +106,7 @@ const Basic1Hero = () => {
                         suppressContentEditableWarning
                         onInput={() => handleSectionChange(bioRef)}
                     >
-                        {templateData.basic1template.home.bio}
+                        {(templateData.data as Basic1TemplateData).home.bio}
                     </span>
                 </div>
 
@@ -116,8 +119,8 @@ const Basic1Hero = () => {
                 />
 
                 <Image
-                    src={templateData.basic1template.home.image}
-                    alt={templateData.basic1template.home.name}
+                    src={(templateData.data as Basic1TemplateData).home.image}
+                    alt={(templateData.data as Basic1TemplateData).home.name}
                     width={300}
                     height={300}
                     className={`rounded-full w-[280px] h-[280px] md:h-[300px] md:w-[300px] object-cover object-top duration-300 ${templateMode === "editing" ? "cursor-pointer hover:opacity-70" : ""}`}
@@ -132,7 +135,7 @@ const Basic1Hero = () => {
                     contentEditable={templateMode === "editing"}
                     suppressContentEditableWarning
                     onInput={() => handleSectionChange(myWorkRef)}
-                >{templateData.basic1template.work.title}</span>
+                >{(templateData.data as Basic1TemplateData).work.title}</span>
             </button>
         </section>
     );

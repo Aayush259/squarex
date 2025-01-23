@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
 import { restoreCursorPosition, scrollToElement } from "@/utils/funcs";
 import { IDs } from "@/utils/helper";
+import { Basic1TemplateData } from "@/utils/interfaces";
 
 export default function Basic1Header() {
 
@@ -17,7 +18,7 @@ export default function Basic1Header() {
     const dispatch = useDispatch();
 
     const handleNameChange = (ref: RefObject<HTMLSpanElement | null>) => {
-        if (!ref.current || !templateData?.basic1template) return;
+        if (!ref.current || !templateData?.data) return;
 
         const selection = window.getSelection();
 
@@ -27,14 +28,15 @@ export default function Basic1Header() {
             const cursorPosition = range.startOffset;
 
             dispatch(setTemplateData({
-                basic1template: {
-                    ...templateData.basic1template,
+                ...templateData,
+                data: {
+                    ...templateData.data as Basic1TemplateData,
                     home: {
-                        ...templateData?.basic1template.home,
+                        ...(templateData?.data as Basic1TemplateData).home,
                         title: homeLinkRef.current?.textContent || "",
                     },
                     work: {
-                        ...templateData?.basic1template.work,
+                        ...(templateData?.data as Basic1TemplateData).work,
                         title: workLinkRef.current?.textContent || "",
                     }
                 }
@@ -45,7 +47,7 @@ export default function Basic1Header() {
         }
     };
 
-    if (!templateData?.basic1template) return null;
+    if (!templateData?.data) return null;
 
     return (
         <>
@@ -63,7 +65,7 @@ export default function Basic1Header() {
                     className={`outline-none hidden md:block font-semibold hover:text-red-500 duration-300 ${templateMode !== "editing" && "cursor-pointer"}`}
                     onClick={templateMode !== 'editing' ? () => scrollToElement(IDs.B1) : undefined}
                 >
-                    {templateData.basic1template.home.title}
+                    {(templateData.data as Basic1TemplateData).home.title}
                 </span>
 
                 {/* Work Link */}
@@ -75,7 +77,7 @@ export default function Basic1Header() {
                     className={`outline-none hidden md:block font-semibold hover:text-red-500 duration-300 ${templateMode !== "editing" && "cursor-pointer"}`}
                     onClick={templateMode !== 'editing' ? () => scrollToElement(IDs.B1, IDs.PROJECTS) : undefined}
                 >
-                    {templateData.basic1template.work.title}
+                    {(templateData.data as Basic1TemplateData).work.title}
                 </span>
 
                 {/* Contact Link */}
@@ -101,7 +103,7 @@ export default function Basic1Header() {
                     className="outline-none block w-full my-6 text-lg text-center font-semibold duration-300"
                     onClick={templateMode !== 'editing' ? () => { scrollToElement(IDs.B1); setIsSidebarOpen(false) } : undefined}
                 >
-                    {templateData.basic1template.home.title}
+                    {(templateData.data as Basic1TemplateData).home.title}
                 </span>
 
                 {/* Work Link */}
@@ -113,7 +115,7 @@ export default function Basic1Header() {
                     className="outline-none block w-full my-6 text-lg text-center font-semibold duration-300"
                     onClick={templateMode !== 'editing' ? () => { scrollToElement(IDs.B1, IDs.PROJECTS); setIsSidebarOpen(false) } : undefined}
                 >
-                    {templateData.basic1template.work.title}
+                    {(templateData.data as Basic1TemplateData).work.title}
                 </span>
 
                 {/* Contact Link for mobile */}

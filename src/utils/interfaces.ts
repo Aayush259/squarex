@@ -33,8 +33,21 @@ export interface UserState {
 };
 
 export type SocialLinks = 'Instagram' | 'Twitter' | 'LinkedIn' | 'GitHub' | 'Facebook' | null;
-export type TemplateType = 'basic1template' | null;
+export type TemplateType = 'basic1template' | 'basic2template' | null;
 export type TemplateMode = 'checking' | 'editing' | 'reviewing' | 'done' | null;
+
+export type TemplateData = {
+    [K in Exclude<TemplateType, null>]: {
+        type: K;
+        data: TemplateDataMap[K];
+    }
+}[Exclude<TemplateType, null>];
+
+export interface TemplateState {
+    mode: TemplateMode;
+    selectedTemplate: TemplateType | null;
+    templateData: TemplateData | null;
+}
 
 // Interface for basic1template data structure
 export interface Basic1TemplateData {
@@ -61,15 +74,16 @@ export interface Basic1TemplateData {
     }[]
 }
 
+export interface Basic2TemplateData { }
+
 // Template data type that maps template types to their corresponding data structures
 export type TemplateDataMap = {
-    basic1template: Basic1TemplateData;
+    'basic1template': Basic1TemplateData;
+    'basic2template': Basic2TemplateData;
 }
 
 export interface TemplateState {
     mode: TemplateMode;
     selectedTemplate: TemplateType;
-    templateData: {
-        [K in Exclude<TemplateType, null>]: K extends keyof TemplateDataMap ? TemplateDataMap[K] : never;
-    } | null;
+    templateData: TemplateData | null;
 }
