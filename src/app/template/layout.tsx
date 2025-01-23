@@ -24,6 +24,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             const { data, error } = await getPortfolioWithBasic1Template(user.id);
 
             if (data) {
+                if (data.page_title) document.title = data.page_title;
+                if (data.page_description) document.querySelector("meta[name='description']")?.setAttribute("content", data.page_description);
                 dispatch(setTemplateData({
                     basic1template: data.data
                 }));
