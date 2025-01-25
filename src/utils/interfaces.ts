@@ -74,7 +74,33 @@ export interface Basic1TemplateData {
     }[]
 }
 
-export interface Basic2TemplateData { }
+export interface Basic2TemplateData {
+    home: {
+        title: string;
+        rolePart1: string;
+        rolePart2: string;
+        bio: string;
+    },
+    about: {
+        title: string;
+        descriptionPart1: string;
+        descriptionPart2: string;
+    },
+    work: {
+        title: string;
+        projects: {
+            title: string;
+            url: string;
+            description: string;
+            image: string;
+        }[];
+    },
+    skills: string[];
+    social: {
+        platform: SocialLinks;
+        url: string | null;
+    }[];
+}
 
 // Template data type that maps template types to their corresponding data structures
 export type TemplateDataMap = {
