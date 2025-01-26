@@ -43,7 +43,7 @@ const Basic2Contact = () => {
     if (templateMode === "editing") return;
 
     return (
-        <section id={IDs.CONTACT} className="w-full px-5 py-5 md:px-36 outfit">
+        <section id={IDs.CONTACT} className="w-full my-8 px-5 py-5 md:px-36 outfit">
             <p className="text-2xl font-semibold w-full text-center">
                 {"Contact"}
             </p>
