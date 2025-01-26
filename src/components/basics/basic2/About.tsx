@@ -85,7 +85,7 @@ const Basic2About = () => {
                 <Image src="/templateImages/about_me.avif" alt="About me" width={500} height={200} className="w-[400px] max-w-[90%] object-cover object-top" />
             </div>
 
-            <Basic2Button className="text-sm !my-6">
+            <Basic2Button className="text-sm block mx-auto md:mx-0 !my-6">
                 {"Let's Talk"}
                 <FaArrowRight size={16} />
             </Basic2Button>

@@ -85,7 +85,7 @@ const Basic2WhatiDo = () => {
     if (!templateData?.data) return;
 
     return (
-        <section id={IDs.SKILLS} className="w-full min-h-screen my-5 px-5 py-5 md:px-36 outfit relative overflow-hidden">
+        <section id={IDs.SKILLS} className="w-full md:min-h-screen mt-5 px-5 py-5 md:px-36 outfit relative overflow-hidden">
             <Image src="/templateImages/skills_bg.avif" alt="Skills" width={500} height={500} className="object-cover object-center w-full h-full absolute top-0 left-0" />
 
             {
@@ -120,7 +120,7 @@ const Basic2WhatiDo = () => {
                 )
             }
 
-            <div className="w-full min-h-screen flex items-center justify-items-center md:justify-between text-neutral-300 relative z-10">
+            <div className="w-full md:min-h-screen flex flex-col md:flex-row items-center justify-items-center md:justify-between text-neutral-300 relative z-10">
                 <div className="md:w-1/2">
                     <span
                         ref={titleRef}
@@ -143,12 +143,12 @@ const Basic2WhatiDo = () => {
                     </span>
                 </div>
 
-                <div className="md:w-1/2 rotate-90 flex items-center relative z-20 my-10 w-full text-3xl whitespace-nowrap text-white font-semibold">
+                <div className="md:w-1/2 md:rotate-90 flex items-center relative z-20 my-10 w-full text-3xl whitespace-nowrap text-white font-semibold">
                     <div className="animate-scroll1 flex shrink-0 gap-4 min-w-[100vw] w-fit flex-nowrap xs:space-x-32 space-x-16 my-8 py-6 xs:py-8 xs:px-20 px-8">
                         {
                             (templateData.data as Basic2TemplateData).skills.skills.map((skill, index) => (
-                                <div className="flex items-start justify-center space-y-4 -rotate-90" key={index}>
-                                    <p className="ml-5 scale-[1.5] bg-white/10 p-2 rounded-xl">
+                                <div className="flex items-start justify-center space-y-4 md:-rotate-90" key={index}>
+                                    <p className="ml-5 md:scale-[1.5] bg-white/10 p-2 rounded-xl">
                                         {skill}
                                     </p>
                                 </div>
@@ -158,8 +158,8 @@ const Basic2WhatiDo = () => {
                     <div className="animate-scroll2 flex shrink-0 gap-4 w-fit flex-nowrap xs:space-x-32 space-x-16 my-8 py-6 xs:py-8 xs:px-20 px-8">
                         {
                             (templateData.data as Basic2TemplateData).skills.skills.map((skill, index) => (
-                                <div className="flex items-start justify-center space-y-4 -rotate-90" key={index}>
-                                    <p className="ml-5 scale-[1.5] bg-white/10 p-2 rounded-xl">
+                                <div className="flex items-start justify-center space-y-4 md:-rotate-90" key={index}>
+                                    <p className="ml-5 md:scale-[1.5] bg-white/10 p-2 rounded-xl">
                                         {skill}
                                     </p>
                                 </div>

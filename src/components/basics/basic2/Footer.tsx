@@ -67,7 +67,7 @@ const Basic2Footer = () => {
     if (!templateData?.data) return null;
 
     return (
-        <footer className="w-full mt-12 relative py-6 px-4 md:py-20 md:px-20">
+        <footer className="w-full relative py-6 px-4 md:py-20 md:px-20">
             <Image src="/templateImages/footer_bg.avif" alt="footer background" width={400} height={400} className="w-full h-full object-cover object-center absolute top-0 left-0" />
 
             <div className="flex w-fit max-w-full mx-auto items-center gap-4 relative z-10">

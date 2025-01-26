@@ -109,12 +109,7 @@ export const createPortfolioWithBasic2Template = async (templateData: Basic2Temp
     const payload = {
         templateName: templateNames.Basic2Template,
         templateData: {
-            home: {
-                title: templateData.home.title,
-                name: templateData.home.name,
-                role: templateData.home.role,
-                bio: templateData.home.bio,
-            },
+            home: templateData.home,
             about: templateData.about,
             work: {
                 title: templateData.work.title,

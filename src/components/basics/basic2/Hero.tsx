@@ -63,7 +63,7 @@ const Basic2Hero = () => {
                 contentEditable={templateMode === "editing"}
                 suppressContentEditableWarning
                 onInput={() => handleSectionChange(roleRef)}
-                className="block outline-none my-8 text-2xl md:text-9xl font-semibold aldrich"
+                className="block outline-none my-8 text-4xl md:text-9xl font-semibold aldrich"
             >
                 {(templateData?.data as Basic2TemplateData).home.role}
             </span>

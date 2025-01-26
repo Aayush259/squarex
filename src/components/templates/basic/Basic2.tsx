@@ -148,9 +148,6 @@ const Basic2 = () => {
                         subtitle: "My Specialization And Key Skills",
                         skills: ["UI/UX Design", "Photoshop", "Illustrator", "Figma", "Web Design", "Logo Design"]
                     },
-                    contact: {
-                        title: "Contact"
-                    },
                     social: [
                         {
                             platform: "LinkedIn",
