@@ -4,8 +4,9 @@ import { setMode, setTemplateData } from "@/store/templateSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { usePathname } from "next/navigation";
 import { FullPageLoader } from "@/components/Loader";
-import { getPortfolioWithBasic1Template } from "@/apis/getPortfolio";
+import { getPortfolioData } from "@/apis/getPortfolio";
 import { selectUser } from "@/store/userSlice";
+import { templateNames } from "@/utils/helper";
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
 
@@ -21,7 +22,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         if (!pathname || !user?.id) return;
 
         if (pathname.includes("basic1template")) {
-            const { data, error } = await getPortfolioWithBasic1Template(user.id);
+            const { data, error } = await getPortfolioData(user.id, templateNames.Basic1Template);
 
             if (data) {
                 if (data.page_title) document.title = data.page_title;

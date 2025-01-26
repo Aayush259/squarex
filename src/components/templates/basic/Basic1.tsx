@@ -1,6 +1,6 @@
 "use client";
 import { createPortfolioWithBasic1Template } from "@/apis/createPortfolio";
-import { getPortfolioWithBasic1Template } from "@/apis/getPortfolio";
+import { getPortfolioData } from "@/apis/getPortfolio";
 import Basic1Contact from "@/components/basics/basic1/Contact";
 import Basic1Footer from "@/components/basics/basic1/Footer";
 import Basic1Header from "@/components/basics/basic1/Header";
@@ -10,9 +10,9 @@ import Basic1Skills from "@/components/basics/basic1/Skills";
 import Button from "@/components/Button";
 import { NotFound, SomethingWentWrong } from "@/components/Error";
 import { CreatingPortfolioSpinner, FullPageLoader } from "@/components/Loader";
-import { selectTemplateData, selectTemplateMode, setMode, setTemplateData } from "@/store/templateSlice";
+import { selectTemplateData, selectTemplateMode, setMode, setSelectedTemplate, setTemplateData } from "@/store/templateSlice";
 import { selectUser } from "@/store/userSlice";
-import { IDs } from "@/utils/helper";
+import { IDs, templateNames } from "@/utils/helper";
 import { usePathname } from "next/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -54,7 +54,7 @@ const Basic1 = () => {
     const getPortfolio = async () => {
         if (!slug || gettingPortfolio) return;
         setGettingPortfolio(true);
-        const { data, error } = await getPortfolioWithBasic1Template(slug as string);
+        const { data, error } = await getPortfolioData(slug as string, templateNames.Basic1Template);
         if (error) {
             if (error === "NOT_FOUND") {
                 setError("NOT_FOUND");
@@ -65,7 +65,7 @@ const Basic1 = () => {
         } else if (data) {
             console.log(data);
             dispatch(setTemplateData({
-                type: 'basic1template',
+                type: "basic1template",
                 data: data.data,
             }));
             if (data.page_title) document.title = data.page_title;
@@ -93,6 +93,7 @@ const Basic1 = () => {
 
     // Initialize template data
     useEffect(() => {
+        dispatch(setSelectedTemplate("basic1template"));
         if (templateData?.data) return;
 
         if (slug) {
