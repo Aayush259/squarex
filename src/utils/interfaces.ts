@@ -106,9 +106,6 @@ export interface Basic2TemplateData {
         subtitle: string;
         skills: string[];
     },
-    contact: {
-        title: string;
-    }
     social: {
         platform: SocialLinks;
         url: string | null;
