@@ -1,7 +1,7 @@
 import useFetchApi from "@/hooks/useFetchApi";
 import { getImageFileBase64 } from "@/utils/funcs";
 import { templateNames } from "@/utils/helper";
-import { Basic1TemplateData } from "@/utils/interfaces";
+import { Basic1TemplateData, Basic2TemplateData } from "@/utils/interfaces";
 
 export const updateMetadata = async (templateName: string, page_title?: string, page_description?: string) => {
 
@@ -63,6 +63,59 @@ export const createPortfolioWithBasic1Template = async (templateData: Basic1Temp
                 bio: templateData.home.bio,
                 image: homeImage,
             },
+            work: {
+                title: templateData.work.title,
+                projects: work,
+            },
+            skills: templateData.skills,
+            social: templateData.social,
+        }
+    }
+
+    const { data, error } = await useFetchApi("/api/template", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+    })
+
+    return { data, error };
+}
+
+export const createPortfolioWithBasic2Template = async (templateData: Basic2TemplateData) => {
+
+    const work: {
+        title: string;
+        url: string;
+        description: string;
+        image: File | string;
+    }[] = [];
+
+    for (const project of templateData.work.projects) {
+        const projectImage = project.image;
+        let file: string | null = null;
+        if (projectImage && projectImage.startsWith("blob:")) {
+            file = await getImageFileBase64(projectImage);
+        }
+        work.push({
+            title: project.title,
+            url: project.url,
+            description: project.description,
+            image: file || projectImage,
+        });
+    };
+
+    const payload = {
+        templateName: templateNames.Basic2Template,
+        templateData: {
+            home: {
+                title: templateData.home.title,
+                name: templateData.home.name,
+                role: templateData.home.role,
+                bio: templateData.home.bio,
+            },
+            about: templateData.about,
             work: {
                 title: templateData.work.title,
                 projects: work,
