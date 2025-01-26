@@ -13,6 +13,11 @@ export default function Home() {
             name: "basic1template",
             description: "A simple and clean template for beginners in their journey.",
             image: "/templates/basic1template.webp",
+        },
+        {
+            name: "basic2template",
+            description: "Sleek, minimalist portfolio template with clean layout, intuitive navigation, and engaging contact features to showcase work elegantly.",
+            image: "/templates/basic2template.webp",
         }
     ];
 
@@ -29,15 +34,15 @@ export default function Home() {
         <div className="w-full py-10 md:px-28 flex flex-col md:flex-row gap-8">
             {
                 templates.map(template => (
-                    <div key={template.name} className="overflow-hidden w-[450px] max-w-[95vw] mx-auto md:mx-0 p-0.5 rounded-lg bg-gradient-to-b from-transparent to-[var(--primary)]">
-                        <div className="rounded-lg w-full bg-black pb-2 overflow-hidden">
+                    <div key={template.name} className="overflow-hidden w-[450px] max-w-[95vw] mx-auto md:mx-0 p-0.5 rounded-lg bg-gradient-to-b from-transparent to-[var(--primary)] duration-300 hover:scale-[1.02]">
+                        <div className="rounded-lg w-full h-full bg-black pb-2 overflow-hidden relative">
                             <Image src={template.image} alt={template.name as string} width={450} height={350} className="w-full rounded-t-lg mx-auto h-auto md:h-[250px] object-cover object-center" />
 
-                            <p className="text-lg my-8 px-4">
+                            <p className="text-lg mt-8 mb-20 px-4">
                                 {template.description}
                             </p>
 
-                            <Button className="block ml-auto mr-2 !rounded-lg before:!rounded-lg" onClick={() => redirectToTemplate(template.name)}>
+                            <Button className="!absolute bottom-2 right-0 block ml-auto mr-2 !rounded-lg before:!rounded-lg" onClick={() => redirectToTemplate(template.name)}>
                                 {"View"}
                             </Button>
                         </div>

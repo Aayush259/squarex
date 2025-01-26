@@ -52,6 +52,10 @@ export default function Dashboard() {
                 portfolioUrl = `/portfolio/${user?.id}/b1`;
                 templateUrl = `/template/basic1template`;
                 break;
+            case templateNames.Basic2Template:
+                portfolioUrl = `/portfolio/${user?.id}/b2`;
+                templateUrl = `/template/basic2template`;
+                break;
         }
 
         return { portfolioUrl, templateUrl };
@@ -62,6 +66,8 @@ export default function Dashboard() {
         switch (templateName) {
             case templateNames.Basic1Template:
                 return "B1 - SquareX";
+            case templateNames.Basic2Template:
+                return "B2 - SquareX";
             default:
                 return "";
         }
@@ -186,7 +192,7 @@ export default function Dashboard() {
                             if (!portfolioUrl || !templateUrl) return;
 
                             return (
-                                <div key={template} className="w-[500px] max-w-[90vw] p-4 rounded-lg bg-[#884dd633] hover:scale-[1.02] duration-300">
+                                <div key={template} className="w-[500px] max-w-[90vw] my-2 p-4 rounded-lg bg-[#884dd633] hover:scale-[1.02] duration-300">
                                     <p className="text-lg mb-2">
                                         {tName}
                                     </p>

@@ -47,7 +47,7 @@ const Basic2 = () => {
             if (pathname?.includes("portfolio")) {
                 window.location.reload();
             } else {
-                router.push(`/dashboard`);
+                router.push(`/portfolio/${data.user_id}/b2`);
             }
         }
     };
