@@ -1,6 +1,7 @@
 
 export const templateNames = {
     Basic1Template: "Basic1Template",
+    Basic2Template: "Basic2Template",
 }
 
 export const IDs = {
@@ -8,4 +9,5 @@ export const IDs = {
     PROJECTS: "projects",
     SKILLS: "skills",
     CONTACT: "contact",
+    ABOUT: "about",
 }
