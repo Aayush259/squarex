@@ -1,5 +1,4 @@
 import useFetchApi from "@/hooks/useFetchApi";
-import { templateNames } from "@/utils/helper";
 
 export const getCreatedTemplateNames = async () => {
     const { data, error } = await useFetchApi("/api/getCreatedTemplateNames", {
@@ -12,10 +11,10 @@ export const getCreatedTemplateNames = async () => {
     return { data, error };
 }
 
-export const getPortfolioWithBasic1Template = async (slug: string) => {
+export const getPortfolioData = async (slug: string, templateName: string) => {
 
     const payload = {
-        templateName: templateNames.Basic1Template,
+        templateName: templateName,
         slug: slug,
     }
 
