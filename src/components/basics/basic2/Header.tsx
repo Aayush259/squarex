@@ -148,7 +148,7 @@ export default function Basic2Header() {
                     contentEditable={templateMode === 'editing'}
                     suppressContentEditableWarning
                     onInput={() => handleNameChange(aboutLinkRef)}
-                    onClick={templateMode !== 'editing' ? () => {setHamActive(false); scrollToElement(IDs.ABOUT)} : undefined}
+                    onClick={templateMode !== 'editing' ? () => {setHamActive(false); scrollToElement(IDs.B1, IDs.ABOUT)} : undefined}
                     className={`border-b ${templateMode !== "editing" && "cursor-pointer"}`}
                 >
                     {(templateData.data as Basic2TemplateData).about.title}
@@ -159,7 +159,7 @@ export default function Basic2Header() {
                     contentEditable={templateMode === 'editing'}
                     suppressContentEditableWarning
                     onInput={() => handleNameChange(workLinkRef)}
-                    onClick={templateMode !== 'editing' ? () => {setHamActive(false); scrollToElement(IDs.PROJECTS)} : undefined}
+                    onClick={templateMode !== 'editing' ? () => {setHamActive(false); scrollToElement(IDs.B1, IDs.PROJECTS)} : undefined}
                     className={`border-b ${templateMode !== "editing" && "cursor-pointer"}`}
                 >
                     {(templateData.data as Basic2TemplateData).work.title}
@@ -170,14 +170,14 @@ export default function Basic2Header() {
                     contentEditable={templateMode === 'editing'}
                     suppressContentEditableWarning
                     onInput={() => handleNameChange(whatIdoLinkRef)}
-                    onClick={templateMode !== 'editing' ? () => {setHamActive(false); scrollToElement(IDs.SKILLS)} : undefined}
+                    onClick={templateMode !== 'editing' ? () => {setHamActive(false); scrollToElement(IDs.B1, IDs.SKILLS)} : undefined}
                     className={`border-b ${templateMode !== "editing" && "cursor-pointer"}`}
                 >
                     {(templateData.data as Basic2TemplateData).skills.title}
                 </HeaderLink>
 
                 {
-                    templateMode !== 'editing' && <HeaderLink onClick={() => {setHamActive(false); scrollToElement(IDs.CONTACT)}} className="cursor-pointer">
+                    templateMode !== 'editing' && <HeaderLink onClick={() => {setHamActive(false); scrollToElement(IDs.B1, IDs.CONTACT)}} className="cursor-pointer">
                         {"Contact"}
                     </HeaderLink>
                 }
