@@ -9,6 +9,12 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
     className?: string;
 };
 
+export interface SpanProps extends React.HTMLAttributes<HTMLSpanElement> {
+    reference?: React.RefObject<HTMLSpanElement | null>;
+    children: React.ReactNode;
+    className?: string;
+}
+
 export interface ITemplates {
     name: TemplateType;
     description: string;
@@ -77,8 +83,8 @@ export interface Basic1TemplateData {
 export interface Basic2TemplateData {
     home: {
         title: string;
-        rolePart1: string;
-        rolePart2: string;
+        name: string;
+        role: string;
         bio: string;
     },
     about: {
@@ -95,7 +101,14 @@ export interface Basic2TemplateData {
             image: string;
         }[];
     },
-    skills: string[];
+    skills: {
+        title: string;
+        subtitle: string;
+        skills: string[];
+    },
+    contact: {
+        title: string;
+    }
     social: {
         platform: SocialLinks;
         url: string | null;
