@@ -10,7 +10,7 @@ import Basic1Skills from "@/components/basics/basic1/Skills";
 import Button from "@/components/Button";
 import { NotFound, SomethingWentWrong } from "@/components/Error";
 import { CreatingPortfolioSpinner, FullPageLoader } from "@/components/Loader";
-import { selectTemplateData, selectTemplateMode, setMode, setSelectedTemplate, setTemplateData } from "@/store/templateSlice";
+import { selectTemplateData, selectTemplateMode, setMode, setTemplateData } from "@/store/templateSlice";
 import { selectUser } from "@/store/userSlice";
 import { IDs, templateNames } from "@/utils/helper";
 import { usePathname } from "next/navigation";
@@ -93,7 +93,6 @@ const Basic1 = () => {
 
     // Initialize template data
     useEffect(() => {
-        dispatch(setSelectedTemplate("basic1template"));
         if (templateData?.data) return;
 
         if (slug) {
@@ -191,7 +190,7 @@ const Basic1 = () => {
                 }
 
                 {
-                    (!settingUpPortfolio && !slug) && (
+                    (!settingUpPortfolio && !slug && templateMode !== "checking") && (
                         <Button className="border border-white hover:border-[var(--primary)] shadow !py-1" onClick={handleFixedBtnClick}>
                             {
                                 templateMode === "editing" ? "Preview" : templateMode === "reviewing" ? "Publish" : null
@@ -208,6 +207,12 @@ const Basic1 = () => {
                             }
                         </Button>
                     )
+                }
+
+                {
+                    templateMode === "checking" && <Button className="border border-white hover:border-[var(--primary)] shadow !py-1 !px-2" onClick={() => dispatch(setMode("editing"))}>
+                        {"Use this template"}
+                    </Button>
                 }
             </div>
         </div>

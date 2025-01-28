@@ -51,7 +51,6 @@ export type TemplateData = {
 
 export interface TemplateState {
     mode: TemplateMode;
-    selectedTemplate: TemplateType | null;
     templateData: TemplateData | null;
 }
 
@@ -120,6 +119,5 @@ export type TemplateDataMap = {
 
 export interface TemplateState {
     mode: TemplateMode;
-    selectedTemplate: TemplateType;
     templateData: TemplateData | null;
 }

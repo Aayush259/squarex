@@ -3,7 +3,7 @@ import { getPortfolioData } from "@/apis/getPortfolio";
 import Button from "@/components/Button";
 import { NotFound, SomethingWentWrong } from "@/components/Error";
 import { CreatingPortfolioSpinner, FullPageLoader } from "@/components/Loader";
-import { selectTemplateData, selectTemplateMode, setMode, setSelectedTemplate, setTemplateData } from "@/store/templateSlice";
+import { selectTemplateData, selectTemplateMode, setMode, setTemplateData } from "@/store/templateSlice";
 import { selectUser } from "@/store/userSlice";
 import { IDs, templateNames } from "@/utils/helper";
 import { usePathname } from "next/navigation";
@@ -94,9 +94,8 @@ const Basic2 = () => {
 
     // Initialize template data
     useEffect(() => {
-        dispatch(setSelectedTemplate("basic2template"));
         if (templateData?.data) return;
-        
+
         if (slug) {
             getPortfolio();
         } else {
@@ -207,7 +206,7 @@ const Basic2 = () => {
                 }
 
                 {
-                    (!settingUpPortfolio && !slug) && (
+                    (!settingUpPortfolio && !slug && templateMode !== "checking") && (
                         <Button className="border border-white hover:border-[var(--primary)] shadow !py-1" onClick={handleFixedBtnClick}>
                             {
                                 templateMode === "editing" ? "Preview" : templateMode === "reviewing" ? "Publish" : null
@@ -224,6 +223,12 @@ const Basic2 = () => {
                             }
                         </Button>
                     )
+                }
+
+                {
+                    templateMode === "checking" && <Button className="border border-white hover:border-[var(--primary)] shadow !py-1 !px-2" onClick={() => dispatch(setMode("editing"))}>
+                        {"Use this template"}
+                    </Button>
                 }
             </div>
         </div>
