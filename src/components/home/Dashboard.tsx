@@ -10,7 +10,6 @@ import { FaExternalLinkAlt } from "react-icons/fa";
 import { FaGear } from "react-icons/fa6";
 import { GoPencil } from "react-icons/go";
 import { IoIosClose } from "react-icons/io";
-import { useRouter } from "next/navigation";
 import { updateMetadata } from "@/apis/createPortfolio";
 import Input from "../Input";
 import Button from "../Button";
@@ -20,7 +19,6 @@ import { Loader } from "../Loader";
 
 export default function Dashboard() {
 
-    const router = useRouter();
     const user = useSelector(selectUser);
     const [userTemplates, setUserTemplates] = useState<string[]>([]);
     const [editMetadataWindowOpen, setEditMetadataWindowOpen] = useState<boolean>(false);
@@ -197,7 +195,7 @@ export default function Dashboard() {
                                         {tName}
                                     </p>
                                     <div className="w-full flex items-center justify-between">
-                                    <Link href={portfolioUrl} className="underline hover:no-underline underline-offset-4 duration-300 flex items-center gap-2 text-lg w-fit">
+                                    <Link href={portfolioUrl} target="_blank" className="underline hover:no-underline underline-offset-4 duration-300 flex items-center gap-2 text-lg w-fit">
                                         {"Visit"}
                                         <FaExternalLinkAlt size={18} />
                                     </Link>
@@ -217,7 +215,7 @@ export default function Dashboard() {
                                             <FaGear size={24} />
                                         </button>
 
-                                        <button onClick={() => router.push(templateUrl)} className="hover:opacity-50">
+                                        <button onClick={() => window.open(templateUrl, "_blank")} className="hover:opacity-50">
                                             <GoPencil size={24} />
                                         </button>
                                     </div>
