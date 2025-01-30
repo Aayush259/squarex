@@ -39,7 +39,7 @@ export interface UserState {
 };
 
 export type SocialLinks = 'Instagram' | 'Twitter' | 'LinkedIn' | 'GitHub' | 'Facebook' | null;
-export type TemplateType = 'basic1template' | 'basic2template' | null;
+export type TemplateType = 'basic1template' | 'basic2template' | 'intermediate1template' | null;
 export type TemplateMode = 'checking' | 'editing' | 'reviewing' | 'done' | null;
 
 export type TemplateData = {
@@ -111,10 +111,15 @@ export interface Basic2TemplateData {
     }[];
 }
 
+export interface Intermediate1TemplateData {
+    
+}
+
 // Template data type that maps template types to their corresponding data structures
 export type TemplateDataMap = {
     'basic1template': Basic1TemplateData;
     'basic2template': Basic2TemplateData;
+    'intermediate1template': Intermediate1TemplateData;
 }
 
 export interface TemplateState {
