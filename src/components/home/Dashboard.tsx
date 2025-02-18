@@ -175,7 +175,7 @@ export default function Dashboard() {
                     }
 
                     {
-                        !fetching.fetchingContacts && !fetching.contactsError && contact.length === 0 && <div className="w-[500px] max-w-[90vw] flex items-center justify-center p-4">
+                        !fetching.fetchingPortfolios && !fetching.portfoliosError && userTemplates.length === 0 && <div className="w-[500px] max-w-[90vw] flex items-center justify-center p-4">
                             <Link href="/" className="hover:opacity-50">
                                 {"Create your first portfolio!"}
                             </Link>
