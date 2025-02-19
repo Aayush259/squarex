@@ -6,7 +6,7 @@ import { FaArrowRight } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
 import { RefObject, useRef } from "react";
-import { restoreCursorPosition } from "@/utils/funcs";
+import { restoreCursorPosition, scrollToElement } from "@/utils/funcs";
 import { Basic2TemplateData } from "@/utils/interfaces";
 
 const Basic2About = () => {
@@ -85,7 +85,7 @@ const Basic2About = () => {
                 <Image src="/templateImages/about_me.avif" alt="About me" width={500} height={200} className="w-[400px] max-w-[90%] object-cover object-top" />
             </div>
 
-            <Basic2Button className="text-sm block mx-auto md:mx-0 !my-6">
+            <Basic2Button onClick={templateMode !== 'editing' ?  () => scrollToElement(IDs.B1, IDs.CONTACT) : undefined} className="text-sm block mx-auto md:mx-0 !my-6">
                 {"Let's Talk"}
                 <FaArrowRight size={16} />
             </Basic2Button>
