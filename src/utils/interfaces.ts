@@ -112,7 +112,21 @@ export interface Basic2TemplateData {
 };
 
 export interface Intermediate1TemplateData {
-    
+    home: {
+        name: string;
+        headlines: string[];
+    };
+    about: {
+        descriptionPart1: string;
+        descriptionPart2: string;
+    };
+    projects: {
+        name: string;
+        description: string;
+        image: string;
+        url: string;
+        gitHubLink: string;
+    }[];
 };
 
 // Template data type that maps template types to their corresponding data structures
