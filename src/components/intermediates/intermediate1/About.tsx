@@ -46,7 +46,7 @@ const Intermediate1About = () => {
     if (!templateData?.data) return null;
 
     return (
-        <section id={IDs.ABOUT} className=" bg-black text-white w-full px-5 py-5 md:pl-36 md:pr-20 outfit">
+        <section id={IDs.ABOUT} className="bg-black text-white w-full px-5 py-5 md:pl-36 md:pr-20 outfit">
             <span className="block outline-none text-2xl font-semibold w-full">
                 {"About"}
             </span>
