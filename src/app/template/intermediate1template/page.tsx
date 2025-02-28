@@ -1,4 +1,5 @@
 import Basic1 from "@/components/templates/basic/Basic1";
+import Intermediate1 from "@/components/templates/intermediate/Intermediate1";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function Intermediate1Template() {
     return (
-        <></>
+        // <></>
+        <Intermediate1 />
         // <Basic1 />
     );
 };
