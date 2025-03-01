@@ -22,6 +22,7 @@ import { Basic1TemplateData } from "@/utils/interfaces";
 import Intermediate1Hero from "@/components/intermediates/intermediate1/Hero";
 import Intermediate1About from "@/components/intermediates/intermediate1/About";
 import Intermediate1Projects from "@/components/intermediates/intermediate1/Projects";
+import { Intermediate1Contact } from "@/components/intermediates/intermediate1/Contact";
 
 const Intermediate1 = () => {
 
@@ -165,6 +166,7 @@ const Intermediate1 = () => {
             <Intermediate1Hero />
             <Intermediate1About />
             <Intermediate1Projects />
+            <Intermediate1Contact />
 
             <div className="z-50 !fixed bottom-20 right-5 md:bottom-10 md:right-10 flex items-center gap-2">
                 {

@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { selectTemplateMode } from "@/store/templateSlice";
 import { useParams } from "next/navigation";
 
-export function ContactForm() {
+export function Intermediate1Contact() {
 
     const params = useParams();
     const slug = params?.slug;
