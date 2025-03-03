@@ -127,6 +127,10 @@ export interface Intermediate1TemplateData {
         url: string;
         gitHubLink: string;
     }[];
+    social: {
+        platform: SocialLinks;
+        url: string | null;
+    }[];
 };
 
 // Template data type that maps template types to their corresponding data structures
