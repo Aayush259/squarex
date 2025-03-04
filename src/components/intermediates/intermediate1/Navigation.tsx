@@ -5,12 +5,16 @@ import { LuMessageSquare } from "react-icons/lu";
 import { FaLinkedinIn, FaGithub, FaFacebook } from "react-icons/fa";
 import { FaXTwitter, FaInstagram } from "react-icons/fa6";
 import { FloatingDock } from "@/components/ui/FloatingDock";
-import { selectTemplateMode } from "@/store/templateSlice";
+import { selectTemplateData, selectTemplateMode } from "@/store/templateSlice";
 import { useSelector } from "react-redux";
+import { IDs } from "@/utils/helper";
+import { scrollToElement } from "@/utils/funcs";
+import { Intermediate1TemplateData } from "@/utils/interfaces";
 
 export default function Intermediate1Navigation() {
 
     const templateMode = useSelector(selectTemplateMode);
+    const templateData = useSelector(selectTemplateData);
 
     const myLinks = [
         {
@@ -22,7 +26,7 @@ export default function Intermediate1Navigation() {
             active: true,
             onClick: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
                 e.preventDefault();
-                window.location.href = "/";
+                templateMode !== 'editing' ? scrollToElement() : undefined
             }
         },
 
@@ -33,6 +37,10 @@ export default function Intermediate1Navigation() {
             ),
             href: "/projects",
             active: true,
+            onClick: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+                e.preventDefault();
+                templateMode !== 'editing' ? scrollToElement(IDs.B1, IDs.PROJECTS) : undefined
+            }
         },
         {
             title: "About",
@@ -41,6 +49,10 @@ export default function Intermediate1Navigation() {
             ),
             href: "/about",
             active: true,
+            onClick: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+                e.preventDefault();
+                templateMode !== 'editing' ? scrollToElement(IDs.B1, IDs.ABOUT) : undefined
+            }
         },
         {
             title: "Contact",
@@ -49,7 +61,27 @@ export default function Intermediate1Navigation() {
             ),
             href: "/contact",
             active: templateMode !== "editing",
+            onClick: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+                e.preventDefault();
+                templateMode !== 'editing' ? scrollToElement(IDs.B1, IDs.CONTACT) : undefined
+            }
         },
+        ...(templateData?.data as Intermediate1TemplateData).social.map(platform => ({
+            title: platform.platform as string,
+            icon: platform.platform === "GitHub" ? (
+                <FaGithub className="h-full w-full text-neutral-300" />
+            ) : platform.platform === "Instagram" ? (
+                <FaInstagram className="h-full w-full text-neutral-300" />
+            ) : platform.platform === "Twitter" ? (
+                <FaXTwitter className="h-full w-full text-neutral-300" />
+            ) : platform.platform === "LinkedIn" ? (
+                <FaLinkedinIn className="h-full w-full text-neutral-300" />
+            ) : (
+                <FaFacebook className="h-full w-full text-neutral-300" />
+            ),
+            href: platform.url as string,
+            active: true,
+        })),
         {
             title: "GitHub",
             icon: (
@@ -102,4 +134,5 @@ export default function Intermediate1Navigation() {
             </div>
         </div>
     );
+
 };
