@@ -23,6 +23,7 @@ import Intermediate1Hero from "@/components/intermediates/intermediate1/Hero";
 import Intermediate1About from "@/components/intermediates/intermediate1/About";
 import Intermediate1Projects from "@/components/intermediates/intermediate1/Projects";
 import { Intermediate1Contact } from "@/components/intermediates/intermediate1/Contact";
+import Intermediate1Navigation from "@/components/intermediates/intermediate1/Navigation";
 
 const Intermediate1 = () => {
 
@@ -143,6 +144,28 @@ const Intermediate1 = () => {
                             gitHubLink: "https://github.com/username/project",
                             url: "/",
                         }
+                    ],
+                    social: [
+                        {
+                            platform: "GitHub",
+                            url: "/",
+                        },
+                        {
+                            platform: "LinkedIn",
+                            url: "/",
+                        },
+                        {
+                            platform: "Twitter",
+                            url: "/",
+                        },
+                        {
+                            platform: "Instagram",
+                            url: "/",
+                        },
+                        {
+                            platform: "Facebook",
+                            url: "/",
+                        }
                     ]
                 }
             }));
@@ -158,7 +181,7 @@ const Intermediate1 = () => {
     if (!templateData) return null;
 
     return (
-        <div id={IDs.B1} className="bg-[#EDF7FA] text-[#21243D] h-screen w-screen fixed top-0 left-0 heebo overflow-y-auto overflow-x-hidden">
+        <div id={IDs.B1} className="bg-black h-screen w-screen fixed top-0 left-0 heebo overflow-y-auto overflow-x-hidden pb-20">
             {
                 settingUpPortfolio && <CreatingPortfolioSpinner />
             }
@@ -167,6 +190,7 @@ const Intermediate1 = () => {
             <Intermediate1About />
             <Intermediate1Projects />
             <Intermediate1Contact />
+            <Intermediate1Navigation />
 
             <div className="z-50 !fixed bottom-20 right-5 md:bottom-10 md:right-10 flex items-center gap-2">
                 {
