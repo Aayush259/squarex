@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { selectTemplateMode } from "@/store/templateSlice";
 import { useParams } from "next/navigation";
+import { IDs } from "@/utils/helper";
 
 export function Intermediate1Contact() {
 
@@ -43,7 +44,7 @@ export function Intermediate1Contact() {
     if (templateMode === "editing") return;
 
     return (
-        <section className="bg-black pb-20">
+        <section id={IDs.CONTACT} className="bg-black pb-20">
             <div className="max-w-[600px] w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input">
                 <h2 className="text-center font-bold text-2xl text-neutral-200">
                     {"Contact Me"}

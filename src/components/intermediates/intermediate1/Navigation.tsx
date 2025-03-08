@@ -33,7 +33,7 @@ export default function Intermediate1Navigation() {
             active: true,
             onClick: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
                 e.preventDefault();
-                templateMode !== 'editing' ? scrollToElement() : undefined
+                templateMode !== 'editing' ? scrollToElement(IDs.B1) : undefined
             }
         },
 

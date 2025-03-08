@@ -8,6 +8,7 @@ import { restoreCursorPosition } from "@/utils/funcs";
 import { Intermediate1TemplateData } from "@/utils/interfaces";
 import { IoIosClose } from "react-icons/io";
 import Basic2Button from "@/components/basics/basic2/Button";
+import { IDs } from "@/utils/helper";
 
 export default function Intermediate1Projects() {
 
@@ -152,7 +153,7 @@ export default function Intermediate1Projects() {
     if (!templateData?.data) return null;
 
     return (
-        <section>
+        <section id={IDs.PROJECTS}>
             <div className="pt-10 pb-20 relative bg-black">
                 <h2 className="text-3xl md:text-4xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-b text-white bg-opacity-50 pb-6">
                     {"Crafting Skills Through Projects"}
