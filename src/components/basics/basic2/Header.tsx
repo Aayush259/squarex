@@ -1,27 +1,28 @@
 "use client";
-import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
-import { restoreCursorPosition, scrollToElement } from "@/utils/funcs";
-import { IDs } from "@/utils/helper";
-import { Basic2TemplateData, SpanProps } from "@/utils/interfaces";
 import { RefObject, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { IDs } from "@/utils/helper";
+import { restoreCursorPosition, scrollToElement } from "@/utils/funcs";
+import { Basic2TemplateData, SpanProps } from "@/utils/interfaces";
+import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
 
 export default function Basic2Header() {
 
-    const templateMode = useSelector(selectTemplateMode);
-    const templateData = useSelector(selectTemplateData);
+    const dispatch = useDispatch();
+    const visibleThreshold = 100;
+
+    const templateMode = useSelector(selectTemplateMode);   // Stores current mode of template (e.g., editing, reviewing, etc.)
+    const templateData = useSelector(selectTemplateData);   // Stores portfolio template data
+
+    const [hamActive, setHamActive] = useState(false);    // State to track hamburger button's state
+    const [isVisible, setIsVisible] = useState(true);    // State to track visibility of header
+    const [lastScrollY, setLastScrollY] = useState(0);    // State to track last scroll position
+
+    // Refs for managing header elements
     const homeLinkRef = useRef<HTMLSpanElement | null>(null);
     const aboutLinkRef = useRef<HTMLSpanElement | null>(null);
     const workLinkRef = useRef<HTMLSpanElement | null>(null);
     const whatIdoLinkRef = useRef<HTMLSpanElement | null>(null);
-    const [hamActive, setHamActive] = useState(false);
-    const [isVisible, setIsVisible] = useState(true);
-    const [lastScrollY, setLastScrollY] = useState(0);
-    const dispatch = useDispatch();
-
-    // State for hamburger button.
-
-    const visibleThreshold = 100;
 
     // Function to handle the hamburger button's state.
     const handleHamburgerClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -29,6 +30,7 @@ export default function Basic2Header() {
         setHamActive(prevHamState => !prevHamState);
     };
 
+    // Function to handle section's name change
     const handleNameChange = (ref: RefObject<HTMLSpanElement | null>) => {
         if (!ref.current || !templateData?.data) return;
 
@@ -67,6 +69,7 @@ export default function Basic2Header() {
         }
     };
 
+    // Effect to handle scroll events and update visibility state for header
     useEffect(() => {
         const scrollContainer = document.getElementById(IDs.B1);
         if (scrollContainer) {

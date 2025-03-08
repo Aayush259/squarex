@@ -1,22 +1,26 @@
 "use client";
-import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
-import { restoreCursorPosition } from "@/utils/funcs";
-import { Basic1TemplateData } from "@/utils/interfaces";
-import Image from "next/image";
 import { ChangeEvent, RefObject, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { restoreCursorPosition } from "@/utils/funcs";
+import { Basic1TemplateData } from "@/utils/interfaces";
+import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
+import Image from "next/image";
 
 const Basic1Hero = () => {
+    
+    const dispatch = useDispatch();
 
-    const templateMode = useSelector(selectTemplateMode);
-    const templateData = useSelector(selectTemplateData);
+    const templateMode = useSelector(selectTemplateMode);   // Stores current mode of template (e.g., editing, reviewing, etc.)
+    const templateData = useSelector(selectTemplateData);   // Stores portfolio template data
+
+    // Refs for managing hero section elements
     const nameRef = useRef<HTMLSpanElement>(null);
     const roleRef = useRef<HTMLSpanElement>(null);
     const bioRef = useRef<HTMLSpanElement>(null);
     const myWorkRef = useRef<HTMLSpanElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const dispatch = useDispatch();
 
+    // Function to handle section change
     const handleSectionChange = (ref: RefObject<HTMLSpanElement | null>) => {
         if (!ref.current || !templateData?.data) return;
 
@@ -49,11 +53,13 @@ const Basic1Hero = () => {
         }
     };
 
+    // Function to handle image click
     const handleImageClick = () => {
         if (templateMode !== "editing" || !fileInputRef.current) return;
         fileInputRef.current.click();
     };
 
+    // Function to handle image change
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (!templateData?.data) return;
         const file = e.target.files?.[0];

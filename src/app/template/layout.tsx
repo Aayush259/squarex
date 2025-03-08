@@ -1,22 +1,24 @@
 "use client";
 import { useEffect, useState } from "react";
-import { setMode, setTemplateData } from "@/store/templateSlice";
-import { useDispatch, useSelector } from "react-redux";
 import { usePathname } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { templateNames } from "@/utils/helper";
+import { selectUser } from "@/store/userSlice";
+import { setMode, setTemplateData } from "@/store/templateSlice";
 import { FullPageLoader } from "@/components/Loader";
 import { getPortfolioData } from "@/apis/getPortfolio";
-import { selectUser } from "@/store/userSlice";
-import { templateNames } from "@/utils/helper";
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
 
     const dispatch = useDispatch();
     const pathname = usePathname();
 
-    const user = useSelector(selectUser);
+    const user = useSelector(selectUser);   // Get user from Redux store
 
+    // State to track the template being initialized
     const [initializingTemplate, setInitializingTemplate] = useState<boolean>(true);
 
+    // Function to initialize the template
     const initializeTemplate = async () => {
         setInitializingTemplate(true);
         if (!pathname || !user?.id) return;

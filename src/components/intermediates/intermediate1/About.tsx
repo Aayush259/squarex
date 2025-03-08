@@ -1,22 +1,26 @@
 "use client";
-import { IDs } from "@/utils/helper";
-import Image from "next/image";
-import { FaArrowRight } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
-import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
 import { RefObject, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { IDs } from "@/utils/helper";
+import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
 import { restoreCursorPosition, scrollToElement } from "@/utils/funcs";
 import { Intermediate1TemplateData } from "@/utils/interfaces";
+import { FaArrowRight } from "react-icons/fa";
+import Image from "next/image";
 import Basic2Button from "@/components/basics/basic2/Button";
 
 const Intermediate1About = () => {
 
-    const templateMode = useSelector(selectTemplateMode);
-    const templateData = useSelector(selectTemplateData);
-    const desc1Ref = useRef<HTMLSpanElement>(null);
-    const desc2Ref = useRef<HTMLSpanElement>(null);
     const dispatch = useDispatch();
 
+    const templateMode = useSelector(selectTemplateMode);   // Stores current mode of template (e.g., editing, reviewing, etc.)
+    const templateData = useSelector(selectTemplateData);   // Stores portfolio template data
+
+    // References to the description elements
+    const desc1Ref = useRef<HTMLSpanElement>(null);
+    const desc2Ref = useRef<HTMLSpanElement>(null);
+
+    // Function to handle section change
     const handleSectionChange = (ref: RefObject<HTMLSpanElement | null>) => {
         if (!ref.current || !templateData?.data) return;
 

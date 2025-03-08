@@ -1,34 +1,38 @@
 "use client";
-import { getCreatedTemplateNames } from "@/apis/getPortfolio";
+import { useEffect, useMemo, useState } from "react";
+import { useSelector } from "react-redux";
 import { selectUser } from "@/store/userSlice";
 import { getRandomEmoji } from "@/utils/funcs";
 import { templateNames } from "@/utils/helper";
-import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
-import { useSelector } from "react-redux";
+import { IContact } from "@/utils/interfaces";
+import { getCreatedTemplateNames } from "@/apis/getPortfolio";
+import { updateMetadata } from "@/apis/createPortfolio";
+import { getMessages } from "@/apis/contact";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { FaGear } from "react-icons/fa6";
 import { GoPencil } from "react-icons/go";
 import { IoIosClose } from "react-icons/io";
-import { updateMetadata } from "@/apis/createPortfolio";
+import { Loader } from "../Loader";
+import Link from "next/link";
 import Input from "../Input";
 import Button from "../Button";
-import { IContact } from "@/utils/interfaces";
-import { getMessages } from "@/apis/contact";
-import { Loader } from "../Loader";
 
 export default function Dashboard() {
 
-    const user = useSelector(selectUser);
-    const [userTemplates, setUserTemplates] = useState<string[]>([]);
-    const [editMetadataWindowOpen, setEditMetadataWindowOpen] = useState<boolean>(false);
-    const [contact, setContact] = useState<IContact[]>([]);
+    const user = useSelector(selectUser);   // Stores user data
+
+    const [userTemplates, setUserTemplates] = useState<string[]>([]);   // State to track user's created templates
+    const [editMetadataWindowOpen, setEditMetadataWindowOpen] = useState<boolean>(false);   // State to track if edit metadata window is open
+    const [contact, setContact] = useState<IContact[]>([]);     // State to track contact messages
+
+    // State to track metadata for portfolio
     const [metadata, setMetadata] = useState({
         templateName: "",
         page_title: "",
         page_description: "",
     });
 
+    // State to track loading states for various operations
     const [fetching, setFetching] = useState({
         fetchingContacts: false,
         fetchingPortfolios: false,
@@ -38,10 +42,10 @@ export default function Dashboard() {
         updatingMetadataError: false,
     });
 
-    const randomEmoji = useMemo(() => getRandomEmoji(), []);
+    const randomEmoji = useMemo(() => getRandomEmoji(), []);    // Random emoji
 
+    // Function to fetch user's created portfolios
     const getPortfolioUrls = (templateName: string) => {
-
         let portfolioUrl = "";
         let templateUrl = "";
 
@@ -54,11 +58,16 @@ export default function Dashboard() {
                 portfolioUrl = `/portfolio/${user?.id}/b2`;
                 templateUrl = `/template/basic2template`;
                 break;
+            case templateNames.Intermediate1Template:
+                portfolioUrl = `/portfolio/${user?.id}/i1`;
+                templateUrl = `/template/intermediate1template`;
+                break;
         }
 
         return { portfolioUrl, templateUrl };
     };
 
+    // Function to get default template names
     const getFrontEndTemplateName = (templateName: string) => {
 
         switch (templateName) {
@@ -71,6 +80,7 @@ export default function Dashboard() {
         }
     };
 
+    // Function to handle metadata update
     const handleEditMetadata = async () => {
         if (!metadata.templateName || fetching.updatingMetadata) return;
         setFetching({ ...fetching, updatingMetadata: true, updatingMetadataError: false });
@@ -84,6 +94,7 @@ export default function Dashboard() {
         setFetching({ ...fetching, updatingMetadata: false });
     };
 
+    // Function to get templates
     const getTemplateNames = async () => {
         if (fetching.fetchingPortfolios) return;
         setFetching({ ...fetching, fetchingPortfolios: true, portfoliosError: false });
@@ -98,6 +109,7 @@ export default function Dashboard() {
         setFetching({ ...fetching, fetchingPortfolios: false });
     };
 
+    // Function to get contact messages
     const getContactMessages = async () => {
         if (fetching.fetchingContacts) return;
         setFetching({ ...fetching, fetchingContacts: true, contactsError: false });
@@ -111,12 +123,14 @@ export default function Dashboard() {
         setFetching({ ...fetching, fetchingContacts: false });
     };
 
+    // Effect to fetch data on component mount
     useEffect(() => {
         if (!user?.id) return;
         getTemplateNames();
         getContactMessages();
     }, [user]);
 
+    // Effect to reset metadata on edit metadata window close
     useEffect(() => {
         if (!editMetadataWindowOpen) {
             setMetadata({

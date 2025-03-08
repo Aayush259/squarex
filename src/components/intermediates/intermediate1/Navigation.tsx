@@ -1,28 +1,29 @@
 "use client";
-import { GoHomeFill, GoProjectSymlink } from "react-icons/go";
-import { HiOutlineInformationCircle } from "react-icons/hi2";
-import { LuMessageSquare } from "react-icons/lu";
-import { FaLinkedinIn, FaGithub, FaFacebook, FaPen } from "react-icons/fa";
-import { FaXTwitter, FaInstagram } from "react-icons/fa6";
-import { FloatingDock } from "@/components/ui/FloatingDock";
-import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
+import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { IDs } from "@/utils/helper";
 import { restoreCursorPosition, scrollToElement } from "@/utils/funcs";
-import { Intermediate1TemplateData, SocialLinks } from "@/utils/interfaces";
-import { useRef, useState } from "react";
+import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
+import { Intermediate1TemplateData } from "@/utils/interfaces";
 import { IoIosClose } from "react-icons/io";
+import { LuMessageSquare } from "react-icons/lu";
+import { FaXTwitter, FaInstagram } from "react-icons/fa6";
+import { HiOutlineInformationCircle } from "react-icons/hi2";
+import { GoHomeFill, GoProjectSymlink } from "react-icons/go";
+import { FaLinkedinIn, FaGithub, FaFacebook, FaPen } from "react-icons/fa";
+import { FloatingDock } from "@/components/ui/FloatingDock";
 
 export default function Intermediate1Navigation() {
-
-    const templateMode = useSelector(selectTemplateMode);
-    const templateData = useSelector(selectTemplateData);
-
+    
     const dispatch = useDispatch();
 
-    const [editNav, setEditNav] = useState<boolean>(false);
-    const socialRef = useRef<(HTMLSpanElement | null)[]>([]);
+    const templateMode = useSelector(selectTemplateMode);   // Stores current mode of template (e.g., editing, reviewing, etc.)
+    const templateData = useSelector(selectTemplateData);   // Stores portfolio template data
 
+    const [editNav, setEditNav] = useState<boolean>(false);    // State to control the visibility of the edit navigation window
+    const socialRef = useRef<(HTMLSpanElement | null)[]>([]);   // Reference to the social links
+
+    // Array of all links for floating dock
     const myLinks = [
         {
             title: "Home",
@@ -36,7 +37,6 @@ export default function Intermediate1Navigation() {
                 templateMode !== 'editing' ? scrollToElement(IDs.B1) : undefined
             }
         },
-
         {
             title: "Projects",
             icon: (
@@ -103,6 +103,7 @@ export default function Intermediate1Navigation() {
         }
     ];
 
+    // Function to handle social link change
     const handleSocialChange = (index: number) => {
         const ref = socialRef.current[index];
         if (!ref || !templateData?.data) return;
@@ -129,7 +130,7 @@ export default function Intermediate1Navigation() {
         }));
 
         restoreCursorPosition(ref, cursorPosition, selection);
-    }
+    };
 
     if (!templateData) return;
 

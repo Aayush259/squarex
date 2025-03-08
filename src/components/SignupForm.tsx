@@ -1,13 +1,16 @@
 "use client";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { signup } from "@/apis/auth";
+import Link from "next/link";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 const SignUpForm = () => {
 
+    const router = useRouter();
+
+    // State for sign in form credentials and form submission states
     const [signInState, setSignInState] = useState({
         formData: {
             name: "",
@@ -19,32 +22,20 @@ const SignUpForm = () => {
         success: false,
     });
 
-    const setError = (error: string) => {
-        setSignInState((prev) => ({ ...prev, error }));
-    }
+    // Functions to handle form submission and form data state changes
+    const setError = (error: string) => setSignInState((prev) => ({ ...prev, error }));
 
-    const setSuccess = (success: boolean) => {
-        setSignInState((prev) => ({ ...prev, success }));
-    }
+    const setSuccess = (success: boolean) => setSignInState((prev) => ({ ...prev, success }));
 
-    const setLoading = (isLoading: boolean) => {
-        setSignInState((prev) => ({ ...prev, isLoading }));
-    }
+    const setLoading = (isLoading: boolean) => setSignInState((prev) => ({ ...prev, isLoading }));
 
-    const setEmail = (email: string) => {
-        setSignInState((prev) => ({ ...prev, formData: { ...prev.formData, email } }));
-    }
+    const setEmail = (email: string) => setSignInState((prev) => ({ ...prev, formData: { ...prev.formData, email } }));        
 
-    const setPassword = (password: string) => {
-        setSignInState((prev) => ({ ...prev, formData: { ...prev.formData, password } }));
-    }
+    const setPassword = (password: string) => setSignInState((prev) => ({ ...prev, formData: { ...prev.formData, password } }));
 
-    const setName = (name: string) => {
-        setSignInState((prev) => ({ ...prev, formData: { ...prev.formData, name } }));
-    }
+    const setName = (name: string) => setSignInState((prev) => ({ ...prev, formData: { ...prev.formData, name } }));
 
-    const router = useRouter();
-
+    // Function to handle form submission
     const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
         setLoading(true);

@@ -1,24 +1,27 @@
 "use client";
-import { CgAsterisk } from "react-icons/cg";
-import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
-import { useDispatch, useSelector } from "react-redux";
 import { useRef, useState } from "react";
-import Button from "@/components/Button";
-import { IoIosClose } from "react-icons/io";
-import { restoreCursorPosition } from "@/utils/funcs";
+import { useDispatch, useSelector } from "react-redux";
 import { IDs } from "@/utils/helper";
+import { restoreCursorPosition } from "@/utils/funcs";
 import { Basic1TemplateData } from "@/utils/interfaces";
+import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
+import { CgAsterisk } from "react-icons/cg";
+import { IoIosClose } from "react-icons/io";
+import Button from "@/components/Button";
 
 const Basic1Skills = () => {
 
-    const [editEnabled, setEditEnabled] = useState<boolean>(false);
-    const templateMode = useSelector(selectTemplateMode);
-    const templateData = useSelector(selectTemplateData);
     const dispatch = useDispatch();
+
+    const templateMode = useSelector(selectTemplateMode);   // Stores current mode of template (e.g., editing, reviewing, etc.)
+    const templateData = useSelector(selectTemplateData);   // Stores portfolio template data
+
+    const [editEnabled, setEditEnabled] = useState<boolean>(false);    // Controls visibility of edit skills section window
 
     // Ref for managing skill elements
     const skillRefs = useRef<(HTMLSpanElement | null)[]>([]);
 
+    // Function to handle skill change
     const handleSkillChange = (index: number) => {
         const ref = skillRefs.current[index];
         if (!ref || !templateData?.data) return;

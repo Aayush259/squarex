@@ -1,26 +1,29 @@
 "use client";
-import { IDs } from "@/utils/helper";
-import Image from "next/image";
-import Basic2Button from "./Button";
-import { FaArrowRight } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
-import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
 import { ChangeEvent, RefObject, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { IDs } from "@/utils/helper";
 import { restoreCursorPosition } from "@/utils/funcs";
 import { Basic2TemplateData } from "@/utils/interfaces";
+import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
+import { FaArrowRight } from "react-icons/fa";
 import { IoIosClose } from "react-icons/io";
-import { useRouter } from "next/navigation";
+import Image from "next/image";
+import Basic2Button from "./Button";
 
 const Basic2Projects = () => {
 
-    const templateMode = useSelector(selectTemplateMode);
-    const templateData = useSelector(selectTemplateData);
-    const dispatch = useDispatch();
     const router = useRouter();
+    const dispatch = useDispatch();
 
-    const myWorkRef = useRef<HTMLSpanElement>(null);
+    const templateMode = useSelector(selectTemplateMode);   // Stores current mode of template (e.g., editing, reviewing, etc.)
+    const templateData = useSelector(selectTemplateData);   // Stores portfolio template data
+
+    const myWorkRef = useRef<HTMLSpanElement>(null);    // Ref for managing my work section
+    // Ref for managing project elements
     const projectRefs = useRef<{ title: HTMLSpanElement | null; url: HTMLSpanElement | null; description: HTMLSpanElement | null; image: HTMLInputElement | null; }[]>([]);
 
+    // Function to handle section change
     const handleSectionChange = (ref: RefObject<HTMLSpanElement | null>) => {
         if (!ref.current || !templateData?.data) return;
 
@@ -47,6 +50,7 @@ const Basic2Projects = () => {
         }
     };
 
+    // Function to handle project changes
     const handleProjectsChange = (index: number, field: keyof Basic2TemplateData['work']['projects'][number]) => {
         const ref = projectRefs.current[index]?.[field as keyof typeof projectRefs.current[number]];
         if (!ref || !templateData?.data) return;
@@ -78,6 +82,7 @@ const Basic2Projects = () => {
         restoreCursorPosition(ref, cursorPosition, selection);
     };
 
+    // Function to handle project image change
     const handleProjectImageChange = (index: number, e: ChangeEvent<HTMLInputElement>) => {
         if (!templateData?.data) return;
         const file = e.target.files?.[0];
@@ -102,6 +107,7 @@ const Basic2Projects = () => {
         };
     };
 
+    // Function to add new project
     const addProject = () => {
         if (!templateData?.data) return;
 
@@ -126,6 +132,7 @@ const Basic2Projects = () => {
         }));
     };
 
+    // Function to remove project
     const removeProject = (index: number) => {
         if (!templateData?.data) return;
         const updatedProjects = [...(templateData.data as Basic2TemplateData).work.projects];

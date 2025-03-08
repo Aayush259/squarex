@@ -1,21 +1,25 @@
 "use client";
-import { FaArrowRight } from "react-icons/fa6";
-import Basic2Button from "./Button";
-import { useDispatch, useSelector } from "react-redux";
 import { RefObject, useRef } from "react";
-import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { restoreCursorPosition } from "@/utils/funcs";
 import { Basic2TemplateData } from "@/utils/interfaces";
+import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
+import { FaArrowRight } from "react-icons/fa6";
+import Basic2Button from "./Button";
 
 const Basic2Hero = () => {
 
-    const templateMode = useSelector(selectTemplateMode);
-    const templateData = useSelector(selectTemplateData);
+    const dispatch = useDispatch();
+
+    const templateMode = useSelector(selectTemplateMode);   // Stores current mode of template (e.g., editing, reviewing, etc.)
+    const templateData = useSelector(selectTemplateData);   // Stores portfolio template data
+
+    // Refs for managing hero section elements
     const nameRef = useRef<HTMLSpanElement>(null);
     const roleRef = useRef<HTMLSpanElement>(null);
     const bioRef = useRef<HTMLSpanElement>(null);
-    const dispatch = useDispatch();
 
+    // Function to handle section change
     const handleSectionChange = (ref: RefObject<HTMLSpanElement | null>) => {
         if (!ref.current || !templateData?.data) return;
 

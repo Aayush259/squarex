@@ -1,6 +1,6 @@
 "use client";
-import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser, setUser } from "@/store/userSlice";
 import { FullPageLoader } from "./Loader";
@@ -12,6 +12,7 @@ export default function Session({ children }: Readonly<{ children: React.ReactNo
     const user = useSelector(selectUser);
     const [loading, setLoading] = useState<boolean>(true);
 
+    // Dispatch user data to redux store if user is logged in
     useEffect(() => {
         if (status === "loading") {
             setLoading(true);

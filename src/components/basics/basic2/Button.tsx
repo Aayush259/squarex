@@ -1,6 +1,5 @@
 import { ButtonProps } from "@/utils/interfaces";
 
-
 const Basic2Button: React.FC<ButtonProps> = ({ className, children, ...props }) => {
 
     return (

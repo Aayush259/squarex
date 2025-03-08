@@ -3,6 +3,7 @@ import { getImageFileBase64 } from "@/utils/funcs";
 import { templateNames } from "@/utils/helper";
 import { Basic1TemplateData, Basic2TemplateData, Intermediate1TemplateData } from "@/utils/interfaces";
 
+// Function to update metadata
 export const updateMetadata = async (templateName: string, page_title?: string, page_description?: string) => {
 
     const payload = {
@@ -22,6 +23,7 @@ export const updateMetadata = async (templateName: string, page_title?: string, 
     return { data, error };
 }
 
+// Function to create a portfolio with Basic1Template
 export const createPortfolioWithBasic1Template = async (templateData: Basic1TemplateData) => {
     let homeImage: string | null = null;
     const work: {
@@ -83,6 +85,7 @@ export const createPortfolioWithBasic1Template = async (templateData: Basic1Temp
     return { data, error };
 }
 
+// Function to create a portfolio with Basic2Template
 export const createPortfolioWithBasic2Template = async (templateData: Basic2TemplateData) => {
 
     const work: {
@@ -131,6 +134,7 @@ export const createPortfolioWithBasic2Template = async (templateData: Basic2Temp
     return { data, error };
 }
 
+// Function to create a portfolio with Intermediate1Template
 export const createPortfolioWithIntermediate1Template = async (templateData: Intermediate1TemplateData) => {
 
     const work: {

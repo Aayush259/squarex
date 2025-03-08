@@ -1,41 +1,44 @@
 "use client";
-import { getPortfolioData } from "@/apis/getPortfolio";
-import Button from "@/components/Button";
-import { NotFound, SomethingWentWrong } from "@/components/Error";
-import { CreatingPortfolioSpinner, FullPageLoader } from "@/components/Loader";
-import { selectTemplateData, selectTemplateMode, setMode, setTemplateData } from "@/store/templateSlice";
-import { selectUser } from "@/store/userSlice";
-import { IDs, templateNames } from "@/utils/helper";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { selectUser } from "@/store/userSlice";
+import { selectTemplateData, selectTemplateMode, setMode, setTemplateData } from "@/store/templateSlice";
+import { basic2TemplateExampleData, IDs, templateNames } from "@/utils/helper";
+import { Basic2TemplateData } from "@/utils/interfaces";
+import { createPortfolioWithBasic2Template } from "@/apis/createPortfolio";
+import { getPortfolioData } from "@/apis/getPortfolio";
 import { GoPencil } from "react-icons/go";
+import { NotFound, SomethingWentWrong } from "@/components/Error";
+import { CreatingPortfolioSpinner, FullPageLoader } from "@/components/Loader";
+import Button from "@/components/Button";
 import Basic2Header from "@/components/basics/basic2/Header";
 import Basic2Hero from "@/components/basics/basic2/Hero";
 import Basic2About from "@/components/basics/basic2/About";
 import Basic2Projects from "@/components/basics/basic2/Projects";
 import Basic2WhatiDo from "@/components/basics/basic2/WhatIDo";
 import Basic2Contact from "@/components/basics/basic2/Contact";
-import { createPortfolioWithBasic2Template } from "@/apis/createPortfolio";
-import { Basic2TemplateData } from "@/utils/interfaces";
 import Basic2Footer from "@/components/basics/basic2/Footer";
 
 const Basic2 = () => {
 
-    const templateMode = useSelector(selectTemplateMode);
-    const templateData = useSelector(selectTemplateData);
-    const user = useSelector(selectUser);
-    const dispatch = useDispatch();
-    const router = useRouter();
-    const pathname = usePathname();
     const params = useParams();
-    const slug = params?.slug;
+    const router = useRouter();
+    const dispatch = useDispatch();
+    const pathname = usePathname();
 
-    const [settingUpPortfolio, setSettingUpPortfolio] = useState<boolean>(false);
-    const [gettingPortfolio, setGettingPortfolio] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
+    const slug = params?.slug;  // Identifier for portfolio owner
 
+    const templateMode = useSelector(selectTemplateMode);   // Stores current mode of template (e.g., editing, reviewing, etc.)
+    const templateData = useSelector(selectTemplateData);   // Stores portfolio template data
+    const user = useSelector(selectUser);   // Stores user data
+
+    const [settingUpPortfolio, setSettingUpPortfolio] = useState<boolean>(false);   // Loading state while setting up portfolio
+    const [gettingPortfolio, setGettingPortfolio] = useState<boolean>(false);   // Loading state while getting portfolio data
+    const [error, setError] = useState<string | null>(null);    // Error state
+
+    // Function to handle portfolio setup
     const setupPortfolio = async () => {
         if (!templateData?.data || settingUpPortfolio) return;
         setSettingUpPortfolio(true);
@@ -52,6 +55,7 @@ const Basic2 = () => {
         }
     };
 
+    // Function to handle portfolio retrieval and dispatch data to store
     const getPortfolio = async () => {
         if (!slug || gettingPortfolio) return;
         setGettingPortfolio(true);
@@ -76,8 +80,9 @@ const Basic2 = () => {
         setTimeout(() => {
             setGettingPortfolio(false);
         }, 0);
-    }
+    };
 
+    // Function to handle fixed button click
     const handleFixedBtnClick = () => {
         if (settingUpPortfolio) return;
         if (user?.id.toString() === slug?.toString() && templateMode === "done") {
@@ -99,87 +104,13 @@ const Basic2 = () => {
         if (slug) {
             getPortfolio();
         } else {
-            dispatch(setTemplateData({
-                type: 'basic2template',
-                data: {
-                    home: {
-                        title: "Home",
-                        name: "👋 Hi! There, I'm Sathya,",
-                        role: "UI UX Designer & Web Designer",
-                        bio: "I Design Beautifully Simple Things And I Love What I Do. Just Simple Like That!"
-                    },
-                    about: {
-                        title: "About Me",
-                        descriptionPart1: "Hello! I'm Sathya Narayanan, a passionate and creative UI/UX designer ready to embark on a journey of shaping exceptional digital experiences. With a fresh perspective and a keen eye for detail, I bring enthusiasm and dedication to every project I undertake.",
-                        descriptionPart2: "I have honed my skills in user research, wireframing, prototyping, and visual design. I am excited to apply my knowledge and creativity to solve complex design challenges and create intuitive and visually appealing interfaces"
-                    },
-                    work: {
-                        title: "Selected Works",
-                        projects: [
-                            {
-                                title: "HEED",
-                                description: "UI UX Case Study",
-                                image: "/templateImages/heed.avif",
-                                url: "/",
-                            },
-                            {
-                                title: "Fly way",
-                                description: "Travel Agency Website Design",
-                                image: "/templateImages/fly_Way.avif",
-                                url: "/",
-                            },
-                            {
-                                title: "Sushi Restaurant",
-                                description: "Social Media Poster Design",
-                                image: "/templateImages/sushi.avif",
-                                url: "/",
-                            },
-                            {
-                                title: "Shoppy Bag",
-                                description: "Shoppy Bag",
-                                image: "/templateImages/shoppy.avif",
-                                url: "/",
-                            }
-                        ]
-                    },
-                    skills: {
-                        title: "What I Do!",
-                        subtitle: "My Specialization And Key Skills",
-                        skills: ["UI/UX Design", "Photoshop", "Illustrator", "Figma", "Web Design", "Logo Design"]
-                    },
-                    social: [
-                        {
-                            platform: "LinkedIn",
-                            url: "/",
-                        },
-                        {
-                            platform: "GitHub",
-                            url: "/",
-                        },
-                        {
-                            platform: "Instagram",
-                            url: "/",
-                        },
-                        {
-                            platform: "Twitter",
-                            url: "/",
-                        },
-                        {
-                            platform: "Facebook",
-                            url: "/",
-                        },
-                    ]
-                }
-            }));
+            dispatch(setTemplateData(basic2TemplateExampleData));
         }
     }, []);
 
     if (gettingPortfolio) return <FullPageLoader />
-
     if (error === "NOT_FOUND") return <NotFound />;
-
     if (error) return <SomethingWentWrong />;
-
     if (!templateData) return null;
 
     return (

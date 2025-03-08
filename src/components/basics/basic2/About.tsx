@@ -1,23 +1,27 @@
 "use client";
+import { RefObject, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { IDs } from "@/utils/helper";
+import { Basic2TemplateData } from "@/utils/interfaces";
+import { restoreCursorPosition, scrollToElement } from "@/utils/funcs";
+import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
+import { FaArrowRight } from "react-icons/fa";
 import Image from "next/image";
 import Basic2Button from "./Button";
-import { FaArrowRight } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
-import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
-import { RefObject, useRef } from "react";
-import { restoreCursorPosition, scrollToElement } from "@/utils/funcs";
-import { Basic2TemplateData } from "@/utils/interfaces";
 
 const Basic2About = () => {
+    
+    const dispatch = useDispatch();
 
-    const templateMode = useSelector(selectTemplateMode);
-    const templateData = useSelector(selectTemplateData);
+    const templateMode = useSelector(selectTemplateMode);   // Stores current mode of template (e.g., editing, reviewing, etc.)
+    const templateData = useSelector(selectTemplateData);   // Stores portfolio template data
+
+    // Refs for managing name and description spans
     const nameRef = useRef<HTMLSpanElement>(null);
     const desc1Ref = useRef<HTMLSpanElement>(null);
     const desc2Ref = useRef<HTMLSpanElement>(null);
-    const dispatch = useDispatch();
 
+    // Function to handle section change
     const handleSectionChange = (ref: RefObject<HTMLSpanElement | null>) => {
         if (!ref.current || !templateData?.data) return;
 

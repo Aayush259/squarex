@@ -1,39 +1,42 @@
 "use client";
-import Button from "@/components/Button";
-import { NotFound, SomethingWentWrong } from "@/components/Error";
-import { CreatingPortfolioSpinner, FullPageLoader } from "@/components/Loader";
-import { selectTemplateData, selectTemplateMode, setMode, setTemplateData } from "@/store/templateSlice";
-import { selectUser } from "@/store/userSlice";
-import { IDs, templateNames } from "@/utils/helper";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { GoPencil } from "react-icons/go";
-import Intermediate1Hero from "@/components/intermediates/intermediate1/Hero";
-import Intermediate1About from "@/components/intermediates/intermediate1/About";
-import Intermediate1Projects from "@/components/intermediates/intermediate1/Projects";
-import { Intermediate1Contact } from "@/components/intermediates/intermediate1/Contact";
-import Intermediate1Navigation from "@/components/intermediates/intermediate1/Navigation";
+import { selectUser } from "@/store/userSlice";
+import { selectTemplateData, selectTemplateMode, setMode, setTemplateData } from "@/store/templateSlice";
+import { IDs, intermediate1TemplateExampleData, templateNames } from "@/utils/helper";
 import { Intermediate1TemplateData } from "@/utils/interfaces";
 import { createPortfolioWithIntermediate1Template } from "@/apis/createPortfolio";
 import { getPortfolioData } from "@/apis/getPortfolio";
+import { GoPencil } from "react-icons/go";
+import { NotFound, SomethingWentWrong } from "@/components/Error";
+import { CreatingPortfolioSpinner, FullPageLoader } from "@/components/Loader";
+import { Intermediate1Contact } from "@/components/intermediates/intermediate1/Contact";
+import Button from "@/components/Button";
+import Intermediate1Hero from "@/components/intermediates/intermediate1/Hero";
+import Intermediate1About from "@/components/intermediates/intermediate1/About";
+import Intermediate1Projects from "@/components/intermediates/intermediate1/Projects";
+import Intermediate1Navigation from "@/components/intermediates/intermediate1/Navigation";
 
 const Intermediate1 = () => {
 
-    const templateMode = useSelector(selectTemplateMode);
-    const templateData = useSelector(selectTemplateData);
-    const user = useSelector(selectUser);
-    const dispatch = useDispatch();
-    const router = useRouter();
-    const pathname = usePathname();
     const params = useParams();
-    const slug = params?.slug;
+    const router = useRouter();
+    const dispatch = useDispatch();
+    const pathname = usePathname();
 
-    const [settingUpPortfolio, setSettingUpPortfolio] = useState<boolean>(false);
-    const [gettingPortfolio, setGettingPortfolio] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
+    const slug = params?.slug;  // Identifier for portfolio owner
 
+    const templateMode = useSelector(selectTemplateMode);   // Stores current mode of template (e.g., editing, reviewing, etc.)
+    const templateData = useSelector(selectTemplateData);   // Stores portfolio template data
+    const user = useSelector(selectUser);   // Stores user data
+
+    const [settingUpPortfolio, setSettingUpPortfolio] = useState<boolean>(false);   // Loading state while setting up portfolio
+    const [gettingPortfolio, setGettingPortfolio] = useState<boolean>(false);   // Loading state while getting portfolio data
+    const [error, setError] = useState<string | null>(null);    // Error state
+
+    // Function to handle portfolio setup
     const setupPortfolio = async () => {
         if (!templateData?.data || settingUpPortfolio) return;
         setSettingUpPortfolio(true);
@@ -50,6 +53,7 @@ const Intermediate1 = () => {
         }
     };
 
+    // Function to handle portfolio retrieval and dispatch data to store
     const getPortfolio = async () => {
         if (!slug || gettingPortfolio) return;
         setGettingPortfolio(true);
@@ -74,8 +78,9 @@ const Intermediate1 = () => {
         setTimeout(() => {
             setGettingPortfolio(false);
         }, 0);
-    }
+    };
 
+    // Function to handle fixed button click
     const handleFixedBtnClick = () => {
         if (settingUpPortfolio) return;
         if (user?.id.toString() === slug?.toString() && templateMode === "done") {
@@ -97,80 +102,13 @@ const Intermediate1 = () => {
         if (slug) {
             getPortfolio();
         } else {
-            dispatch(setTemplateData({
-                type: 'intermediate1template',
-                data: {
-                    home: {
-                        name: "Aayush Kumar Kumawat",
-                        headlines: ["A Full-stack Developer 🖥️", "A Tech enthusiast 🚀", "I take exciting challenges 🎯", "I like lots of sweets 🍰", "Shy but improving 😊"]
-                    },
-                    about: {
-                        descriptionPart1: "Hello! I'm Aayush, a tech enthusiast and passionate code who is eager to learn and tackle new challenges. I value simplicity and creativity, and I strive to reflect these traits in my work. Whether I'm building innovative solutions or exploring new technologies, I'm dedicated to growing as a developer and contributing to the tech community.",
-                        descriptionPart2: "I have honed my skills in modern technologies like React, Next.js, TypeScript, Node,js, Express. Tailwind CSS and more. My projects often incorporate advanced features like real-time updates with sockets and secure JWT-based authentication. I am excited to apply my knowledge and creativity.",
-                    },
-                    projects: [
-                        {
-                            name: "HEED",
-                            description: "UI UX Case Study",
-                            image: "/templateImages/heed.avif",
-                            gitHubLink: "https://github.com/username/project",
-                            url: "/",
-                        },
-                        {
-                            name: "Fly way",
-                            description: "Travel Agency Website Design",
-                            image: "/templateImages/fly_Way.avif",
-                            gitHubLink: "https://github.com/username/project",
-                            url: "/",
-                        },
-                        {
-                            name: "Sushi Restaurant",
-                            description: "Social Media Poster Design",
-                            image: "/templateImages/sushi.avif",
-                            gitHubLink: "https://github.com/username/project",
-                            url: "/",
-                        },
-                        {
-                            name: "Shoppy Bag",
-                            description: "Shoppy Bag",
-                            image: "/templateImages/shoppy.avif",
-                            gitHubLink: "https://github.com/username/project",
-                            url: "/",
-                        }
-                    ],
-                    social: [
-                        {
-                            platform: "GitHub",
-                            url: "/",
-                        },
-                        {
-                            platform: "LinkedIn",
-                            url: "/",
-                        },
-                        {
-                            platform: "Twitter",
-                            url: "/",
-                        },
-                        {
-                            platform: "Instagram",
-                            url: "/",
-                        },
-                        {
-                            platform: "Facebook",
-                            url: "/",
-                        }
-                    ]
-                }
-            }));
+            dispatch(setTemplateData(intermediate1TemplateExampleData));
         }
     }, []);
 
     if (gettingPortfolio) return <FullPageLoader />;
-
     if (error === "NOT_FOUND") return <NotFound />;
-
     if (error) return <SomethingWentWrong />;
-
     if (!templateData) return null;
 
     return (

@@ -1,6 +1,7 @@
 import useFetchApi from "@/hooks/useFetchApi";
 import { TemplateType } from "@/utils/interfaces";
 
+// Function to send a message
 export const sendMessage = async (slug: string, name: string, email: string, message: string, templateName: TemplateType) => {
 
     const payload = {
@@ -22,6 +23,7 @@ export const sendMessage = async (slug: string, name: string, email: string, mes
     return { data, error };
 };
 
+// Function to get messages
 export const getMessages = async () => {
 
     const { data, error } = await useFetchApi("/api/getMessages", {

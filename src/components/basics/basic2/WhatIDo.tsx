@@ -1,30 +1,28 @@
 "use client";
-import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
-import { restoreCursorPosition } from "@/utils/funcs";
-import { IDs } from "@/utils/helper";
-import { Basic2TemplateData } from "@/utils/interfaces";
-import Image from "next/image";
 import { RefObject, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Basic2Button from "./Button";
+import { IDs } from "@/utils/helper";
+import { restoreCursorPosition } from "@/utils/funcs";
+import { Basic2TemplateData } from "@/utils/interfaces";
+import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
 import { IoIosClose } from "react-icons/io";
+import Image from "next/image";
+import Basic2Button from "./Button";
 
 const Basic2WhatiDo = () => {
 
-    const skills = [
-        "UI/UX Design", "Photoshop", "Illustrator", "Figma", "Web Design", "Logo Design"
-    ]
-
-    const [editEnabled, setEditEnabled] = useState<boolean>(false);
-    const templateMode = useSelector(selectTemplateMode);
-    const templateData = useSelector(selectTemplateData);
     const dispatch = useDispatch();
 
-    const titleRef = useRef<HTMLSpanElement | null>(null);
-    const subtitleRef = useRef<HTMLSpanElement | null>(null);
-    // Ref for managing skill elements
-    const skillRefs = useRef<(HTMLSpanElement | null)[]>([]);
+    const templateMode = useSelector(selectTemplateMode);   // Stores current mode of template (e.g., editing, reviewing, etc.)
+    const templateData = useSelector(selectTemplateData);   // Stores portfolio template data
 
+    const [editEnabled, setEditEnabled] = useState<boolean>(false);    // State to track edit window visibility
+
+    const titleRef = useRef<HTMLSpanElement | null>(null);    // Ref for managing title element
+    const subtitleRef = useRef<HTMLSpanElement | null>(null);    // Ref for managing subtitle element
+    const skillRefs = useRef<(HTMLSpanElement | null)[]>([]);   // Ref for managing skill elements
+
+    // Function to handle section change
     const handleSectionChange = (ref: RefObject<HTMLSpanElement | null>) => {
         if (!ref.current || !templateData?.data) return;
 
@@ -52,6 +50,7 @@ const Basic2WhatiDo = () => {
         }
     };
 
+    // Function to handle skill change
     const handleSkillChange = (index: number) => {
         const ref = skillRefs.current[index];
         if (!ref || !templateData?.data) return;

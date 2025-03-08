@@ -3,26 +3,25 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ChangeEvent, useEffect, useId, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
-import { useRouter } from "next/navigation";
 import { restoreCursorPosition } from "@/utils/funcs";
 import { Intermediate1TemplateData } from "@/utils/interfaces";
 import { IoIosClose } from "react-icons/io";
-import Basic2Button from "@/components/basics/basic2/Button";
 import { IDs } from "@/utils/helper";
 
 export default function Intermediate1Projects() {
 
-    const templateMode = useSelector(selectTemplateMode);
-    const templateData = useSelector(selectTemplateData);
+    const id = useId();     // Unique identifier for the component
     const dispatch = useDispatch();
-    const router = useRouter();
-    const id = useId();
+
+    const templateMode = useSelector(selectTemplateMode);    // Stores current mode of template (e.g., editing, reviewing, etc.)
+    const templateData = useSelector(selectTemplateData);   // Stores portfolio template data
 
     const [active, setActive] = useState<{ idx: number, name: string, description: string, image: string, url: string, gitHubLink: string } | boolean | null>(null);  // Active is the project that is in view.
 
     const ref = useRef<HTMLDivElement>(null);
     const projectRefs = useRef<{ name: HTMLSpanElement | null; description: HTMLSpanElement | null; url: HTMLSpanElement | null; gitHubLink: HTMLInputElement | null; image: HTMLInputElement | null; }[]>([]);
 
+    // Function to handle project change
     const handleProjectsChange = (index: number, field: keyof Intermediate1TemplateData['projects'][number]) => {
         const ref = projectRefs.current[index]?.[field as keyof typeof projectRefs.current[number]];
         if (!ref || !templateData?.data) return;
@@ -59,6 +58,7 @@ export default function Intermediate1Projects() {
         restoreCursorPosition(ref, cursorPosition, selection);
     };
 
+    // Function to handle project image change
     const handleProjectImageChange = (index: number, e: ChangeEvent<HTMLInputElement>) => {
         if (!templateData?.data) return;
         const file = e.target.files?.[0];
@@ -80,15 +80,16 @@ export default function Intermediate1Projects() {
         };
     };
 
+    // Function to add a new project
     const addProject = () => {
         if (!templateData?.data) return;
 
         const newProject: Intermediate1TemplateData['projects'][number] = {
             name: "Project Name",
-            url: "/",
+            url: "",
             description: "Project Description",
             image: "/slider2.jpg",
-            gitHubLink: "https://github.com/username/project",
+            gitHubLink: "",
         };
 
         const updatedProjects = [...(templateData.data as Intermediate1TemplateData).projects, newProject];
@@ -102,6 +103,7 @@ export default function Intermediate1Projects() {
         }));
     };
 
+    // Function to remove a project
     const removeProject = (index: number) => {
         if (!templateData?.data) return;
         const updatedProjects = [...(templateData.data as Intermediate1TemplateData).projects];
@@ -133,6 +135,7 @@ export default function Intermediate1Projects() {
         return () => window.removeEventListener("keydown", onKeyDown);
     }, [active]);
 
+    // Setting up useEffect to close active project when clicking outside of it.
     useEffect(() => {
         const listener = (event: MouseEvent | TouchEvent) => {
             if (!ref.current || ref.current.contains(event.target as Node)) {

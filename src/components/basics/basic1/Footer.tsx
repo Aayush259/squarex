@@ -1,24 +1,27 @@
 "use client";
-import Button from "@/components/Button";
-import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
-import { Basic1TemplateData, SocialLinks } from "@/utils/interfaces";
-import Link from "next/link";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Basic1TemplateData, SocialLinks } from "@/utils/interfaces";
+import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
+import { IoAdd } from "react-icons/io5";
 import { FaLinkedinIn, FaGithub, FaFacebook } from "react-icons/fa";
 import { FaXTwitter, FaInstagram, FaCheck } from "react-icons/fa6";
-import { useDispatch, useSelector } from "react-redux";
-import { IoAdd } from "react-icons/io5";
+import Link from "next/link";
+import Button from "@/components/Button";
 
 const Basic1Footer = () => {
 
-    const [inputEnabled, setInputEnabled] = useState<boolean>(false);
-    const [addMoreDropDownEnabled, setAddMoreDropDownEnabled] = useState<boolean>(false);
-    const [inputPlatform, setInputPlatform] = useState<SocialLinks>(null);
-    const [inputLink, setInputLink] = useState<string>("");
-    const templateMode = useSelector(selectTemplateMode);
-    const templateData = useSelector(selectTemplateData);
     const dispatch = useDispatch();
 
+    const templateMode = useSelector(selectTemplateMode);   // Stores current mode of template (e.g., editing, reviewing, etc.)
+    const templateData = useSelector(selectTemplateData);   // Stores portfolio template data
+
+    const [inputEnabled, setInputEnabled] = useState<boolean>(false);   // State to manage input field visibility
+    const [addMoreDropDownEnabled, setAddMoreDropDownEnabled] = useState<boolean>(false);   // State to manage "Add More" dropdown visibility
+    const [inputPlatform, setInputPlatform] = useState<SocialLinks>(null);    // State to manage edit selected social platform
+    const [inputLink, setInputLink] = useState<string>("");    // State to manage edit selected social platform link
+
+    // Function to handle link edit
     const handleLinkEdit = (link: { platform: SocialLinks, url: string | null }) => {
         setAddMoreDropDownEnabled(false);
         if (templateMode !== "editing") return;
@@ -29,6 +32,7 @@ const Basic1Footer = () => {
         }, 0);
     };
 
+    // Function to handle link add
     const handleLinkAdd = () => {
         setInputEnabled(false);
         if (templateMode !== "editing" || !inputPlatform || !templateData?.data) return;
@@ -60,7 +64,7 @@ const Basic1Footer = () => {
             setInputLink("");
             setInputPlatform(null);
         }, 0);
-    }
+    };
 
     if (!templateData?.data) return null;
 

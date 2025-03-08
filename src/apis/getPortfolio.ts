@@ -1,5 +1,6 @@
 import useFetchApi from "@/hooks/useFetchApi";
 
+// Function to get created template names
 export const getCreatedTemplateNames = async () => {
     const { data, error } = await useFetchApi("/api/getCreatedTemplateNames", {
         method: "GET",
@@ -11,6 +12,7 @@ export const getCreatedTemplateNames = async () => {
     return { data, error };
 }
 
+// Function to get portfolio data
 export const getPortfolioData = async (slug: string, templateName: string) => {
 
     const payload = {

@@ -10,13 +10,19 @@ import { Basic1TemplateData } from "@/utils/interfaces";
 
 export default function Basic1Header() {
 
-    const templateMode = useSelector(selectTemplateMode);
-    const templateData = useSelector(selectTemplateData);
-    const homeLinkRef = useRef<HTMLSpanElement | null>(null);
-    const workLinkRef = useRef<HTMLSpanElement | null>(null);
-    const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
     const dispatch = useDispatch();
 
+    const templateMode = useSelector(selectTemplateMode);   // Stores current mode of template (e.g., editing, reviewing, etc.)
+    const templateData = useSelector(selectTemplateData);   // Stores portfolio template data
+
+    // Refs for managing header elements
+    const homeLinkRef = useRef<HTMLSpanElement | null>(null);
+    const workLinkRef = useRef<HTMLSpanElement | null>(null);
+
+    // State to manage sidebar visibility
+    const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+
+    // Function to handle section's name change
     const handleNameChange = (ref: RefObject<HTMLSpanElement | null>) => {
         if (!ref.current || !templateData?.data) return;
 

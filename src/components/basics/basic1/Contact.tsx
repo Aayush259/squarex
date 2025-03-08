@@ -1,19 +1,19 @@
 "use client";
-import { sendMessage } from "@/apis/contact";
-import Button from "@/components/Button";
-import Input from "@/components/Input";
-import { selectTemplateMode } from "@/store/templateSlice";
-import { IDs } from "@/utils/helper";
-import { useParams } from "next/navigation";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { useParams } from "next/navigation";
+import { IDs } from "@/utils/helper";
+import { sendMessage } from "@/apis/contact";
+import { selectTemplateMode } from "@/store/templateSlice";
+import Button from "@/components/Button";
+import Input from "@/components/Input";
 
 const Basic1Contact = () => {
 
     const params = useParams();
-    const slug = params?.slug;
+    const slug = params?.slug;   // Identifier for portfolio owner
 
-    const templateMode = useSelector(selectTemplateMode);
+    const templateMode = useSelector(selectTemplateMode);   // Stores current mode of template (e.g., editing, reviewing, etc.)
 
     const [sending, setSending] = useState(false);
     const [formData, setFormData] = useState({
@@ -22,6 +22,7 @@ const Basic1Contact = () => {
         message: "",
     });
 
+    // Function to handle form submission
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (templateMode !== "done" || !templateMode || !slug) return;
@@ -38,7 +39,7 @@ const Basic1Contact = () => {
         }
 
         setSending(false);
-    }
+    };
 
     if (templateMode === "editing") return;
 

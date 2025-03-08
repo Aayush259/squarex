@@ -1,20 +1,20 @@
 "use client";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { useParams } from "next/navigation";
+import { IDs } from "@/utils/helper";
+import { sendMessage } from "@/apis/contact";
+import { selectTemplateMode } from "@/store/templateSlice";
 import { Input, TextArea } from "@/components/ui/Input";
 import LabelInputContainer from "@/components/ui/LabelInputContainer";
 import BottomGradient from "@/components/ui/BottomGradient";
-import { sendMessage } from "@/apis/contact";
-import { useState } from "react";
-import { useSelector } from "react-redux";
-import { selectTemplateMode } from "@/store/templateSlice";
-import { useParams } from "next/navigation";
-import { IDs } from "@/utils/helper";
 
 export function Intermediate1Contact() {
 
     const params = useParams();
-    const slug = params?.slug;
+    const slug = params?.slug;   // Identifier for portfolio owner
 
-    const templateMode = useSelector(selectTemplateMode);
+    const templateMode = useSelector(selectTemplateMode);   // Stores current mode of template (e.g., editing, reviewing, etc.)
 
     const [sending, setSending] = useState(false);
     const [formData, setFormData] = useState({
@@ -23,6 +23,7 @@ export function Intermediate1Contact() {
         message: "",
     });
 
+    // Function to handle form submission
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (templateMode !== "done" || !templateMode || !slug) return;
@@ -39,7 +40,7 @@ export function Intermediate1Contact() {
         }
 
         setSending(false);
-    }
+    };
 
     if (templateMode === "editing") return;
 

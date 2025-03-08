@@ -1,24 +1,27 @@
 "use client";
-import Button from "@/components/Button";
-import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
-import { restoreCursorPosition } from "@/utils/funcs";
-import { Basic1TemplateData } from "@/utils/interfaces";
-import Image from "next/image";
-import Link from "next/link";
 import { ChangeEvent, RefObject, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { IoIosClose } from "react-icons/io";
 import { IDs } from "@/utils/helper";
+import { restoreCursorPosition } from "@/utils/funcs";
+import { Basic1TemplateData } from "@/utils/interfaces";
+import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
+import { IoIosClose } from "react-icons/io";
+import Link from "next/link";
+import Image from "next/image";
+import Button from "@/components/Button";
 
 const Basic1Projects = () => {
-
-    const templateMode = useSelector(selectTemplateMode);
-    const templateData = useSelector(selectTemplateData);
+    
     const dispatch = useDispatch();
 
+    const templateMode = useSelector(selectTemplateMode);   // Stores current mode of template (e.g., editing, reviewing, etc.)
+    const templateData = useSelector(selectTemplateData);   // Stores portfolio template data
+
+    // Refs for managing project elements
     const myWorkRef = useRef<HTMLSpanElement>(null);
     const projectRefs = useRef<{ title: HTMLSpanElement | null; url: HTMLSpanElement | null; description: HTMLSpanElement | null; image: HTMLInputElement | null; }[]>([]);
 
+    // Function to handle section change
     const handleSectionChange = (ref: RefObject<HTMLSpanElement | null>) => {
         if (!ref.current || !templateData?.data) return;
 
@@ -45,6 +48,7 @@ const Basic1Projects = () => {
         }
     };
 
+    // Function to handle project changes
     const handleProjectsChange = (index: number, field: keyof Basic1TemplateData['work']['projects'][number]) => {
         const ref = projectRefs.current[index]?.[field as keyof typeof projectRefs.current[number]];
         if (!ref || !templateData?.data) return;
@@ -76,6 +80,7 @@ const Basic1Projects = () => {
         restoreCursorPosition(ref, cursorPosition, selection);
     };
 
+    // Function to handle project image change
     const handleProjectImageChange = (index: number, e: ChangeEvent<HTMLInputElement>) => {
         if (!templateData?.data) return;
         const file = e.target.files?.[0];
@@ -100,6 +105,7 @@ const Basic1Projects = () => {
         };
     };
 
+    // Function to add a new project
     const addProject = () => {
         if (!templateData?.data) return;
 
@@ -124,6 +130,7 @@ const Basic1Projects = () => {
         }));
     };
 
+    // Function to remove a project
     const removeProject = (index: number) => {
         if (!templateData?.data) return;
         const updatedProjects = [...(templateData.data as Basic1TemplateData).work.projects];
@@ -138,7 +145,7 @@ const Basic1Projects = () => {
                 },
             }
         }));
-    }
+    };
 
     if (!templateData?.data) return null;
 

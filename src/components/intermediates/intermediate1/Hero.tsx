@@ -1,22 +1,25 @@
-import WavyBackground from "@/components/ui/WavyBackground";
-import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
-import { restoreCursorPosition } from "@/utils/funcs";
-import { Intermediate1TemplateData } from "@/utils/interfaces";
+"use client";
 import { RefObject, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { restoreCursorPosition } from "@/utils/funcs";
+import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
+import { Intermediate1TemplateData } from "@/utils/interfaces";
 import { GoPencil } from "react-icons/go";
 import { IoIosClose } from "react-icons/io";
-import { useDispatch, useSelector } from "react-redux";
+import WavyBackground from "@/components/ui/WavyBackground";
 
 export default function Intermediate1Hero() {
-
-    const templateMode = useSelector(selectTemplateMode);
-    const templateData = useSelector(selectTemplateData);
-
-    const [editHeadlinesEnabled, setEditHeadlinesEnabled] = useState<boolean>(false);
-    const nameRef = useRef<HTMLSpanElement>(null);
-    const headlinesRef = useRef<(HTMLSpanElement | null)[]>([]);
+    
     const dispatch = useDispatch();
 
+    const templateMode = useSelector(selectTemplateMode);   // Stores current mode of template (e.g., editing, reviewing, etc.)
+    const templateData = useSelector(selectTemplateData);   // Stores portfolio template data
+
+    const [editHeadlinesEnabled, setEditHeadlinesEnabled] = useState<boolean>(false);   // State to control the visibility of the edit headlines window
+    const nameRef = useRef<HTMLSpanElement>(null);  // Reference to the name element
+    const headlinesRef = useRef<(HTMLSpanElement | null)[]>([]);    // Reference to the headlines
+
+    // Function to handle name change
     const handleNameChange = (ref: RefObject<HTMLSpanElement | null>) => {
         if (!ref.current || !templateData?.data) return;
 
@@ -43,6 +46,7 @@ export default function Intermediate1Hero() {
         }
     };
 
+    // Function to handle headline change
     const handleHeadlinesChange = (index: number) => {
         const ref = headlinesRef.current[index];
         if (!ref || !templateData?.data) return;
@@ -69,7 +73,7 @@ export default function Intermediate1Hero() {
         }));
 
         restoreCursorPosition(ref, cursorPosition, selection);
-    }
+    };
 
     if (!templateData?.data) return null;
 
@@ -129,4 +133,4 @@ export default function Intermediate1Hero() {
             </p>
         </WavyBackground>
     );
-}
+};

@@ -1,26 +1,28 @@
 "use client";
-import Button from "@/components/Button";
-import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
-import { Basic2TemplateData, SocialLinks } from "@/utils/interfaces";
-import Link from "next/link";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Basic2TemplateData, SocialLinks } from "@/utils/interfaces";
+import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
 import { FaLinkedinIn, FaGithub, FaFacebook } from "react-icons/fa";
 import { FaXTwitter, FaInstagram, FaCheck } from "react-icons/fa6";
-import { useDispatch, useSelector } from "react-redux";
 import { IoAdd } from "react-icons/io5";
-import Basic2Button from "./Button";
+import Link from "next/link";
 import Image from "next/image";
+import Basic2Button from "./Button";
 
 const Basic2Footer = () => {
 
-    const [inputEnabled, setInputEnabled] = useState<boolean>(false);
-    const [addMoreDropDownEnabled, setAddMoreDropDownEnabled] = useState<boolean>(false);
-    const [inputPlatform, setInputPlatform] = useState<SocialLinks>(null);
-    const [inputLink, setInputLink] = useState<string>("");
-    const templateMode = useSelector(selectTemplateMode);
-    const templateData = useSelector(selectTemplateData);
     const dispatch = useDispatch();
 
+    const templateMode = useSelector(selectTemplateMode);   // Stores current mode of template (e.g., editing, reviewing, etc.)
+    const templateData = useSelector(selectTemplateData);   // Stores portfolio template data
+
+    const [inputEnabled, setInputEnabled] = useState<boolean>(false);   // Controls whether input field is enabled
+    const [addMoreDropDownEnabled, setAddMoreDropDownEnabled] = useState<boolean>(false);   // Controls whether "Add More" dropdown is enabled
+    const [inputPlatform, setInputPlatform] = useState<SocialLinks>(null);    // State for current editing social link platform
+    const [inputLink, setInputLink] = useState<string>("");    // State for current editing input link
+
+    // Function to handle link edit
     const handleLinkEdit = (link: { platform: SocialLinks, url: string | null }) => {
         setAddMoreDropDownEnabled(false);
         if (templateMode !== "editing") return;
@@ -31,6 +33,7 @@ const Basic2Footer = () => {
         }, 0);
     };
 
+    // Function to add new link
     const handleLinkAdd = () => {
         setInputEnabled(false);
         if (templateMode !== "editing" || !inputPlatform || !templateData?.data) return;
@@ -62,7 +65,7 @@ const Basic2Footer = () => {
             setInputLink("");
             setInputPlatform(null);
         }, 0);
-    }
+    };
 
     if (!templateData?.data) return null;
 
