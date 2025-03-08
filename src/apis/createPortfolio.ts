@@ -1,7 +1,7 @@
 import useFetchApi from "@/hooks/useFetchApi";
 import { getImageFileBase64 } from "@/utils/funcs";
 import { templateNames } from "@/utils/helper";
-import { Basic1TemplateData, Basic2TemplateData } from "@/utils/interfaces";
+import { Basic1TemplateData, Basic2TemplateData, Intermediate1TemplateData } from "@/utils/interfaces";
 
 export const updateMetadata = async (templateName: string, page_title?: string, page_description?: string) => {
 
@@ -116,6 +116,53 @@ export const createPortfolioWithBasic2Template = async (templateData: Basic2Temp
                 projects: work,
             },
             skills: templateData.skills,
+            social: templateData.social,
+        }
+    }
+
+    const { data, error } = await useFetchApi("/api/template", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+    })
+
+    return { data, error };
+}
+
+export const createPortfolioWithIntermediate1Template = async (templateData: Intermediate1TemplateData) => {
+
+    const work: {
+        name: string;
+        description: string;
+        image: File | string;
+        url: string;
+        gitHubLink: string;
+    }[] = [];
+
+    for (const project of templateData.projects) {
+        const projectImage = project.image;
+        let file: string | null = null;
+        if (projectImage && projectImage.startsWith("blob:")) {
+            file = await getImageFileBase64(projectImage);
+        }
+
+        work.push({
+            name: project.name,
+            description: project.description,
+            image: file || projectImage,
+            url: project.url,
+            gitHubLink: project.gitHubLink,
+        });
+    };
+
+    const payload = {
+        templateName: templateNames.Intermediate1Template,
+        templateData: {
+            home: templateData.home,
+            about: templateData.about,
+            projects: work,
             social: templateData.social,
         }
     }
