@@ -1,12 +1,4 @@
 "use client";
-import { createPortfolioWithBasic1Template } from "@/apis/createPortfolio";
-import { getPortfolioData } from "@/apis/getPortfolio";
-import Basic1Contact from "@/components/basics/basic1/Contact";
-import Basic1Footer from "@/components/basics/basic1/Footer";
-import Basic1Header from "@/components/basics/basic1/Header";
-import Basic1Hero from "@/components/basics/basic1/Hero";
-import Basic1Projects from "@/components/basics/basic1/Projects";
-import Basic1Skills from "@/components/basics/basic1/Skills";
 import Button from "@/components/Button";
 import { NotFound, SomethingWentWrong } from "@/components/Error";
 import { CreatingPortfolioSpinner, FullPageLoader } from "@/components/Loader";
@@ -18,12 +10,14 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GoPencil } from "react-icons/go";
-import { Basic1TemplateData } from "@/utils/interfaces";
 import Intermediate1Hero from "@/components/intermediates/intermediate1/Hero";
 import Intermediate1About from "@/components/intermediates/intermediate1/About";
 import Intermediate1Projects from "@/components/intermediates/intermediate1/Projects";
 import { Intermediate1Contact } from "@/components/intermediates/intermediate1/Contact";
 import Intermediate1Navigation from "@/components/intermediates/intermediate1/Navigation";
+import { Intermediate1TemplateData } from "@/utils/interfaces";
+import { createPortfolioWithIntermediate1Template } from "@/apis/createPortfolio";
+import { getPortfolioData } from "@/apis/getPortfolio";
 
 const Intermediate1 = () => {
 
@@ -41,46 +35,46 @@ const Intermediate1 = () => {
     const [error, setError] = useState<string | null>(null);
 
     const setupPortfolio = async () => {
-        // if (!templateData?.data || settingUpPortfolio) return;
-        // setSettingUpPortfolio(true);
-        // const { data, error } = await createPortfolioWithBasic1Template(templateData.data as Basic1TemplateData);
-        // if (error) {
-        //     setError("Something went wrong");
-        // } else if (data) {
-        //     console.log(data);
-        //     if (pathname?.includes("portfolio")) {
-        //         window.location.reload();
-        //     } else {
-        //         router.push(`/portfolio/${data.user_id}/b1`);
-        //     }
-        // }
+        if (!templateData?.data || settingUpPortfolio) return;
+        setSettingUpPortfolio(true);
+        const { data, error } = await createPortfolioWithIntermediate1Template(templateData.data as Intermediate1TemplateData);
+        if (error) {
+            setError("Something went wrong");
+        } else if (data) {
+            console.log(data);
+            if (pathname?.includes("portfolio")) {
+                window.location.reload();
+            } else {
+                router.push(`/portfolio/${data.user_id}/i1`);
+            }
+        }
     };
 
-    // const getPortfolio = async () => {
-    //     if (!slug || gettingPortfolio) return;
-    //     setGettingPortfolio(true);
-    //     const { data, error } = await getPortfolioData(slug as string, templateNames.Basic1Template);
-    //     if (error) {
-    //         if (error === "NOT_FOUND") {
-    //             setError("NOT_FOUND");
-    //         } else {
-    //             setError("Something went wrong");
-    //         }
-    //         console.log(error);
-    //     } else if (data) {
-    //         console.log(data);
-    //         dispatch(setTemplateData({
-    //             type: "intermediate1template",
-    //             data: data.data,
-    //         }));
-    //         if (data.page_title) document.title = data.page_title;
-    //         if (data.page_description) document.querySelector("meta[name='description']")?.setAttribute("content", data.page_description);
-    //         dispatch(setMode("done"));
-    //     }
-    //     setTimeout(() => {
-    //         setGettingPortfolio(false);
-    //     }, 0);
-    // }
+    const getPortfolio = async () => {
+        if (!slug || gettingPortfolio) return;
+        setGettingPortfolio(true);
+        const { data, error } = await getPortfolioData(slug as string, templateNames.Intermediate1Template);
+        if (error) {
+            if (error === "NOT_FOUND") {
+                setError("NOT_FOUND");
+            } else {
+                setError("Something went wrong");
+            }
+            console.log(error);
+        } else if (data) {
+            console.log(data);
+            dispatch(setTemplateData({
+                type: "intermediate1template",
+                data: data.data,
+            }));
+            if (data.page_title) document.title = data.page_title;
+            if (data.page_description) document.querySelector("meta[name='description']")?.setAttribute("content", data.page_description);
+            dispatch(setMode("done"));
+        }
+        setTimeout(() => {
+            setGettingPortfolio(false);
+        }, 0);
+    }
 
     const handleFixedBtnClick = () => {
         if (settingUpPortfolio) return;
@@ -101,9 +95,8 @@ const Intermediate1 = () => {
         if (templateData?.data) return;
 
         if (slug) {
-            // getPortfolio();
+            getPortfolio();
         } else {
-            dispatch(setMode("editing"));
             dispatch(setTemplateData({
                 type: 'intermediate1template',
                 data: {
@@ -172,7 +165,7 @@ const Intermediate1 = () => {
         }
     }, []);
 
-    // if (gettingPortfolio) return <FullPageLoader />
+    if (gettingPortfolio) return <FullPageLoader />;
 
     if (error === "NOT_FOUND") return <NotFound />;
 
