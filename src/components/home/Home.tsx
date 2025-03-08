@@ -18,6 +18,11 @@ export default function Home() {
             name: "basic2template",
             description: "Sleek, minimalist portfolio template with clean layout, intuitive navigation, and engaging contact features to showcase work elegantly.",
             image: "/templates/basic2template.webp",
+        },
+        {
+            name: "intermediate1template",
+            description: "A template with a clean and modern design, featuring cool animations.",
+            image: "/templates/intermediate1template.webp",
         }
     ];
 
