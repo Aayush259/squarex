@@ -112,9 +112,14 @@ export default function Intermediate1Hero() {
             </h1>
 
             <p className="relative text-base md:text-lg mt-6 text-white font-normal text-center flex">
-                <button className="text-white absolute top-full left-1/2 -translate-x-1/2 translate-y-[200%] rounded-full duration-300 hover:opacity-70" onClick={() => setEditHeadlinesEnabled(true)}>
-                    <GoPencil size={24} />
-                </button>
+
+                {
+                    templateMode === "editing" && (
+                        <button className="text-white absolute top-full left-1/2 -translate-x-1/2 translate-y-[200%] rounded-full duration-300 hover:opacity-70" onClick={() => setEditHeadlinesEnabled(true)}>
+                            <GoPencil size={24} />
+                        </button>
+                    )
+                }
 
                 {
                     (templateData.data as Intermediate1TemplateData).home.headlines.map((headline, idx) => <span key={idx} className={`block absolute opacity-0 animate-txt-slide-${idx + 1} w-full`}>
