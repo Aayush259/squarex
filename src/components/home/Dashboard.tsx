@@ -97,30 +97,30 @@ export default function Dashboard() {
     // Function to get templates
     const getTemplateNames = useCallback(async () => {
         if (fetching.fetchingPortfolios) return;
-        setFetching({ ...fetching, fetchingPortfolios: true, portfoliosError: false });
+        setFetching(f => ({ ...f, fetchingPortfolios: true, portfoliosError: false }));
         const { data } = await getCreatedTemplateNames();
         console.log(data);
 
         if (data) {
             setUserTemplates(data);
         } else {
-            setFetching({ ...fetching, portfoliosError: true });
+            setFetching(f => ({ ...f, portfoliosError: true }));
         }
-        setFetching({ ...fetching, fetchingPortfolios: false });
+        setFetching(f => ({ ...f, fetchingPortfolios: false }));
     }, []);
 
     // Function to get contact messages
     const getContactMessages = useCallback(async () => {
         if (fetching.fetchingContacts) return;
-        setFetching({ ...fetching, fetchingContacts: true, contactsError: false });
+        setFetching(f => ({ ...f, fetchingContacts: true, contactsError: false }));
         const { data } = await getMessages();
 
         if (data) {
             setContact(data);
         } else {
-            setFetching({ ...fetching, contactsError: true });
+            setFetching(f => ({ ...f, contactsError: true }));
         }
-        setFetching({ ...fetching, fetchingContacts: false });
+        setFetching(f => ({ ...f, fetchingContacts: false }));
     }, []);
 
     // Effect to fetch data on component mount
