@@ -34,7 +34,7 @@ export default function Intermediate1Navigation() {
             active: true,
             onClick: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
                 e.preventDefault();
-                templateMode !== 'editing' ? scrollToElement(IDs.B1) : undefined
+                if (templateMode !== 'editing') scrollToElement(IDs.B1)
             }
         },
         {
@@ -46,7 +46,7 @@ export default function Intermediate1Navigation() {
             active: true,
             onClick: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
                 e.preventDefault();
-                templateMode !== 'editing' ? scrollToElement(IDs.B1, IDs.PROJECTS) : undefined
+                if (templateMode !== 'editing') scrollToElement(IDs.B1, IDs.PROJECTS)
             }
         },
         {
@@ -58,7 +58,7 @@ export default function Intermediate1Navigation() {
             active: true,
             onClick: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
                 e.preventDefault();
-                templateMode !== 'editing' ? scrollToElement(IDs.B1, IDs.ABOUT) : undefined
+                if (templateMode !== 'editing') scrollToElement(IDs.B1, IDs.ABOUT)
             }
         },
         {
@@ -70,7 +70,7 @@ export default function Intermediate1Navigation() {
             active: templateMode !== "editing",
             onClick: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
                 e.preventDefault();
-                templateMode !== 'editing' ? scrollToElement(IDs.B1, IDs.CONTACT) : undefined
+                if (templateMode !== 'editing') scrollToElement(IDs.B1, IDs.CONTACT)
             }
         },
         ...(templateData?.data as Intermediate1TemplateData).social.filter(s => s.url?.trim() !== "").map(platform => ({

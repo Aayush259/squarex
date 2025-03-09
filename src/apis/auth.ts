@@ -1,11 +1,11 @@
-import useFetchApi from "@/hooks/useFetchApi";
+import fetchApi from "@/hooks/fetchApi";
 
 export const signup = async (formData: {
     name: string;
     email: string;
     password: string;
 }) => {
-    const { data, error } = await useFetchApi("/api/auth/signup", {
+    const { data, error } = await fetchApi("/api/auth/signup", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

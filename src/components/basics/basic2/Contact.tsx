@@ -29,6 +29,7 @@ const Basic2Contact = () => {
 
         setSending(true);
         const { data, error } = await sendMessage(slug as string, formData.name, formData.email, formData.message, "basic1template");
+        console.log(data, error);
 
         if (data) {
             setFormData({

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { templateNames } from "@/utils/helper";
@@ -19,12 +19,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     const [initializingTemplate, setInitializingTemplate] = useState<boolean>(true);
 
     // Function to initialize the template
-    const initializeTemplate = async () => {
+    const initializeTemplate = useCallback(async () => {
         setInitializingTemplate(true);
         if (!pathname || !user?.id) return;
 
         if (pathname.includes("basic1template")) {
             const { data, error } = await getPortfolioData(user.id, templateNames.Basic1Template);
+
+            console.log(data, error);
 
             if (data) {
                 if (data.page_title) document.title = data.page_title;
@@ -39,6 +41,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             }
         } else if (pathname.includes("basic2template")) {
             const { data, error } = await getPortfolioData(user.id, templateNames.Basic2Template);
+            console.log(data, error);
 
             if (data) {
                 if (data.page_title) document.title = data.page_title;
@@ -54,11 +57,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         }
 
         setInitializingTemplate(false);
-    };
+    }, [pathname, user, dispatch]);
 
     useEffect(() => {
         initializeTemplate();
-    }, [pathname, user]);
+    }, [pathname, user, initializeTemplate]);
 
     if (initializingTemplate) return <FullPageLoader />;
 

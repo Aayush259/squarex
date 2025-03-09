@@ -1,4 +1,4 @@
-import useFetchApi from "@/hooks/useFetchApi";
+import fetchApi from "@/hooks/fetchApi";
 import { TemplateType } from "@/utils/interfaces";
 
 // Function to send a message
@@ -12,7 +12,7 @@ export const sendMessage = async (slug: string, name: string, email: string, mes
         message,
     }
 
-    const { data, error } = await useFetchApi("/api/sendMessage", {
+    const { data, error } = await fetchApi("/api/sendMessage", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -26,7 +26,7 @@ export const sendMessage = async (slug: string, name: string, email: string, mes
 // Function to get messages
 export const getMessages = async () => {
 
-    const { data, error } = await useFetchApi("/api/getMessages", {
+    const { data, error } = await fetchApi("/api/getMessages", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

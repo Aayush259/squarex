@@ -1,4 +1,4 @@
-import useFetchApi from "@/hooks/useFetchApi";
+import fetchApi from "@/hooks/fetchApi";
 import { getImageFileBase64 } from "@/utils/funcs";
 import { templateNames } from "@/utils/helper";
 import { Basic1TemplateData, Basic2TemplateData, Intermediate1TemplateData } from "@/utils/interfaces";
@@ -12,7 +12,7 @@ export const updateMetadata = async (templateName: string, page_title?: string, 
         ...(page_description ? { page_description } : {}),
     };
 
-    const { data, error } = await useFetchApi("/api/editMetadata", {
+    const { data, error } = await fetchApi("/api/editMetadata", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -74,7 +74,7 @@ export const createPortfolioWithBasic1Template = async (templateData: Basic1Temp
         }
     }
 
-    const { data, error } = await useFetchApi("/api/template", {
+    const { data, error } = await fetchApi("/api/template", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -123,7 +123,7 @@ export const createPortfolioWithBasic2Template = async (templateData: Basic2Temp
         }
     }
 
-    const { data, error } = await useFetchApi("/api/template", {
+    const { data, error } = await fetchApi("/api/template", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -171,7 +171,7 @@ export const createPortfolioWithIntermediate1Template = async (templateData: Int
         }
     }
 
-    const { data, error } = await useFetchApi("/api/template", {
+    const { data, error } = await fetchApi("/api/template", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

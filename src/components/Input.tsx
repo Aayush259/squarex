@@ -1,6 +1,6 @@
 import { InputProps } from "@/utils/interfaces";
 
-const Input: React.FC<InputProps> = ({ label, capture, className, error, ...props }) => {
+const Input: React.FC<InputProps> = ({ label, className, ...props }) => {
 
     return (
         <label htmlFor={label} className="block my-4">

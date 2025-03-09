@@ -63,6 +63,7 @@ const uploadImage = async (imageBuffer: Buffer): Promise<UploadImageResponse> =>
         const imageUrl = await uploadPromise;
         return { success: true, url: imageUrl };
     } catch (error) {
+        console.log(error);
         return { success: false };
     }
 }
@@ -119,7 +120,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const existingTemplate = await mongoose.connection.collection(templateName).findOne({ user_id: userId });
 
-        let updatedTemplateData = JSON.parse(JSON.stringify(templateData));
+        const updatedTemplateData = JSON.parse(JSON.stringify(templateData));
 
         await processImages(updatedTemplateData);
 

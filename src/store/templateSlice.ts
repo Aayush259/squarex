@@ -18,7 +18,7 @@ const templateSlice = createSlice({
 
             state.templateData = { type, data } as TemplateData;
         },
-        resetTemplate: (state) => {
+        resetTemplate: () => {
             return initialState;
         },
     },

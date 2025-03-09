@@ -1,5 +1,5 @@
 
-export default async function useFetchApi<Data>(url: string, options?: RequestInit) {
+export default async function fetchApi(url: string, options?: RequestInit) {
 
     try {
         const response = await fetch(url, options);

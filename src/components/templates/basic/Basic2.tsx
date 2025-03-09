@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useParams, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
@@ -56,7 +56,7 @@ const Basic2 = () => {
     };
 
     // Function to handle portfolio retrieval and dispatch data to store
-    const getPortfolio = async () => {
+    const getPortfolio = useCallback(async () => {
         if (!slug || gettingPortfolio) return;
         setGettingPortfolio(true);
         const { data, error } = await getPortfolioData(slug as string, templateNames.Basic2Template);
@@ -80,7 +80,7 @@ const Basic2 = () => {
         setTimeout(() => {
             setGettingPortfolio(false);
         }, 0);
-    };
+    }, [slug, gettingPortfolio, dispatch]);
 
     // Function to handle fixed button click
     const handleFixedBtnClick = () => {
@@ -106,7 +106,7 @@ const Basic2 = () => {
         } else {
             dispatch(setTemplateData(basic2TemplateExampleData));
         }
-    }, []);
+    }, [dispatch, getPortfolio, slug, templateData?.data]);
 
     if (gettingPortfolio) return <FullPageLoader />
     if (error === "NOT_FOUND") return <NotFound />;

@@ -53,12 +53,12 @@ const WavyBackground = ({
         ctx = canvas?.getContext("2d") || null;
         w = ctx ? ctx.canvas.width = window.innerWidth : 0;
         h = ctx ? ctx.canvas.height = window.innerHeight : 0;
-        ctx ? ctx.filter = `blur(${blur}px)` : "";
+        if (ctx) ctx.filter = `blur(${blur}px)`;
         nt = 0;
         window.onresize = function () {
             w = ctx ? ctx.canvas.width = window.innerWidth : 0;
             h = ctx ? ctx.canvas.height = window.innerHeight : 0;
-            ctx ? ctx.filter = `blur(${blur}px)` : "";
+            if (ctx) ctx.filter = `blur(${blur}px)`;
         };
         render();
     };
@@ -74,24 +74,30 @@ const WavyBackground = ({
     const drawWave = (n: number) => {
         nt += getSpeed();
         for (i = 0; i < n; i++) {
-            ctx ? ctx.beginPath() : "";
-            ctx ? ctx.lineWidth = waveWidth || 50 : "";
-            ctx ? ctx.strokeStyle = waveColors[i % waveColors.length] : "";
+            if (ctx) {
+                ctx.beginPath();
+                ctx.lineWidth = waveWidth || 50;
+                ctx.strokeStyle = waveColors[i % waveColors.length]
+            }
             for (x = 0; x < w; x += 5) {
                 const y = noise(x / 800, 0.3 * i, nt) * 100;
-                ctx ? ctx.lineTo(x, y + h * 0.5) : ""; // adjust for height, currently at 50% of the container
+                if (ctx) ctx.lineTo(x, y + h * 0.5);    // adjust for height, currently at 50% of the container
             }
-            ctx ? ctx.stroke() : "";
-            ctx ? ctx.closePath() : "";
+            if (ctx) {
+                ctx.stroke();
+                ctx.closePath();
+            }
         }
     };
 
     let animationId: number;
 
     const render = () => {
-        ctx ? ctx.fillStyle = backgroundFill || "black" : "";
-        ctx ? ctx.globalAlpha = waveOpacity || 0.5 : "";
-        ctx ? ctx.fillRect(0, 0, w, h) : "";
+        if (ctx) {
+            ctx.fillStyle = backgroundFill || "black";
+            ctx.globalAlpha = waveOpacity || 0.5;
+            ctx.fillRect(0, 0, w, h);
+        }
         drawWave(5);
         animationId = requestAnimationFrame(render);
     };
@@ -101,7 +107,7 @@ const WavyBackground = ({
         return () => {
             cancelAnimationFrame(animationId);
         };
-    }, []);
+    }, [init]);
 
     const [isSafari, setIsSafari] = useState(false);
     useEffect(() => {

@@ -1,8 +1,8 @@
-import useFetchApi from "@/hooks/useFetchApi";
+import fetchApi from "@/hooks/fetchApi";
 
 // Function to get created template names
 export const getCreatedTemplateNames = async () => {
-    const { data, error } = await useFetchApi("/api/getCreatedTemplateNames", {
+    const { data, error } = await fetchApi("/api/getCreatedTemplateNames", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -20,7 +20,7 @@ export const getPortfolioData = async (slug: string, templateName: string) => {
         slug: slug,
     }
 
-    const { data, error } = await useFetchApi("/api/getPortfolio", {
+    const { data, error } = await fetchApi("/api/getPortfolio", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

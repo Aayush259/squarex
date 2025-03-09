@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectUser } from "@/store/userSlice";
 import { getRandomEmoji } from "@/utils/funcs";
@@ -95,7 +95,7 @@ export default function Dashboard() {
     };
 
     // Function to get templates
-    const getTemplateNames = async () => {
+    const getTemplateNames = useCallback(async () => {
         if (fetching.fetchingPortfolios) return;
         setFetching({ ...fetching, fetchingPortfolios: true, portfoliosError: false });
         const { data } = await getCreatedTemplateNames();
@@ -107,10 +107,10 @@ export default function Dashboard() {
             setFetching({ ...fetching, portfoliosError: true });
         }
         setFetching({ ...fetching, fetchingPortfolios: false });
-    };
+    }, []);
 
     // Function to get contact messages
-    const getContactMessages = async () => {
+    const getContactMessages = useCallback(async () => {
         if (fetching.fetchingContacts) return;
         setFetching({ ...fetching, fetchingContacts: true, contactsError: false });
         const { data } = await getMessages();
@@ -121,14 +121,14 @@ export default function Dashboard() {
             setFetching({ ...fetching, contactsError: true });
         }
         setFetching({ ...fetching, fetchingContacts: false });
-    };
+    }, []);
 
     // Effect to fetch data on component mount
     useEffect(() => {
         if (!user?.id) return;
         getTemplateNames();
         getContactMessages();
-    }, [user]);
+    }, [user, getContactMessages, getTemplateNames]);
 
     // Effect to reset metadata on edit metadata window close
     useEffect(() => {

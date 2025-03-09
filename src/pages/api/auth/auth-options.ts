@@ -1,4 +1,4 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import connectMongoDb from '@/lib/db';
 import User from '@/models/User';
@@ -13,8 +13,9 @@ export const authOptions: NextAuthOptions = {
             },
             authorize: async (credentials) => {
                 await connectMongoDb();
-                const user = await User.findOne({ email: credentials?.email });
-                if (user && await user.comparePassword(credentials?.password!)) {
+                if (!credentials) return null;
+                const user = await User.findOne({ email: credentials.email });
+                if (user && await user.comparePassword(credentials.password)) {
                     return { id: (user._id as string).toString(), name: user.name, email: user.email };
                 } else {
                     return null;

@@ -29,7 +29,7 @@ export default function Session({ children }: Readonly<{ children: React.ReactNo
                 }));
             }
         }
-    }, [session, dispatch]);
+    }, [session, dispatch, status]);
 
     if (!user && loading) return <FullPageLoader />;
 
