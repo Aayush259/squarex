@@ -77,6 +77,13 @@ export default function Intermediate1Projects() {
                     projects: updatedProjects,
                 }
             }));
+
+            if (active && typeof active === "object" && active.idx === index) {
+                setActive({
+                    ...updatedProjects[index],
+                    idx: index,
+                });
+            }
         };
     };
 
