@@ -75,6 +75,8 @@ export default function Dashboard() {
                 return "B1 - SquareX";
             case templateNames.Basic2Template:
                 return "B2 - SquareX";
+            case templateNames.Intermediate1Template:
+                return "I1 - SquareX";
             default:
                 return "";
         }

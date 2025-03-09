@@ -1,8 +1,9 @@
 "use client";
 import { RefObject, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { restoreCursorPosition } from "@/utils/funcs";
+import { IDs } from "@/utils/helper";
 import { Basic2TemplateData } from "@/utils/interfaces";
+import { restoreCursorPosition, scrollToElement } from "@/utils/funcs";
 import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
 import { FaArrowRight } from "react-icons/fa6";
 import Basic2Button from "./Button";
@@ -82,7 +83,7 @@ const Basic2Hero = () => {
                 {(templateData?.data as Basic2TemplateData).home.bio}
             </span>
 
-            <Basic2Button className="text-sm !my-6">
+            <Basic2Button className="text-sm !my-6" onClick={() => scrollToElement(IDs.B1, IDs.CONTACT)}>
                 {"Let's Talk"}
                 <FaArrowRight size={16} />
             </Basic2Button>
