@@ -2,6 +2,7 @@ import { Geist, Geist_Mono, Heebo, Playfair_Display, Poppins, Outfit, Aldrich, O
 import "./globals.css";
 import StoreProvider from "@/store/StoreProvider";
 import Session from "@/components/Session";
+import { TemplateContextProvider } from "./context/TemplateContext";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -58,7 +59,9 @@ export default function RootLayout({
             >
                 <StoreProvider>
                     <Session>
-                        {children}
+                        <TemplateContextProvider>
+                            {children}
+                        </TemplateContextProvider>
                     </Session>
                 </StoreProvider>
             </body>

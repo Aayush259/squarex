@@ -5,7 +5,6 @@ import { selectUser } from "@/store/userSlice";
 import { getRandomEmoji } from "@/utils/funcs";
 import { templateNames } from "@/utils/helper";
 import { IContact } from "@/utils/interfaces";
-import { getCreatedTemplateNames } from "@/apis/getPortfolio";
 import { updateMetadata } from "@/apis/createPortfolio";
 import { getMessages } from "@/apis/contact";
 import { FaExternalLinkAlt } from "react-icons/fa";
@@ -16,12 +15,13 @@ import { Loader } from "../Loader";
 import Link from "next/link";
 import Input from "../Input";
 import Button from "../Button";
+import { useTemplateContext } from "@/app/context/TemplateContext";
 
 export default function Dashboard() {
 
     const user = useSelector(selectUser);   // Stores user data
+    const { fetchingUsedTemplates, usedTemplates } = useTemplateContext();
 
-    const [userTemplates, setUserTemplates] = useState<string[]>([]);   // State to track user's created templates
     const [editMetadataWindowOpen, setEditMetadataWindowOpen] = useState<boolean>(false);   // State to track if edit metadata window is open
     const [contact, setContact] = useState<IContact[]>([]);     // State to track contact messages
 
@@ -35,7 +35,6 @@ export default function Dashboard() {
     // State to track loading states for various operations
     const [fetching, setFetching] = useState({
         fetchingContacts: false,
-        fetchingPortfolios: false,
         updatingMetadata: false,
         contactsError: false,
         portfoliosError: false,
@@ -50,15 +49,15 @@ export default function Dashboard() {
         let templateUrl = "";
 
         switch (templateName) {
-            case templateNames.Basic1Template:
+            case templateNames.Basic1Template.toLowerCase():
                 portfolioUrl = `/portfolio/${user?.id}/b1`;
                 templateUrl = `/template/basic1template`;
                 break;
-            case templateNames.Basic2Template:
+            case templateNames.Basic2Template.toLowerCase():
                 portfolioUrl = `/portfolio/${user?.id}/b2`;
                 templateUrl = `/template/basic2template`;
                 break;
-            case templateNames.Intermediate1Template:
+            case templateNames.Intermediate1Template.toLowerCase():
                 portfolioUrl = `/portfolio/${user?.id}/i1`;
                 templateUrl = `/template/intermediate1template`;
                 break;
@@ -71,11 +70,11 @@ export default function Dashboard() {
     const getFrontEndTemplateName = (templateName: string) => {
 
         switch (templateName) {
-            case templateNames.Basic1Template:
+            case templateNames.Basic1Template.toLowerCase():
                 return "B1 - SquareX";
-            case templateNames.Basic2Template:
+            case templateNames.Basic2Template.toLowerCase():
                 return "B2 - SquareX";
-            case templateNames.Intermediate1Template:
+            case templateNames.Intermediate1Template.toLowerCase():
                 return "I1 - SquareX";
             default:
                 return "";
@@ -96,21 +95,6 @@ export default function Dashboard() {
         setFetching({ ...fetching, updatingMetadata: false });
     };
 
-    // Function to get templates
-    const getTemplateNames = useCallback(async () => {
-        if (fetching.fetchingPortfolios) return;
-        setFetching(f => ({ ...f, fetchingPortfolios: true, portfoliosError: false }));
-        const { data } = await getCreatedTemplateNames();
-        console.log(data);
-
-        if (data) {
-            setUserTemplates(data);
-        } else {
-            setFetching(f => ({ ...f, portfoliosError: true }));
-        }
-        setFetching(f => ({ ...f, fetchingPortfolios: false }));
-    }, []);
-
     // Function to get contact messages
     const getContactMessages = useCallback(async () => {
         if (fetching.fetchingContacts) return;
@@ -128,9 +112,8 @@ export default function Dashboard() {
     // Effect to fetch data on component mount
     useEffect(() => {
         if (!user?.id) return;
-        getTemplateNames();
         getContactMessages();
-    }, [user, getContactMessages, getTemplateNames]);
+    }, [user, getContactMessages]);
 
     // Effect to reset metadata on edit metadata window close
     useEffect(() => {
@@ -184,14 +167,7 @@ export default function Dashboard() {
                     }
 
                     {
-                        fetching.contactsError && <div className="w-[500px] max-w-[90vw] flex items-center justify-center p-4">
-                            {"Something went wrong! "}
-                            <button className="underline hover:no-underline underline-offset-4" onClick={getTemplateNames}>{"Retry"}</button>
-                        </div>
-                    }
-
-                    {
-                        !fetching.fetchingPortfolios && !fetching.portfoliosError && userTemplates.length === 0 && <div className="w-[500px] max-w-[90vw] flex items-center justify-center p-4">
+                        !fetchingUsedTemplates && !fetching.portfoliosError && usedTemplates.length === 0 && <div className="w-[500px] max-w-[90vw] flex items-center justify-center p-4">
                             <Link href="/" className="hover:opacity-50">
                                 {"Create your first portfolio!"}
                             </Link>
@@ -199,7 +175,7 @@ export default function Dashboard() {
                     }
 
                     {
-                        userTemplates.reverse().map(template => {
+                        usedTemplates.reverse().map(template => {
                             const { portfolioUrl, templateUrl } = getPortfolioUrls(template);
                             const tName = getFrontEndTemplateName(template);
 
@@ -211,30 +187,30 @@ export default function Dashboard() {
                                         {tName}
                                     </p>
                                     <div className="w-full flex items-center justify-between">
-                                    <Link href={portfolioUrl} target="_blank" className="underline hover:no-underline underline-offset-4 duration-300 flex items-center gap-2 text-lg w-fit">
-                                        {"Visit"}
-                                        <FaExternalLinkAlt size={18} />
-                                    </Link>
+                                        <Link href={portfolioUrl} target="_blank" className="underline hover:no-underline underline-offset-4 duration-300 flex items-center gap-2 text-lg w-fit">
+                                            {"Visit"}
+                                            <FaExternalLinkAlt size={18} />
+                                        </Link>
 
-                                    <div className="flex items-center gap-4">
-                                        <button
-                                            className="hover:opacity-50"
-                                            onClick={() => {
-                                                setMetadata({
-                                                    templateName: template,
-                                                    page_title: "",
-                                                    page_description: "",
-                                                });
-                                                setEditMetadataWindowOpen(true);
-                                            }}
-                                        >
-                                            <FaGear size={24} />
-                                        </button>
+                                        <div className="flex items-center gap-4">
+                                            <button
+                                                className="hover:opacity-50"
+                                                onClick={() => {
+                                                    setMetadata({
+                                                        templateName: template,
+                                                        page_title: "",
+                                                        page_description: "",
+                                                    });
+                                                    setEditMetadataWindowOpen(true);
+                                                }}
+                                            >
+                                                <FaGear size={24} />
+                                            </button>
 
-                                        <button onClick={() => window.open(templateUrl, "_blank")} className="hover:opacity-50">
-                                            <GoPencil size={24} />
-                                        </button>
-                                    </div>
+                                            <button onClick={() => window.open(templateUrl, "_blank")} className="hover:opacity-50">
+                                                <GoPencil size={24} />
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             )
