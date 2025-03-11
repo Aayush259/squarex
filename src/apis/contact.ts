@@ -35,3 +35,17 @@ export const getMessages = async () => {
 
     return { data, error };
 };
+
+// Function to mark messages as visited
+export const markAsVisited = async (messageIds: string[]) => {
+
+    const { data, error } = await fetchApi("/api/markAsVisited", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ messageIds }),
+    });
+
+    return { data, error };
+};
