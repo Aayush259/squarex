@@ -1,12 +1,10 @@
 "use client";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectUser } from "@/store/userSlice";
 import { getRandomEmoji } from "@/utils/funcs";
 import { templateNames } from "@/utils/helper";
-import { IContact } from "@/utils/interfaces";
 import { updateMetadata } from "@/apis/createPortfolio";
-import { getMessages } from "@/apis/contact";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { FaGear } from "react-icons/fa6";
 import { GoPencil } from "react-icons/go";
@@ -16,14 +14,14 @@ import Link from "next/link";
 import Input from "../Input";
 import Button from "../Button";
 import { useTemplateContext } from "@/app/context/TemplateContext";
+import { markAsVisited } from "@/apis/contact";
 
 export default function Dashboard() {
 
     const user = useSelector(selectUser);   // Stores user data
-    const { fetchingUsedTemplates, usedTemplates } = useTemplateContext();
+    const { fetchingUsedTemplates, fetchingContacts, usedTemplates, contacts } = useTemplateContext();
 
     const [editMetadataWindowOpen, setEditMetadataWindowOpen] = useState<boolean>(false);   // State to track if edit metadata window is open
-    const [contact, setContact] = useState<IContact[]>([]);     // State to track contact messages
 
     // State to track metadata for portfolio
     const [metadata, setMetadata] = useState({
@@ -34,10 +32,7 @@ export default function Dashboard() {
 
     // State to track loading states for various operations
     const [fetching, setFetching] = useState({
-        fetchingContacts: false,
         updatingMetadata: false,
-        contactsError: false,
-        portfoliosError: false,
         updatingMetadataError: false,
     });
 
@@ -95,25 +90,19 @@ export default function Dashboard() {
         setFetching({ ...fetching, updatingMetadata: false });
     };
 
-    // Function to get contact messages
-    const getContactMessages = useCallback(async () => {
-        if (fetching.fetchingContacts) return;
-        setFetching(f => ({ ...f, fetchingContacts: true, contactsError: false }));
-        const { data } = await getMessages();
+    const visitMessages = async () => {
+        const notVisitedMessagesIds = contacts.filter(contact => !contact.visited).map(contact => contact._id);
 
-        if (data) {
-            setContact(data);
-        } else {
-            setFetching(f => ({ ...f, contactsError: true }));
+        if (notVisitedMessagesIds.length > 0) {
+            await markAsVisited(notVisitedMessagesIds);
+
+            contacts.forEach(contact => {
+                if (notVisitedMessagesIds.includes(contact._id)) {
+                    contact.visited = true;
+                }
+            });
         }
-        setFetching(f => ({ ...f, fetchingContacts: false }));
-    }, []);
-
-    // Effect to fetch data on component mount
-    useEffect(() => {
-        if (!user?.id) return;
-        getContactMessages();
-    }, [user, getContactMessages]);
+    };
 
     // Effect to reset metadata on edit metadata window close
     useEffect(() => {
@@ -125,6 +114,10 @@ export default function Dashboard() {
             });
         }
     }, [editMetadataWindowOpen]);
+
+    useEffect(() => {
+        visitMessages();
+    }, [user, contacts]);
 
     if (!user) return;
 
@@ -161,13 +154,13 @@ export default function Dashboard() {
                     </p>
 
                     {
-                        fetching.fetchingContacts && <div className="w-[500px] max-w-[90vw] flex items-center justify-center p-4">
+                        fetchingContacts && <div className="w-[500px] max-w-[90vw] flex items-center justify-center p-4">
                             <Loader />
                         </div>
                     }
 
                     {
-                        !fetchingUsedTemplates && !fetching.portfoliosError && usedTemplates.length === 0 && <div className="w-[500px] max-w-[90vw] flex items-center justify-center p-4">
+                        !fetchingUsedTemplates && usedTemplates.length === 0 && <div className="w-[500px] max-w-[90vw] flex items-center justify-center p-4">
                             <Link href="/" className="hover:opacity-50">
                                 {"Create your first portfolio!"}
                             </Link>
@@ -237,26 +230,19 @@ export default function Dashboard() {
                     </div>
 
                     {
-                        fetching.fetchingContacts && <div className="w-full flex items-center justify-center p-4">
+                        fetchingContacts && <div className="w-full flex items-center justify-center p-4">
                             <Loader />
                         </div>
                     }
 
                     {
-                        fetching.contactsError && <div className="w-full flex items-center justify-center p-4">
-                            {"Something went wrong! "}
-                            <button className="underline hover:no-underline underline-offset-4" onClick={getContactMessages}>{"Retry"}</button>
-                        </div>
-                    }
-
-                    {
-                        !fetching.fetchingContacts && !fetching.contactsError && contact.length === 0 && <div className="w-full flex items-center justify-center p-4">
+                        fetchingContacts && contacts.length === 0 && <div className="w-full flex items-center justify-center p-4">
                             {"No messages yet!"}
                         </div>
                     }
 
                     {
-                        contact.reverse().map((contactData, index) => {
+                        contacts.reverse().map((contactData, index) => {
                             return (
                                 <div key={index} className="bg-gradient-to-r from-[#FFFFFF33] to-[#FFFFFF66] dark:from-[#1B1B1B47] dark:to-[#81818100] flex justify-between px-2 rounded-3xl relative break-words dark:[box-shadow:inset_0_0_3px_0_#FFFFFF6B] [box-shadow:inset_0_0_3px_0_#FFFFFFBF]">
 
