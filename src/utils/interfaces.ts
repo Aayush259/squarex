@@ -22,13 +22,16 @@ export interface ITemplates {
 };
 
 export interface IContact {
+    _id: string;
     user_id: string;
     templateName: TemplateType;
     data: {
         name: string;
         email: string;
         message: string;
-    }
+    };
+    visited: boolean;
+    createdAt: Date;
 };
 
 // Store Interfaces
