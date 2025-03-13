@@ -26,7 +26,7 @@ export default function Home() {
 
             </div>
 
-            <p className="text-3xl py-3 md:px-16 font-semibold">
+            <p className="text-3xl py-3 md:px-16 font-semibold text-center md:text-left">
                 {"Your templates"}
             </p>
 
