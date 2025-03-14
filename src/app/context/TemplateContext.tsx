@@ -33,7 +33,7 @@ const TemplateContextProvider = ({ children }: { children: React.ReactNode }) =>
     const [contact, setContact] = useState<IContact[]>([]);     // State to track contact messages
 
     const fetchUsedTemplates = async () => {
-        if (fetchingUsedTemplates) return;
+        if (fetchingUsedTemplates || !user.id) return;
         setFetchingUsedTemplates(true);
         const { data } = await getCreatedTemplateNames();
         console.log(data);
@@ -48,7 +48,7 @@ const TemplateContextProvider = ({ children }: { children: React.ReactNode }) =>
 
     // Function to get contact messages
     const getContactMessages = async () => {
-        if (fetchingContacts) return;
+        if (fetchingContacts || !user.id) return;
         setFetchingContacts(true);
         const { data } = await getMessages();
 
