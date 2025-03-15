@@ -54,6 +54,21 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             } else {
                 dispatch(setMode("checking"));
             }
+        } else if (pathname.includes("intermediate1template")) {
+            const { data, error } = await getPortfolioData(user.id, templateNames.Intermediate1Template);
+            console.log(data, error);
+
+            if (data) {
+                if (data.page_title) document.title = data.page_title;
+                if (data.page_description) document.querySelector("meta[name='description']")?.setAttribute("content", data.page_description);
+                dispatch(setTemplateData({
+                    type: "intermediate1template",
+                    data: data.data
+                }));
+                dispatch(setMode("editing"));
+            } else {
+                dispatch(setMode("checking"));
+            }
         }
 
         setInitializingTemplate(false);
