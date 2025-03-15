@@ -33,7 +33,7 @@ export default function Home() {
             <div className="w-full py-10 md:px-16 flex flex-col md:flex-row gap-8">
                 {
                     templates.filter(template => usedTemplates.includes(template.name?.toLowerCase() ?? '')).map(template => (
-                        <TemplateCard key={template.name} template={template} />
+                        <TemplateCard key={template.name} template={template} created={true} />
                     ))
                 }
             </div>
@@ -42,8 +42,9 @@ export default function Home() {
 };
 
 const TemplateCard: React.FC<{
-    template?: ITemplates
-}> = ({ template }) => {
+    template?: ITemplates;
+    created?: boolean;
+}> = ({ template, created }) => {
 
 
     const router = useRouter();
@@ -67,7 +68,7 @@ const TemplateCard: React.FC<{
                 </p>
 
                 <Button className="!absolute bottom-2 right-0 block ml-auto mr-2 !rounded-lg before:!rounded-lg" onClick={() => redirectToTemplate(template.name)}>
-                    {"View"}
+                    {created ? "Edit" : "Create"}
                 </Button>
             </div>
         </div>
