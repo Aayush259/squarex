@@ -124,6 +124,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         await processImages(updatedTemplateData);
 
+        updatedTemplateData.views = 0;
+
         if (existingTemplate) {
             // Update the existing template
             existingTemplate.data = updatedTemplateData;
