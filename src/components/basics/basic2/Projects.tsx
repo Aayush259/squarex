@@ -1,19 +1,16 @@
 "use client";
 import { ChangeEvent, RefObject, useRef } from "react";
-import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { IDs } from "@/utils/helper";
 import { restoreCursorPosition } from "@/utils/funcs";
-import { Basic2TemplateData } from "@/utils/interfaces";
+import { Basic2TemplateData, ITrackerFunctions } from "@/utils/interfaces";
 import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
 import { FaArrowRight } from "react-icons/fa";
 import { IoIosClose } from "react-icons/io";
 import Image from "next/image";
 import Basic2Button from "./Button";
 
-const Basic2Projects = () => {
-
-    const router = useRouter();
+const Basic2Projects: React.FC<ITrackerFunctions> = ({ trackProjectClick }) => {
     const dispatch = useDispatch();
 
     const templateMode = useSelector(selectTemplateMode);   // Stores current mode of template (e.g., editing, reviewing, etc.)
@@ -242,10 +239,10 @@ const Basic2Projects = () => {
 
                                     <Basic2Button
                                         className="!bg-white !text-[#303030] hover:!text-white before:!bg-[#303030] h-full !px-4"
-                                        onClick={() => {
-                                            if (templateMode === "done") {
-                                                router.push(project.url);
-                                            }
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            trackProjectClick();
+                                            if (templateMode !== "editing") window.open(project.url, "_blank");
                                         }}
                                     >
                                         <FaArrowRight size={16} />

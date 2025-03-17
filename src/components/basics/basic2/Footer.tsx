@@ -1,7 +1,7 @@
 "use client";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Basic2TemplateData, SocialLinks } from "@/utils/interfaces";
+import { Basic2TemplateData, ITrackerFunctions, SocialLinks } from "@/utils/interfaces";
 import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
 import { FaLinkedinIn, FaGithub, FaFacebook } from "react-icons/fa";
 import { FaXTwitter, FaInstagram, FaCheck } from "react-icons/fa6";
@@ -10,7 +10,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Basic2Button from "./Button";
 
-const Basic2Footer = () => {
+const Basic2Footer: React.FC<ITrackerFunctions> = ({ trackSocialClick }) => {
 
     const dispatch = useDispatch();
 
@@ -87,10 +87,10 @@ const Basic2Footer = () => {
                                 key={index}
                                 className="flex items-center justify-center w-12 h-12 rounded-full bg-transparent hover:opacity-50 duration-300 text-neutral-400"
                                 onClick={(e) => {
-                                    if (templateMode !== "done") {
-                                        e.preventDefault();
-                                        if (templateMode === "editing") handleLinkEdit(link);
-                                    }
+                                    e.preventDefault();
+                                    trackSocialClick();
+                                    if (templateMode !== "editing") window.open(link.url as string, "_blank");
+                                    if (templateMode === "editing") handleLinkEdit(link);
                                 }}
                             >
                                 {linkIcon}

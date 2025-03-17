@@ -12,6 +12,7 @@ import { getPortfolioData } from "@/apis/getPortfolio";
 import { GoPencil } from "react-icons/go";
 import { NotFound, SomethingWentWrong } from "@/components/Error";
 import { CreatingPortfolioSpinner, FullPageLoader } from "@/components/Loader";
+import useEngagementTracker from "@/hooks/useEngagementTracker";
 import Button from "@/components/Button";
 import Basic2Header from "@/components/basics/basic2/Header";
 import Basic2Hero from "@/components/basics/basic2/Hero";
@@ -29,6 +30,9 @@ const Basic2 = () => {
     const pathname = usePathname();
 
     const slug = params?.slug;  // Identifier for portfolio owner
+
+    // Hook to track engagement
+    const { trackProjectClick, trackSocialClick } = useEngagementTracker(typeof slug === "string" ? slug : undefined);
 
     const templateMode = useSelector(selectTemplateMode);   // Stores current mode of template (e.g., editing, reviewing, etc.)
     const templateData = useSelector(selectTemplateData);   // Stores portfolio template data
@@ -122,10 +126,10 @@ const Basic2 = () => {
             <Basic2Header />
             <Basic2Hero />
             <Basic2About />
-            <Basic2Projects />
+            <Basic2Projects trackProjectClick={trackProjectClick} trackSocialClick={trackSocialClick} />
             <Basic2WhatiDo />
             <Basic2Contact />
-            <Basic2Footer />
+            <Basic2Footer trackProjectClick={trackProjectClick} trackSocialClick={trackSocialClick} />
 
             <div className="z-50 !fixed bottom-20 right-5 md:bottom-10 md:right-10 flex items-center gap-2">
                 {
