@@ -32,7 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         if (template) {
             if (!existingView) {
-                template.data.views += 1;
+                template.data.views = template.data.views ? template.data.views + 1 : 1;
                 await mongoose.connection.collection(templateName).updateOne({ user_id: slug }, { $set: template });
 
                 await View.create({ portfolioId: slug, ipAddress: userIp, userAgent });
