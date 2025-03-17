@@ -147,3 +147,14 @@ export interface TemplateState {
     mode: TemplateMode;
     templateData: TemplateData | null;
 };
+
+export interface IEngagementData {
+    socialClicks: number;
+    projectClicks: number;
+    timeSpent: number;
+};
+
+export interface ITrackerFunctions {
+    trackSocialClick: () => void;
+    trackProjectClick: () => void;
+};
