@@ -4,11 +4,11 @@ import { ChangeEvent, useEffect, useId, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
 import { restoreCursorPosition } from "@/utils/funcs";
-import { Intermediate1TemplateData } from "@/utils/interfaces";
+import { Intermediate1TemplateData, ITrackerFunctions } from "@/utils/interfaces";
 import { IoIosClose } from "react-icons/io";
 import { IDs } from "@/utils/helper";
 
-export default function Intermediate1Projects() {
+const Intermediate1Projects: React.FC<ITrackerFunctions> = ({ trackProjectClick }) => {
 
     const id = useId();     // Unique identifier for the component
     const dispatch = useDispatch();
@@ -369,7 +369,10 @@ export default function Intermediate1Projects() {
                             <motion.div
                                 layoutId={`card-${idx}-${id}`}
                                 key={`card-${idx}-${id}`}
-                                onClick={() => setActive({ idx: idx, name: project.name, description: project.description, url: project.url, image: project.image, gitHubLink: project.gitHubLink })}
+                                onClick={() => {
+                                    trackProjectClick();
+                                    setActive({ idx: idx, name: project.name, description: project.description, url: project.url, image: project.image, gitHubLink: project.gitHubLink });
+                                }}
                                 className="w-[90vw] mx-auto md:w-auto my-4 md:my-0 p-4 flex flex-col md:flex-row justify-between md:items-center md:hover:bg-neutral-50 md:dark:hover:bg-neutral-800 rounded-xl cursor-pointer relative"
                             >
                                 {
@@ -445,3 +448,5 @@ export default function Intermediate1Projects() {
         </section>
     );
 };
+
+export default Intermediate1Projects;
