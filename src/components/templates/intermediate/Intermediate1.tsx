@@ -13,6 +13,7 @@ import { GoPencil } from "react-icons/go";
 import { NotFound, SomethingWentWrong } from "@/components/Error";
 import { CreatingPortfolioSpinner, FullPageLoader } from "@/components/Loader";
 import { Intermediate1Contact } from "@/components/intermediates/intermediate1/Contact";
+import useEngagementTracker from "@/hooks/useEngagementTracker";
 import Button from "@/components/Button";
 import Intermediate1Hero from "@/components/intermediates/intermediate1/Hero";
 import Intermediate1About from "@/components/intermediates/intermediate1/About";
@@ -27,6 +28,9 @@ const Intermediate1 = () => {
     const pathname = usePathname();
 
     const slug = params?.slug;  // Identifier for portfolio owner
+
+    // Hook to track engagement
+    const { trackProjectClick, trackSocialClick } = useEngagementTracker(typeof slug === "string" ? slug : undefined);
 
     const templateMode = useSelector(selectTemplateMode);   // Stores current mode of template (e.g., editing, reviewing, etc.)
     const templateData = useSelector(selectTemplateData);   // Stores portfolio template data
@@ -119,9 +123,9 @@ const Intermediate1 = () => {
 
             <Intermediate1Hero />
             <Intermediate1About />
-            <Intermediate1Projects />
+            <Intermediate1Projects trackProjectClick={trackProjectClick} trackSocialClick={trackSocialClick} />
             <Intermediate1Contact />
-            <Intermediate1Navigation />
+            <Intermediate1Navigation trackProjectClick={trackProjectClick} trackSocialClick={trackSocialClick} />
 
             <div className="z-50 !fixed bottom-20 right-5 md:bottom-10 md:right-10 flex items-center gap-2">
                 {

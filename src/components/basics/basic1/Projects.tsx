@@ -3,14 +3,14 @@ import { ChangeEvent, RefObject, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { IDs } from "@/utils/helper";
 import { restoreCursorPosition } from "@/utils/funcs";
-import { Basic1TemplateData } from "@/utils/interfaces";
+import { Basic1TemplateData, ITrackerFunctions } from "@/utils/interfaces";
 import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
 import { IoIosClose } from "react-icons/io";
 import Link from "next/link";
 import Image from "next/image";
 import Button from "@/components/Button";
 
-const Basic1Projects = () => {
+const Basic1Projects: React.FC<ITrackerFunctions> = ({ trackProjectClick }) => {
     
     const dispatch = useDispatch();
 
@@ -224,7 +224,9 @@ const Basic1Projects = () => {
                                     <Link
                                         href={project.url}
                                         onClick={(e) => {
-                                            if (templateMode === "editing") e.preventDefault();
+                                            e.preventDefault();
+                                            trackProjectClick();
+                                            if (templateMode !== "editing") window.open(project.url, "_blank");
                                         }}
                                         className="w-fit text-xs border border-black bg-black text-white rounded-full py-1 px-3 block relative hover:text-black duration-500 before:absolute before:top-0 before:left-1/2 before:h-full before:w-0 before:rounded-full before:bg-white before:duration-500 hover:before:w-full hover:before:left-0"
                                     >

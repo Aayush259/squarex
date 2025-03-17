@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { IDs } from "@/utils/helper";
 import { restoreCursorPosition, scrollToElement } from "@/utils/funcs";
 import { selectTemplateData, selectTemplateMode, setTemplateData } from "@/store/templateSlice";
-import { Intermediate1TemplateData } from "@/utils/interfaces";
+import { Intermediate1TemplateData, ITrackerFunctions } from "@/utils/interfaces";
 import { IoIosClose } from "react-icons/io";
 import { LuMessageSquare } from "react-icons/lu";
 import { FaXTwitter, FaInstagram } from "react-icons/fa6";
@@ -13,8 +13,8 @@ import { GoHomeFill, GoProjectSymlink } from "react-icons/go";
 import { FaLinkedinIn, FaGithub, FaFacebook, FaPen } from "react-icons/fa";
 import { FloatingDock } from "@/components/ui/FloatingDock";
 
-export default function Intermediate1Navigation() {
-    
+const Intermediate1Navigation: React.FC<ITrackerFunctions> = ({ trackSocialClick }) => {
+
     const dispatch = useDispatch();
 
     const templateMode = useSelector(selectTemplateMode);   // Stores current mode of template (e.g., editing, reviewing, etc.)
@@ -88,6 +88,11 @@ export default function Intermediate1Navigation() {
             ),
             href: platform.url as string,
             active: true,
+            onClick: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+                e.preventDefault();
+                trackSocialClick();
+                if (templateMode !== 'editing') window.open((platform.url as string), "_blank");
+            }
         })),
         {
             title: "Edit",
@@ -194,5 +199,6 @@ export default function Intermediate1Navigation() {
             </div>
         </div>
     );
-
 };
+
+export default Intermediate1Navigation;
