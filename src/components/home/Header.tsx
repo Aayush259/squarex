@@ -40,7 +40,7 @@ export const Header = () => {
                 <div
                     className={`absolute top-[120%] right-0 w-[300px] max-w-[90vw] rounded-md [box-shadow:inset_0_0_3px_0_#FFFFFF6B] overflow-hidden 57.6 duration-300 ${notificationPopupOpen ? "opacity-100" : "opacity-0"}`}
                     style={{
-                        height: notificationPopupOpen ? contacts.filter(contact => !contact.visited).length || 1 * 57.6 : 0
+                        height: notificationPopupOpen ? (contacts.filter(contact => !contact.visited).length || 1) * 57.6 : 0
                     }}
 
                     onClick={(e) => e.stopPropagation()}
@@ -51,7 +51,7 @@ export const Header = () => {
                                 <div className="h-2 w-2 bg-[var(--primary)] rounded-full" />
                                 <p className="w-[97%] whitespace-nowrap overflow-ellipsis overflow-hidden">
                                     <span className="font-semibold">{contact.data.name + ": "}</span>
-                                    <span>{contact.data.message} {contact.data.message} {contact.data.message} {contact.data.message}</span>
+                                    <span>{contact.data.message}</span>
                                 </p>
                             </div>
                         ))
