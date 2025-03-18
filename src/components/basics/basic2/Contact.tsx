@@ -1,46 +1,12 @@
 "use client";
-import { useState } from "react";
-import { useParams } from "next/navigation";
-import { useSelector } from "react-redux";
 import { IDs } from "@/utils/helper";
-import { sendMessage } from "@/apis/contact";
-import { selectTemplateMode } from "@/store/templateSlice";
+import useContactForm from "@/hooks/useContactForm";
 import Basic2Button from "./Button";
 import Input from "@/components/Input";
 
 const Basic2Contact = () => {
 
-    const params = useParams();
-    const slug = params?.slug;   // Identifier for portfolio owner
-
-    const templateMode = useSelector(selectTemplateMode);   // Stores current mode of template (e.g., editing, reviewing, etc.)
-
-    const [sending, setSending] = useState(false);
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        message: "",
-    });
-
-    // Function to handle form submission
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        if (templateMode !== "done" || !templateMode || !slug) return;
-
-        setSending(true);
-        const { data, error } = await sendMessage(slug as string, formData.name, formData.email, formData.message, "basic1template");
-        console.log(data, error);
-
-        if (data) {
-            setFormData({
-                name: "",
-                email: "",
-                message: "",
-            })
-        }
-
-        setSending(false);
-    };
+    const {formData, handleSubmit, sending, setFormData, templateMode} = useContactForm({ templateName: "basic2template" });
 
     if (templateMode === "editing") return;
 

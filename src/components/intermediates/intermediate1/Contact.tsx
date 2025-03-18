@@ -1,47 +1,13 @@
 "use client";
-import { useState } from "react";
-import { useSelector } from "react-redux";
-import { useParams } from "next/navigation";
 import { IDs } from "@/utils/helper";
-import { sendMessage } from "@/apis/contact";
-import { selectTemplateMode } from "@/store/templateSlice";
+import useContactForm from "@/hooks/useContactForm";
 import { Input, TextArea } from "@/components/ui/Input";
 import LabelInputContainer from "@/components/ui/LabelInputContainer";
 import BottomGradient from "@/components/ui/BottomGradient";
 
 export function Intermediate1Contact() {
 
-    const params = useParams();
-    const slug = params?.slug;   // Identifier for portfolio owner
-
-    const templateMode = useSelector(selectTemplateMode);   // Stores current mode of template (e.g., editing, reviewing, etc.)
-
-    const [sending, setSending] = useState(false);
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        message: "",
-    });
-
-    // Function to handle form submission
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        if (templateMode !== "done" || !templateMode || !slug) return;
-
-        setSending(true);
-        const { data, error } = await sendMessage(slug as string, formData.name, formData.email, formData.message, "intermediate1template");
-        console.log(data, error);
-
-        if (data) {
-            setFormData({
-                name: "",
-                email: "",
-                message: "",
-            })
-        }
-
-        setSending(false);
-    };
+    const { formData, handleSubmit, sending, setFormData, templateMode } = useContactForm({ templateName: "intermediate1template" });
 
     if (templateMode === "editing") return;
 
@@ -101,7 +67,7 @@ export function Intermediate1Contact() {
                         disabled={sending}
                     >
                         {
-                            sending ? "Sending..." : <>{"Send"} &rarr;</>
+                            sending ? "Sending..." : <>{"Send"} →</>
                         }
                         <BottomGradient />
                     </button>
