@@ -1,13 +1,18 @@
 import { TemplateType } from "@/utils/interfaces";
 import mongoose, { Document, Model, Schema } from "mongoose";
 
+interface IEngagementMetric {
+    date: string;
+    count: number;
+}
+
 interface IUserTemplate extends Document {
     user_id: string;
     templateNames: TemplateType[];
     engagement: {
-        socialClicks: number;
-        projectClicks: number;
-        timeSpent: number;
+        socialClicks: IEngagementMetric[];
+        projectClicks: IEngagementMetric[];
+        timeSpent: IEngagementMetric[];
     }
 }
 
@@ -15,9 +20,9 @@ const userTemplatesSchema = new Schema<IUserTemplate>({
     user_id: { type: String, required: true },
     templateNames: { type: Array, default: [] },
     engagement: {
-        socialClicks: { type: Number, default: 0 },
-        projectClicks: { type: Number, default: 0 },
-        timeSpent: { type: Number, default: 0 },
+        socialClicks: { type: [{ date: String, count: Number }], default: [] },
+        projectClicks: { type: [{ date: String, count: Number }], default: [] },
+        timeSpent: { type: [{ date: String, count: Number }], default: [] },
     }
 });
 

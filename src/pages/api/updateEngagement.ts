@@ -22,10 +22,62 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(404).json({ success: false, message: "Portfolio not found" });
         }
 
-        // Update engagement stats
-        userTemplate.engagement.socialClicks += socialClicks || 0;
-        userTemplate.engagement.projectClicks += projectClicks || 0;
-        userTemplate.engagement.timeSpent += timeSpent || 0;
+        // Get today's date in YYYY-MM-DD format
+        const today = new Date().toISOString().split('T')[0];
+
+        // Initialize engagement arrays
+        if (!userTemplate.engagement) {
+            userTemplate.engagement = {
+                socialClicks: [],
+                projectClicks: [],
+                timeSpent: [],
+            };
+        }
+
+        // Update socialClicks
+        if (socialClicks && socialClicks > 0) {
+            // Initialize the array if it doesn't exist
+            if (!Array.isArray(userTemplate.engagement.socialClicks)) {
+                userTemplate.engagement.socialClicks = [];
+            }
+
+            const todayIndex = userTemplate.engagement.socialClicks.findIndex(item => item.date === today);
+            if (todayIndex >= 0) {
+                userTemplate.engagement.socialClicks[todayIndex].count += socialClicks;
+            } else {
+                userTemplate.engagement.socialClicks.push({ date: today, count: socialClicks });
+            }
+        }
+
+        // Update projectClicks
+        if (projectClicks && projectClicks > 0) {
+            // Initialize the array if it doesn't exist
+            if (!Array.isArray(userTemplate.engagement.projectClicks)) {
+                userTemplate.engagement.projectClicks = [];
+            }
+            
+            const todayIndex = userTemplate.engagement.projectClicks.findIndex(item => item.date === today);
+            if (todayIndex >= 0) {
+                userTemplate.engagement.projectClicks[todayIndex].count += projectClicks;
+            } else {
+                userTemplate.engagement.projectClicks.push({ date: today, count: projectClicks });
+            }
+        }
+
+        // Update timeSpent
+        if (timeSpent && timeSpent > 0) {
+            // Initialize the array if it doesn't exist
+            if (!Array.isArray(userTemplate.engagement.timeSpent)) {
+                userTemplate.engagement.timeSpent = [];
+            }
+            
+            const todayIndex = userTemplate.engagement.timeSpent.findIndex(item => item.date === today);
+            if (todayIndex >= 0) {
+                userTemplate.engagement.timeSpent[todayIndex].count += timeSpent;
+            } else {
+                userTemplate.engagement.timeSpent.push({ date: today, count: timeSpent });
+            }
+        }
 
         await userTemplate.save();
 
