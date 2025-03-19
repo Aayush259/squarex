@@ -124,9 +124,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         await processImages(updatedTemplateData);
 
-        updatedTemplateData.views = 0;
+        // updatedTemplateData.views = 0;
+        updatedTemplateData.views = [];
 
         if (existingTemplate) {
+            // Preserve existing views data if exists
+            if (existingTemplate.data.views && Array.isArray(existingTemplate.data.views)) {
+                updatedTemplateData.views = existingTemplate.data.views;
+            }
+
             // Update the existing template
             existingTemplate.data = updatedTemplateData;
             await mongoose.connection.collection(templateName).updateOne({ user_id: userId }, { $set: existingTemplate });

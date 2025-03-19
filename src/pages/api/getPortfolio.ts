@@ -32,8 +32,31 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         if (template) {
             if (!existingView) {
-                template.data.views = template.data.views ? template.data.views + 1 : 1;
-                await mongoose.connection.collection(templateName).updateOne({ user_id: slug }, { $set: template });
+                // Get today's date
+                const today = new Date().toISOString().split('T')[0];
+
+                // Initialize views array if it doesn't exist
+                if (!template.data.views || !Array.isArray(template.data.views)) {
+                    template.data.views = [];
+                }
+
+                // Find if there's an entry for today
+                const todayViewIndex = template.data.views.findIndex(
+                    (view: { date: string; count: number }) => view.date === today
+                );
+
+                if (todayViewIndex >= 0) {
+                    // Update today's count
+                    template.data.views[todayViewIndex].count += 1;
+                } else {
+                    // Add a new entry for today
+                    template.data.views.push({ date: today, count: 1 });
+                }
+
+                await mongoose.connection.collection(templateName).updateOne(
+                    { user_id: slug },
+                    { $set: { "data.views": template.data.views } }
+                );
 
                 await View.create({ portfolioId: slug, ipAddress: userIp, userAgent });
             }
