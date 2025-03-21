@@ -19,19 +19,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
         await connectMongoDb();
 
+        const template = await mongoose.connection.collection(templateName).findOne({ user_id: slug });
+
+        console.log("\n\nTemplate:", template);
+
         // Check if this IP + User-Agent combo has already viewed within last 10 minutes
         const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
         const existingView = await View.findOne({
-            portfolioId: slug,
+            portfolioId: template?._id.toString(),
             ipAddress: userIp,
             userAgent,
             timestamp: { $gte: tenMinutesAgo },
         });
 
-        const template = await mongoose.connection.collection(templateName).findOne({ user_id: slug });
+
+        console.log("\n\nReq url:", req.headers.referer);
 
         if (template) {
-            if (!existingView) {
+            if (!existingView && (req.headers.referer && !req.headers.referer.includes('template')) && req.headers.origin && !req.headers.origin.includes('template')) {
                 // Get today's date
                 const today = new Date().toISOString().split('T')[0];
 
@@ -58,7 +63,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     { $set: { "data.views": template.data.views } }
                 );
 
-                await View.create({ portfolioId: slug, ipAddress: userIp, userAgent });
+                await View.create({ portfolioId: template._id.toString(), ipAddress: userIp, userAgent });
             }
             res.status(200).json({ success: true, message: "Portfolio", data: template });
         } else {
