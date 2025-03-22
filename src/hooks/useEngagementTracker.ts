@@ -1,9 +1,8 @@
 import fetchApi from "./fetchApi";
 import { useEffect, useState } from "react";
-import { IEngagementData } from "@/utils/interfaces";
 
 const useEngagementTracker = (slug: string | undefined) => {
-    const [engagement, setEngagement] = useState<IEngagementData>({
+    const [engagement, setEngagement] = useState({
         socialClicks: 0,
         projectClicks: 0,
         timeSpent: 0,
