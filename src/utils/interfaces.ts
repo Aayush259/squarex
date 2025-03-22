@@ -148,10 +148,23 @@ export interface TemplateState {
     templateData: TemplateData | null;
 };
 
+export interface IEngagementMetric {
+    date: string;
+    count: number;
+};
+
 export interface IEngagementData {
-    socialClicks: number;
-    projectClicks: number;
-    timeSpent: number;
+    socialClicks: IEngagementMetric[];
+    projectClicks: IEngagementMetric[];
+    timeSpent: IEngagementMetric[];
+};
+
+export interface IEngagementApiData {
+    views: {
+        templateName: TemplateType;
+        views: IEngagementMetric[];
+    }[];
+    engagement: IEngagementData;
 };
 
 export interface ITrackerFunctions {
