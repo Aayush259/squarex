@@ -2,7 +2,30 @@
 import { useTemplateContext } from "@/app/context/TemplateContext";
 import { Area, AreaChart, Bar, BarChart, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
-export const EngagementTrends = () => {
+export default function EngagementVisuals() {
+    return (
+        <section className="w-full px-4 md:px-8 xl:px-32 flex flex-col gap-16 my-20">
+            <div>
+                <h2 className="text-lg md:text-2xl font-semibold mb-6 md:mx-6">{"Overall Engagement Trends"}</h2>
+                <EngagementTrends />
+            </div>
+            <div>
+                <h2 className="text-lg md:text-2xl font-semibold mb-6 md:mx-6">{"Page Views"}</h2>
+                <ViewsChart />
+            </div>
+            <div>
+                <h2 className="text-lg md:text-2xl font-semibold mb-6 md:mx-6">{"Click Distribution"}</h2>
+                <ClicksChart />
+            </div>
+            <div>
+                <h2 className="text-lg md:text-2xl font-semibold mb-6 md:mx-6">{"Time Spent Analysis"}</h2>
+                <TimeSpentChart />
+            </div>
+        </section>
+    );
+}
+
+const EngagementTrends = () => {
 
     const { viewsArr, socialClicksArr, projectClicksArr, timeSpentArr } = useTemplateContext();
 
@@ -30,7 +53,7 @@ export const EngagementTrends = () => {
     );
 };
 
-export const ViewsChart = () => {
+const ViewsChart = () => {
 
     const { viewsArr } = useTemplateContext();
 
@@ -47,7 +70,7 @@ export const ViewsChart = () => {
     );
 };
 
-export const ClicksChart = () => {
+const ClicksChart = () => {
 
     const { socialClicksArr, projectClicksArr } = useTemplateContext();
 
@@ -71,7 +94,7 @@ export const ClicksChart = () => {
     );
 };
 
-export const TimeSpentChart = () => {
+const TimeSpentChart = () => {
 
     const { timeSpentArr } = useTemplateContext();
 
