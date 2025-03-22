@@ -130,7 +130,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (existingTemplate) {
             // Preserve existing views data if exists
             if (existingTemplate.data.views && Array.isArray(existingTemplate.data.views)) {
-                updatedTemplateData.views = existingTemplate.data.views;
+                if ((req.headers.referer && !req.headers.referer.includes('template')) || req.headers.origin && !req.headers.origin.includes('template')) {
+                    updatedTemplateData.views = existingTemplate.data.views;
+                }
             }
 
             // Update the existing template
