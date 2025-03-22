@@ -71,10 +71,25 @@ const TemplateContextProvider = ({ children }: { children: React.ReactNode }) =>
         const totalViews = viewsArr.reduce((acc, view) => acc + view.count, 0);
         const totalClicks = [...socialClicksArr, ...projectClicksArr].reduce((acc, click) => acc + click.count, 0);
         const totalTimeSpent = timeSpentArr.reduce((acc, time) => acc + time.count, 0);
-        const score = ((totalClicks + totalTimeSpent) / totalViews) * 100;
+        // Define estimated max values (adjust based on real data)
+        const maxViews = Math.max(totalViews, 10); // Prevent division by zero
+        const maxClicks = Math.max(totalClicks, 10);
+        const maxTime = Math.max(totalTimeSpent, 20);
 
-        if (isNaN(score)) return 0;
-        return score;
+        // Weights (Adjustable)
+        const W_v = 0.3; // Views Weight
+        const W_c = 0.4; // Clicks Weight
+        const W_t = 0.3; // Time Spent Weight
+
+        // Calculate weighted scores
+        const viewsScore = W_v * (totalViews / maxViews);
+        const clicksScore = W_c * (totalClicks / maxClicks);
+        const timeScore = W_t * (totalTimeSpent / maxTime);
+
+        // Final normalized score
+        const score = (viewsScore + clicksScore + timeScore) * 100;
+
+        return isNaN(score) ? 0 : Math.min(score, 100);
     }, [viewsArr, socialClicksArr, projectClicksArr, timeSpentArr]);
 
     const fetchUsedTemplates = async () => {

@@ -15,11 +15,12 @@ import Input from "../Input";
 import Button from "../Button";
 import { useTemplateContext } from "@/app/context/TemplateContext";
 import { markAsVisited } from "@/apis/contact";
+import EngagementVisuals from "./EngagementTrends";
 
 export default function Dashboard() {
 
     const user = useSelector(selectUser);   // Stores user data
-    const { fetchingUsedTemplates, fetchingContacts, usedTemplates, contacts } = useTemplateContext();
+    const { fetchingUsedTemplates, fetchingContacts, usedTemplates, contacts, engagementScore } = useTemplateContext();
 
     const [editMetadataWindowOpen, setEditMetadataWindowOpen] = useState<boolean>(false);   // State to track if edit metadata window is open
 
@@ -141,15 +142,52 @@ export default function Dashboard() {
                 </div>
             }
 
-            <div className="flex items-start justify-between p-4 lg:p-6">
-                <div>
-                    <p className="text-xl lg:text-2xl font-semibold">
-                        {"Hii "}{user?.name.split(" ")[0]}{" "}{randomEmoji}
-                    </p>
+            <p className="text-xl lg:text-2xl font-semibold p-4 lg:p-6">
+                {"Hii "}{user?.name.split(" ")[0]}{" "}{randomEmoji}
+            </p>
+
+            <div className="flex flex-col-reverse lg:flex-row gap-4 items-start justify-between px-4 lg:px-6">
+                <div className="mx-auto">
+                    <h3 className="text-lg lg:text-2xl font-semibold my-4">{"Engagement Score"}</h3>
+                    <div className="p-6 rounded-xl bg-[#884dd633] relative">
+
+                        <div className="relative h-40 w-40 mx-auto">
+                            {/* Outer circle (background) */}
+                            <div className="absolute inset-0 rounded-full bg-[#884dd620]"></div>
+
+                            {/* Progress circle */}
+                            <svg className="absolute inset-0 transform -rotate-90" viewBox="0 0 100 100">
+                                <circle
+                                    className="text-[#884dd6] stroke-current"
+                                    strokeWidth="8"
+                                    strokeLinecap="round"
+                                    fill="transparent"
+                                    r="42"
+                                    cx="50"
+                                    cy="50"
+                                    style={{
+                                        strokeDasharray: 264,
+                                        strokeDashoffset: 264 - (264 * engagementScore) / 100
+                                    }}
+                                />
+                            </svg>
+
+                            {/* Score text */}
+                            <div className="absolute inset-0 flex items-center justify-center">
+                                <span className="text-3xl font-bold">
+                                    {Math.round(engagementScore)}{"%"}
+                                </span>
+                            </div>
+                        </div>
+
+                        <p className="text-center mt-4 text-sm opacity-75">
+                            Based on views, clicks, and time spent
+                        </p>
+                    </div>
                 </div>
 
                 <div>
-                    <p className="w-[500px] max-w-[90vw] text-lg md:text-xl font-semibold my-4">
+                    <p className="w-[500px] max-w-[90vw] text-lg md:text-2xl font-semibold my-4">
                         {"Your Portfolios"}
                     </p>
 
@@ -212,55 +250,59 @@ export default function Dashboard() {
                 </div>
             </div>
 
-            <p className="w-[90vw] mx-auto mt-20 px-4 text-lg md:text-xl font-semibold my-4">
+            <EngagementVisuals />
+
+            <p className="w-[90vw] mx-auto px-4 text-lg md:text-2xl font-semibold my-4">
                 {"Messages:"}
             </p>
 
-            <div className="w-[90vw] mx-auto mb-20 min-w-[800px] h-fit col-span-4 py-4 bg-gradient-to-r dark:from-[#00000033] dark:to-[#00000033] from-[#FFFFFF33] to-[#FFFFFF66] rounded-3xl flex flex-col gap-4 dark:[box-shadow:inset_0_0_3px_0_#FFFFFF6B] [box-shadow:inset_0_0_3px_0_#FFFFFFBF]">
+            <div className="w-full overflow-x-auto px-4 [&::-webkit-scrollbar]:hidden">
+                <div className="w-[90vw] mx-auto mb-20 min-w-[800px] h-fit col-span-4 py-4 bg-gradient-to-r dark:from-[#00000033] dark:to-[#00000033] from-[#FFFFFF33] to-[#FFFFFF66] rounded-3xl flex flex-col gap-4 dark:[box-shadow:inset_0_0_3px_0_#FFFFFF6B] [box-shadow:inset_0_0_3px_0_#FFFFFFBF]">
 
-                <div className="flex flex-col gap-1 relative px-4">
-                    <div className="bg-gradient-to-r from-[#FFFFFF33] to-[#FFFFFF66] dark:from-[#1B1B1B47] dark:to-[#81818100] flex justify-between px-1 rounded-3xl relative dark:[box-shadow:inset_0_0_3px_0_#FFFFFF6B] [box-shadow:inset_0_0_3px_0_#FFFFFFBF]">
-                        {["Name", "Email", "Message"].map((item) => {
-                            return (
-                                <p key={item} className="py-2 text-sm font-medium dark:text-[#FFFFFFBF] text-[#1E1E1EBF] font-boston w-[33.33%] text-center">
-                                    {item}
-                                </p>
-                            );
-                        })}
+                    <div className="flex flex-col gap-1 relative px-4">
+                        <div className="bg-gradient-to-r from-[#FFFFFF33] to-[#FFFFFF66] dark:from-[#1B1B1B47] dark:to-[#81818100] flex justify-between px-1 rounded-3xl relative dark:[box-shadow:inset_0_0_3px_0_#FFFFFF6B] [box-shadow:inset_0_0_3px_0_#FFFFFFBF]">
+                            {["Name", "Email", "Message"].map((item) => {
+                                return (
+                                    <p key={item} className="py-2 text-sm font-medium dark:text-[#FFFFFFBF] text-[#1E1E1EBF] font-boston w-[33.33%] text-center">
+                                        {item}
+                                    </p>
+                                );
+                            })}
+                        </div>
+
+                        {
+                            fetchingContacts && <div className="w-full flex items-center justify-center p-4">
+                                <Loader />
+                            </div>
+                        }
+
+                        {
+                            fetchingContacts && contacts.length === 0 && <div className="w-full flex items-center justify-center p-4">
+                                {"No messages yet!"}
+                            </div>
+                        }
+
+                        {
+                            contacts.reverse().map((contactData, index) => {
+                                return (
+                                    <div key={index} className="bg-gradient-to-r from-[#FFFFFF33] to-[#FFFFFF66] dark:from-[#1B1B1B47] dark:to-[#81818100] flex justify-between px-2 rounded-3xl relative break-words dark:[box-shadow:inset_0_0_3px_0_#FFFFFF6B] [box-shadow:inset_0_0_3px_0_#FFFFFFBF]">
+
+                                        <p className="py-3 text-sm font-medium dark:text-[#FFFFFFBF] text-[#1E1E1EBF] w-[33.33%] text-center">
+                                            {contactData.data.name}
+                                        </p>
+                                        <p className="py-3 text-sm font-medium dark:text-[#FFFFFFBF] text-[#1E1E1EBF] w-[33.33%] text-center">
+                                            {contactData.data.email}
+                                        </p>
+                                        <p className="py-3 text-sm font-medium dark:text-[#FFFFFFBF] text-[#1E1E1EBF] w-[33.33%] text-center px-3">
+                                            {contactData.data.message}
+                                        </p>
+                                    </div>
+                                );
+                            })
+                        }
+                        <div className="w-[1px] h-full bg-[#FFFFFF40] absolute left-[33.33%]" />
+                        <div className="w-[1px] h-full bg-[#FFFFFF40] absolute left-[66.66%]" />
                     </div>
-
-                    {
-                        fetchingContacts && <div className="w-full flex items-center justify-center p-4">
-                            <Loader />
-                        </div>
-                    }
-
-                    {
-                        fetchingContacts && contacts.length === 0 && <div className="w-full flex items-center justify-center p-4">
-                            {"No messages yet!"}
-                        </div>
-                    }
-
-                    {
-                        contacts.reverse().map((contactData, index) => {
-                            return (
-                                <div key={index} className="bg-gradient-to-r from-[#FFFFFF33] to-[#FFFFFF66] dark:from-[#1B1B1B47] dark:to-[#81818100] flex justify-between px-2 rounded-3xl relative break-words dark:[box-shadow:inset_0_0_3px_0_#FFFFFF6B] [box-shadow:inset_0_0_3px_0_#FFFFFFBF]">
-
-                                    <p className="py-3 text-sm font-medium dark:text-[#FFFFFFBF] text-[#1E1E1EBF] w-[33.33%] text-center">
-                                        {contactData.data.name}
-                                    </p>
-                                    <p className="py-3 text-sm font-medium dark:text-[#FFFFFFBF] text-[#1E1E1EBF] w-[33.33%] text-center">
-                                        {contactData.data.email}
-                                    </p>
-                                    <p className="py-3 text-sm font-medium dark:text-[#FFFFFFBF] text-[#1E1E1EBF] w-[33.33%] text-center px-3">
-                                        {contactData.data.message}
-                                    </p>
-                                </div>
-                            );
-                        })
-                    }
-                    <div className="w-[1px] h-full bg-[#FFFFFF40] absolute left-[33.33%]" />
-                    <div className="w-[1px] h-full bg-[#FFFFFF40] absolute left-[66.66%]" />
                 </div>
             </div>
         </section>
