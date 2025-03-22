@@ -3,7 +3,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectUser } from "@/store/userSlice";
 import { getCreatedTemplateNames } from "@/apis/getPortfolio";
-import { IContact, IEngagementApiData } from "@/utils/interfaces";
+import { IContact, IEngagementApiData, IEngagementMetric } from "@/utils/interfaces";
 import { getMessages } from "@/apis/contact";
 import { getEngagement } from "@/apis/engagement";
 
@@ -14,6 +14,11 @@ const TemplateContext = createContext<{
     usedTemplates: string[];
     contacts: IContact[];
     engagementData: IEngagementApiData | null;
+    viewsArr: IEngagementMetric[];
+    socialClicksArr: IEngagementMetric[];
+    projectClicksArr: IEngagementMetric[];
+    timeSpentArr: IEngagementMetric[];
+    engagementScore: number;
 }>({
     fetchingUsedTemplates: false,
     fetchingContacts: false,
@@ -21,6 +26,11 @@ const TemplateContext = createContext<{
     usedTemplates: [],
     contacts: [],
     engagementData: null,
+    viewsArr: [],
+    socialClicksArr: [],
+    projectClicksArr: [],
+    timeSpentArr: [],
+    engagementScore: 0,
 });
 
 const TemplateContextProvider = ({ children }: { children: React.ReactNode }) => {
@@ -119,6 +129,11 @@ const TemplateContextProvider = ({ children }: { children: React.ReactNode }) =>
             usedTemplates,
             contacts: contact,
             engagementData,
+            viewsArr,
+            socialClicksArr,
+            projectClicksArr,
+            timeSpentArr,
+            engagementScore,
         }}>
             {children}
         </TemplateContext.Provider>
