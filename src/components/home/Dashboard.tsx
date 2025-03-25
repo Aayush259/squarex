@@ -277,7 +277,7 @@ export default function Dashboard() {
                         }
 
                         {
-                            fetchingContacts && contacts.length === 0 && <div className="w-full flex items-center justify-center p-4">
+                            !fetchingContacts && contacts.length === 0 && <div className="w-full flex items-center justify-center p-4">
                                 {"No messages yet!"}
                             </div>
                         }
