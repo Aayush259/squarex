@@ -26,9 +26,13 @@ export default function Home() {
 
             </div>
 
-            <p className="text-3xl py-3 md:px-16 font-semibold text-center md:text-left">
-                {"Your templates"}
-            </p>
+            {
+                templates.filter(template => usedTemplates.includes(template.name?.toLowerCase() ?? ''))?.length > 0 && (
+                        <p className="text-3xl py-3 md:px-16 font-semibold text-center md:text-left">
+                            {"Your templates"}
+                        </p>
+                )
+            }
 
             <div className="w-full py-10 md:px-16 flex flex-col md:flex-row gap-8">
                 {
