@@ -52,17 +52,17 @@ const TemplateContextProvider = ({ children }: { children: React.ReactNode }) =>
     }, [engagementData]);
 
     const socialClicksArr = useMemo(() => {
-        if (!engagementData || !engagementData?.socialClicks) return [];
+        if (!engagementData || !engagementData?.engagement?.socialClicks) return [];
         return engagementData.engagement.socialClicks;
     }, [engagementData]);
 
     const projectClicksArr = useMemo(() => {
-        if (!engagementData || !engagementData?.projectClicks) return [];
+        if (!engagementData || !engagementData?.engagement?.projectClicks) return [];
         return engagementData.engagement.projectClicks;
     }, [engagementData]);
 
     const timeSpentArr = useMemo(() => {
-        if (!engagementData || !engagementData?.timeSpent) return [];
+        if (!engagementData || !engagementData?.engagement?.timeSpent) return [];
         return engagementData.engagement.timeSpent.map(time => ({ ...time, count: time.count / 60 }));
     }, [engagementData]);
 
