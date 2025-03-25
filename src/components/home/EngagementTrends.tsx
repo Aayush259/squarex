@@ -37,6 +37,12 @@ const EngagementTrends = () => {
         timeSpent: timeSpentArr.find(time => time.date === view.date)?.count || 0,
     }));
 
+    if (data.length === 0) return (
+        <div className="w-full text-center py-8 px-4 text-2xl font-semibold">
+            {"No data available"}
+        </div>
+    );
+
     return (
         <ResponsiveContainer width="100%" height={300}>
             <LineChart data={data}>
@@ -56,6 +62,12 @@ const EngagementTrends = () => {
 const ViewsChart = () => {
 
     const { viewsArr } = useTemplateContext();
+
+    if (viewsArr.length === 0) return (
+        <div className="w-full text-center py-8 px-4 text-2xl font-semibold">
+            {"No data available"}
+        </div>
+    );
 
     return (
         <ResponsiveContainer width="100%" height={300}>
@@ -80,6 +92,12 @@ const ClicksChart = () => {
         socialClicks: socialClicksArr.find(social => social.date === click.date)?.count || 0,
     }));
 
+    if (combinedData.length === 0) return (
+        <div className="w-full text-center py-8 px-4 text-2xl font-semibold">
+            {"No data available"}
+        </div>
+    );
+
     return (
         <ResponsiveContainer width="100%" height={300}>
             <BarChart data={combinedData}>
@@ -97,6 +115,12 @@ const ClicksChart = () => {
 const TimeSpentChart = () => {
 
     const { timeSpentArr } = useTemplateContext();
+
+    if (timeSpentArr.length === 0) return (
+        <div className="w-full text-center py-8 px-4 text-2xl font-semibold">
+            {"No data available"}
+        </div>
+    );
 
     return (
         <ResponsiveContainer width="100%" height={300}>
