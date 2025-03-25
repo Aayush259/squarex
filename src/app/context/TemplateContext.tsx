@@ -47,22 +47,22 @@ const TemplateContextProvider = ({ children }: { children: React.ReactNode }) =>
 
     // Memoized values for engagement data
     const viewsArr = useMemo(() => {
-        if (!engagementData) return [];
+        if (!engagementData || !engagementData?.views) return [];
         return engagementData.views.flatMap(view => view.views);
     }, [engagementData]);
 
     const socialClicksArr = useMemo(() => {
-        if (!engagementData) return [];
+        if (!engagementData || !engagementData?.socialClicks) return [];
         return engagementData.engagement.socialClicks;
     }, [engagementData]);
 
     const projectClicksArr = useMemo(() => {
-        if (!engagementData) return [];
+        if (!engagementData || !engagementData?.projectClicks) return [];
         return engagementData.engagement.projectClicks;
     }, [engagementData]);
 
     const timeSpentArr = useMemo(() => {
-        if (!engagementData) return [];
+        if (!engagementData || !engagementData?.timeSpent) return [];
         return engagementData.engagement.timeSpent.map(time => ({ ...time, count: time.count / 60 }));
     }, [engagementData]);
 
