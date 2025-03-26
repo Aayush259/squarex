@@ -82,7 +82,7 @@ const Intermediate1 = () => {
         setTimeout(() => {
             setGettingPortfolio(false);
         }, 0);
-    }, [slug, gettingPortfolio, dispatch]);
+    }, [slug, dispatch]);
 
     // Function to handle fixed button click
     const handleFixedBtnClick = () => {
