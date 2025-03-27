@@ -6,6 +6,7 @@ import { getCreatedTemplateNames } from "@/apis/getPortfolio";
 import { IContact, IEngagementApiData, IEngagementMetric } from "@/utils/interfaces";
 import { getMessages } from "@/apis/contact";
 import { getEngagement } from "@/apis/engagement";
+import { usePathname } from "next/navigation";
 
 const TemplateContext = createContext<{
     fetchingUsedTemplates: boolean;
@@ -36,6 +37,7 @@ const TemplateContext = createContext<{
 const TemplateContextProvider = ({ children }: { children: React.ReactNode }) => {
 
     const user = useSelector(selectUser);   // Stores user data
+    const pathname = usePathname(); // Get current pathname
 
     const [fetchingUsedTemplates, setFetchingUsedTemplates] = useState<boolean>(false);   // State to track if fetching used templates
     const [fetchingContacts, setFetchingContacts] = useState<boolean>(false);   // State to track if fetching contacts
@@ -131,10 +133,12 @@ const TemplateContextProvider = ({ children }: { children: React.ReactNode }) =>
     };
 
     useEffect(() => {
-        fetchUsedTemplates();
-        getContactMessages();
-        fetchEngagements();
-    }, [user]);
+        if (!pathname?.includes("template") && !pathname?.includes("portfolio")) {
+            fetchUsedTemplates();
+            getContactMessages();
+            fetchEngagements();
+        };
+    }, [user, pathname]);
 
     return (
         <TemplateContext.Provider value={{
