@@ -45,17 +45,17 @@ export default function Dashboard() {
         let templateUrl = "";
 
         switch (templateName) {
-            case templateNames.Basic1Template.toLowerCase():
+            case templateNames.Basic1Template:
                 portfolioUrl = `/portfolio/${user?.id}/b1`;
-                templateUrl = `/template/basic1template`;
+                templateUrl = `/template/${templateNames.Basic1Template}`;
                 break;
-            case templateNames.Basic2Template.toLowerCase():
+            case templateNames.Basic2Template:
                 portfolioUrl = `/portfolio/${user?.id}/b2`;
-                templateUrl = `/template/basic2template`;
+                templateUrl = `/template/${templateNames.Basic2Template}`;
                 break;
-            case templateNames.Intermediate1Template.toLowerCase():
+            case templateNames.Intermediate1Template:
                 portfolioUrl = `/portfolio/${user?.id}/i1`;
-                templateUrl = `/template/intermediate1template`;
+                templateUrl = `/template/${templateNames.Intermediate1Template}`;
                 break;
         }
 
@@ -125,7 +125,7 @@ export default function Dashboard() {
     return (
         <section className="w-full">
             {
-                editMetadataWindowOpen && <div className="fixed w-screen h-screen top-0 left-0 bg-black/85 flex items-center justify-center">
+                editMetadataWindowOpen && <div className="fixed w-screen h-screen top-0 left-0 bg-black/85 flex items-center justify-center z-50">
                     <div className="w-[500px] max-w-[94vw] p-4 bg-[#884dd633] rounded-lg relative">
                         <button className="absolute top-4 right-4 hover:opacity-50" onClick={() => setEditMetadataWindowOpen(false)}>
                             <IoIosClose size={30} />

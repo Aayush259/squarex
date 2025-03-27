@@ -1,9 +1,9 @@
 import { Basic1TemplateData, Basic2TemplateData, Intermediate1TemplateData, ITemplates } from "./interfaces"
 
 export const templateNames = {
-    Basic1Template: "Basic1Template",
-    Basic2Template: "Basic2Template",
-    Intermediate1Template: "Intermediate1Template",
+    Basic1Template: "basic1template",
+    Basic2Template: "basic2template",
+    Intermediate1Template: "intermediate1template",
 }
 
 export const IDs = {

@@ -81,7 +81,7 @@ const Basic1Hero = () => {
 
     return (
         <section className="w-full bg-[#FFFFFF] px-5 pt-12 pb-20 md:px-36 md:pt-28 md:pb-28">
-            <div className="flex items-center justify-center gap-8 md:gap-20 flex-col-reverse md:flex-row">
+            <div className="flex items-center justify-between gap-8 md:gap-20 flex-col-reverse md:flex-row">
                 <div>
                     <h1 className="text-2xl md:text-6xl font-semibold flex flex-col gap-2 md:gap-4">
                         <span>
