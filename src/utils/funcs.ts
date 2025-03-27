@@ -1,3 +1,4 @@
+import { templateNames } from "./helper";
 
 // Restore cursor position
 export const restoreCursorPosition = (element: HTMLSpanElement | null, cursorPosition: number, selection: Selection) => {
@@ -37,7 +38,7 @@ export const getImageFileBase64 = async (imageObjectUrl: string): Promise<string
     });
 };
 
-export const scrollToElement = ( parentId?: string, elementId?: string) => {
+export const scrollToElement = (parentId?: string, elementId?: string) => {
 
     let parent = document.getElementById(parentId || "");
 
@@ -62,4 +63,26 @@ export const getRandomEmoji = () => {
     const randomIndex = Math.floor(Math.random() * emojis.length);
 
     return emojis[randomIndex];
+};
+
+export const getPortfolioUrls = (templateName: string, user_id: string) => {
+    let portfolioUrl = "";
+    let templateUrl = "";
+
+    switch (templateName) {
+        case templateNames.Basic1Template:
+            portfolioUrl = `/portfolio/${user_id}/b1`;
+            templateUrl = `/template/${templateNames.Basic1Template}`;
+            break;
+        case templateNames.Basic2Template:
+            portfolioUrl = `/portfolio/${user_id}/b2`;
+            templateUrl = `/template/${templateNames.Basic2Template}`;
+            break;
+        case templateNames.Intermediate1Template:
+            portfolioUrl = `/portfolio/${user_id}/i1`;
+            templateUrl = `/template/${templateNames.Intermediate1Template}`;
+            break;
+    };
+
+    return { portfolioUrl, templateUrl };
 };
