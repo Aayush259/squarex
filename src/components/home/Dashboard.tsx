@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectUser } from "@/store/userSlice";
-import { getRandomEmoji } from "@/utils/funcs";
+import { getPortfolioUrls, getRandomEmoji } from "@/utils/funcs";
 import { templateNames } from "@/utils/helper";
 import { updateMetadata } from "@/apis/createPortfolio";
 import { FaExternalLinkAlt } from "react-icons/fa";
@@ -38,29 +38,6 @@ export default function Dashboard() {
     });
 
     const randomEmoji = useMemo(() => getRandomEmoji(), []);    // Random emoji
-
-    // Function to fetch user's created portfolios
-    const getPortfolioUrls = (templateName: string) => {
-        let portfolioUrl = "";
-        let templateUrl = "";
-
-        switch (templateName) {
-            case templateNames.Basic1Template:
-                portfolioUrl = `/portfolio/${user?.id}/b1`;
-                templateUrl = `/template/${templateNames.Basic1Template}`;
-                break;
-            case templateNames.Basic2Template:
-                portfolioUrl = `/portfolio/${user?.id}/b2`;
-                templateUrl = `/template/${templateNames.Basic2Template}`;
-                break;
-            case templateNames.Intermediate1Template:
-                portfolioUrl = `/portfolio/${user?.id}/i1`;
-                templateUrl = `/template/${templateNames.Intermediate1Template}`;
-                break;
-        }
-
-        return { portfolioUrl, templateUrl };
-    };
 
     // Function to get default template names
     const getFrontEndTemplateName = (templateName: string) => {
@@ -207,7 +184,7 @@ export default function Dashboard() {
 
                     {
                         usedTemplates.reverse().map(template => {
-                            const { portfolioUrl, templateUrl } = getPortfolioUrls(template);
+                            const { portfolioUrl, templateUrl } = getPortfolioUrls(template, user.id);
                             const tName = getFrontEndTemplateName(template);
 
                             if (!portfolioUrl || !templateUrl) return;

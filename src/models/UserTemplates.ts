@@ -18,7 +18,7 @@ interface IUserTemplate extends Document {
 
 const userTemplatesSchema = new Schema<IUserTemplate>({
     user_id: { type: String, required: true },
-    templateNames: { type: Array, default: [] },
+    templateNames: { type: [String], default: [] },
     engagement: {
         socialClicks: { type: [{ date: String, count: Number }], default: [] },
         projectClicks: { type: [{ date: String, count: Number }], default: [] },
