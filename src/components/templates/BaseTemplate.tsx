@@ -105,7 +105,7 @@ const BaseTemplate: React.FC<{
 
     // Initialize template data
     useEffect(() => {
-        if (templateData?.data) return;
+        if (templateData?.data) return;    // If not template data then do nothing
 
         if (slug) {
             getPortfolio();
