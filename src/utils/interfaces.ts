@@ -173,3 +173,9 @@ export interface ITrackerFunctions {
     trackSocialClick: () => void;
     trackProjectClick: () => void;
 };
+
+export interface IToast {
+    id: string;
+    message: string;
+    success: boolean;
+}
