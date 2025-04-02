@@ -178,4 +178,8 @@ export interface IToast {
     id: string;
     message: string;
     success: boolean;
-}
+};
+
+export interface ToastState {
+    toasts: IToast[];
+};

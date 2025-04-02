@@ -1,9 +1,5 @@
-import { IToast } from "@/utils/interfaces";
+import { ToastState } from "@/utils/interfaces";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface ToastState {
-    toasts: IToast[];
-}
 
 const initialState: ToastState = {
     toasts: [],
@@ -25,3 +21,6 @@ const toastSlice = createSlice({
 
 export const { addToast, removeToast } = toastSlice.actions;
 export default toastSlice.reducer;
+
+// Selectors
+export const selectToast = (state: { toast: ToastState }) => state.toast;
