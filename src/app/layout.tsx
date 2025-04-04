@@ -3,6 +3,7 @@ import "./globals.css";
 import StoreProvider from "@/store/StoreProvider";
 import Session from "@/components/Session";
 import { TemplateContextProvider } from "./context/TemplateContext";
+import ToastContainer from "@/components/ToastContainer";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -58,6 +59,7 @@ export default function RootLayout({
                 className={`${geistSans.variable} ${geistMono.variable} ${heebo.variable} ${playfairDisplay.variable} ${poppins.variable} ${aldrich.variable} ${outfit.variable} ${overlock.variable} antialiased`}
             >
                 <StoreProvider>
+                    <ToastContainer />
                     <Session>
                         <TemplateContextProvider>
                             {children}

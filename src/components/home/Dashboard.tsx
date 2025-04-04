@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "@/store/userSlice";
 import { getPortfolioUrls, getRandomEmoji } from "@/utils/funcs";
 import { templateNames } from "@/utils/helper";
@@ -16,9 +16,11 @@ import Button from "../Button";
 import { useTemplateContext } from "@/app/context/TemplateContext";
 import { markAsVisited } from "@/apis/contact";
 import EngagementVisuals from "./EngagementTrends";
+import { addToast } from "@/store/toastSlice";
 
 export default function Dashboard() {
 
+    const dispatch = useDispatch();
     const user = useSelector(selectUser);   // Stores user data
     const { fetchingUsedTemplates, fetchingContacts, usedTemplates, contacts, engagementScore } = useTemplateContext();
 
@@ -61,8 +63,10 @@ export default function Dashboard() {
         const { data } = await updateMetadata(metadata.templateName, metadata.page_title, metadata.page_description);
 
         if (data) {
+            dispatch(addToast({ message: "Metadata updated!", success: true }));
             setEditMetadataWindowOpen(false);
         } else {
+            dispatch(addToast({ message: "Failed to update metadata", success: false }));
             setFetching({ ...fetching, updatingMetadataError: true });
         }
         setFetching({ ...fetching, updatingMetadata: false });

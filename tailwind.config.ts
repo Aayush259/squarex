@@ -59,6 +59,14 @@ export default {
           '30%': { opacity: '0', transform: 'translateY(-28px)' },
           '100%': { opacity: '0', transform: 'translateY(-28px)' },
         },
+        'toast': {
+          '0%': { width: '100%' },
+          '100%': { width: '0%' }
+        },
+        'heightActive': {
+          '0%': { height: '0px' },
+          '100%': { height: '16px' }
+        },
       },
       animation: {
         "scroll1": "scroll1 30s linear infinite forwards",
@@ -73,6 +81,8 @@ export default {
         'txt-slide-3': 'txt-slide 10s ease-in-out 4s infinite',
         'txt-slide-4': 'txt-slide 10s ease-in-out 6s infinite',
         'txt-slide-5': 'txt-slide 10s ease-in-out 8s infinite',
+        'toast': 'toast 4s linear forwards',
+        'heightActive': 'heightActive 0.2s linear forwards',
       }
     },
   },

@@ -13,6 +13,7 @@ import { CreatingPortfolioSpinner, FullPageLoader } from "@/components/Loader";
 import useEngagementTracker from "@/hooks/useEngagementTracker";
 import Button from "@/components/Button";
 import { getPortfolioUrls } from "@/utils/funcs";
+import { addToast } from "@/store/toastSlice";
 
 const BaseTemplate: React.FC<{
     templateName: TemplateType;
@@ -52,7 +53,9 @@ const BaseTemplate: React.FC<{
         const { created, error } = await createPortfolio(templateData.data);
         if (error) {
             setError("Something went wrong");
+            dispatch(addToast({ message: "Something went wrong", success: false }));
         } else if (created) {
+            dispatch(addToast({ message: "Your Portfolio is live!", success: true }));
             if (pathname?.includes("portfolio")) {
                 window.location.reload();
             } else {
