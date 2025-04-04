@@ -24,6 +24,13 @@ export default function Home() {
                     ))
                 }
 
+                {
+                    templates.filter(template => !usedTemplates.includes(template.name?.toLowerCase() ?? '')).length === 0 && (
+                        <p className="text-xl mx-auto p-3 font-semibold text-center">
+                            {"More templates coming soon!"}
+                        </p>
+                    )
+                }
             </div>
 
             {
