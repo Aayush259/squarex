@@ -4,13 +4,29 @@ import { getToken } from "next-auth/jwt";
 export default async function middleware(req: NextRequest) {
     const pathname = req.nextUrl.pathname;
 
-    // Get the session token
-    const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    // Get the session token with explicit configuration
+    const session = await getToken({
+        req,
+        secret: process.env.NEXTAUTH_SECRET,
+        secureCookie: process.env.NODE_ENV === 'production',
+        cookieName: 'next-auth.session-token'
+    });
 
-    console.log("Middleware pathname:", pathname);
-    console.log("Middleware session:", session);
-    console.log("Middleware cookies:", req.cookies.getAll());
-    console.log("Middleware session:", session); // Add this for debugging
+    // Debug information
+    console.log(JSON.stringify({
+        event: 'middleware-auth',
+        pathname,
+        hasSession: !!session,
+        cookies: req.cookies,
+        headers: {
+            authorization: req.headers.get('authorization'),
+            cookie: req.headers.get('cookie')
+        },
+        env: {
+            hasSecret: !!process.env.NEXTAUTH_SECRET,
+            nodeEnv: process.env.NODE_ENV
+        }
+    }));
 
     // Check if the user is authenticated
     const isAuthenticated = !!session;
