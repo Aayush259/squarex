@@ -12,25 +12,8 @@ export default async function middleware(req: NextRequest) {
         cookieName: 'next-auth.session-token'
     });
 
-    // Debug information
-    console.log(JSON.stringify({
-        event: 'middleware-auth',
-        pathname,
-        hasSession: !!session,
-        cookies: req.cookies,
-        headers: {
-            authorization: req.headers.get('authorization'),
-            cookie: req.headers.get('cookie')
-        },
-        env: {
-            hasSecret: !!process.env.NEXTAUTH_SECRET,
-            nodeEnv: process.env.NODE_ENV
-        }
-    }));
-
     // Check if the user is authenticated
     const isAuthenticated = !!session;
-    console.log("Is Authenticated:", isAuthenticated); // Add this for debugging
 
     // Allow access to auth-related endpoints
     if (pathname.startsWith('/api/auth')) {
