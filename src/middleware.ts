@@ -7,11 +7,19 @@ export default async function middleware(req: NextRequest) {
     // Get the session token
     const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
+    console.log("Middleware pathname:", pathname);
+    console.log("Middleware session:", session);
+    console.log("Middleware cookies:", req.cookies.getAll());
     console.log("Middleware session:", session); // Add this for debugging
 
     // Check if the user is authenticated
     const isAuthenticated = !!session;
     console.log("Is Authenticated:", isAuthenticated); // Add this for debugging
+
+    // Allow access to auth-related endpoints
+    if (pathname.startsWith('/api/auth')) {
+        return NextResponse.next();
+    }
 
     // Allow access to the sign-in, sign-up pages and portfolio routes
     const isSignInOrSignUp = pathname.startsWith('/signin') || pathname.startsWith('/signup');
