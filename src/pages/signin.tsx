@@ -59,7 +59,9 @@ const SignIn = () => {
             return;
         } else {
             setSuccess(true);
-            // router.push("/");
+            setTimeout(() => {
+                router.push("/");
+            }, 1000000);
         }
     }
 
